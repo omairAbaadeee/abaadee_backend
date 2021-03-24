@@ -24,9 +24,12 @@ export class Country {
     @OneToMany(type => City, city => city.country)
     city: City[];
 
+    
+
+
   
 
-    @OneToMany(()=>User,user=>user.city)
+    @OneToMany(()=>User,user=>user.country)
     user:User[];
 
 }

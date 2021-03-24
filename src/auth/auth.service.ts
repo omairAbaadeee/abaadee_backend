@@ -10,7 +10,7 @@ import { LocationRepository } from 'src/reposatory/location.repository';
 import { JwtPayload } from './jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { throwError } from 'rxjs';
-import { Cron } from '@nestjs/schedule';
+import { CountryRepository } from 'src/reposatory/country.reposatory';
 @Injectable()
 export class AuthService {
     constructor(
@@ -22,6 +22,10 @@ export class AuthService {
 
         @InjectRepository(LocationRepository)
         private locationrepo:LocationRepository,
+
+        @InjectRepository(CountryRepository)
+        private countryrepo: CountryRepository,
+        
         private jwtService:JwtService,
         private utilityservice:UtilityService
     ){}
@@ -29,7 +33,7 @@ export class AuthService {
     
     async signUp(authCredentialsDto:AuthCredentialsDto):Promise<void>{
 
-        var {name,email,password,phone_number,city,
+        var {name,email,password,phone_number,city,country,
             location, is_active,is_verified,created_at,
         }= authCredentialsDto;
         is_active=true;
@@ -45,7 +49,12 @@ export class AuthService {
         //console.log(user.password);
         user.phone_number=phone_number;
        
-        
+        const findcountry = await this.countryrepo
+        .createQueryBuilder("country")
+        .where("country.country_name = :country_name", { country_name: country })
+        .getOne();
+        user.country=findcountry;
+
         const findcity = await this.cityrepo
         .createQueryBuilder("city")
         .where("city.cityname = :cityname", { cityname: city })

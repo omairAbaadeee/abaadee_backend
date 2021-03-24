@@ -12,6 +12,7 @@ export class AuthCredentialsDto{
     @MaxLength(12)
     password:string;
     phone_number:string;
+    country:string;
     city:string;
     location:string;
     is_active:boolean;

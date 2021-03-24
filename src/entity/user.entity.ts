@@ -3,6 +3,7 @@ import * as bcrypt from "bcrypt";
 import { Addproperty } from "./addproperty.entity";
 import { City } from "./city.entity";
 import {Location} from "./location.entity";
+import { Country } from "./country.entity";
 @Entity()
 @Unique(["name","email"])
 export class User extends BaseEntity {
@@ -24,6 +25,9 @@ export class User extends BaseEntity {
 
     @ManyToOne(() => City,city=>city.user)
     city:City;
+    
+    @ManyToOne(() => Country,country=>country.user)
+    country:Country;
 
     @ManyToOne(() => Location,location=>location.user)
     location:Location;
