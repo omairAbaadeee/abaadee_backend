@@ -17,6 +17,8 @@ import { PropertyCategoryRepositery } from 'src/reposatory/propertycatogory.repo
 import { PropertytypeRepositery } from 'src/reposatory/propertytype.reposatory';
 import { BathRepositery } from 'src/reposatory/bath.reposatory';
 import { Bathrooms } from 'src/entity/bathroom.entity';
+import { CountryRepository } from 'src/reposatory/country.reposatory';
+import { Country } from 'src/entity/country.entity';
 @Injectable()
 export class HomeService {
     constructor(
@@ -48,14 +50,30 @@ export class HomeService {
 
         @InjectRepository(BathRepositery)
         private bathrepo: BathRepositery,
+        @InjectRepository(CountryRepository)
+        private countryrepo: CountryRepository,
     ) { }
     //Get All  City And Location
     async getallcity(): Promise<City[]> {
         const city = await this.cityrepo
             .createQueryBuilder("city")
-          
             .getMany();
         return city;
+    }
+    async getallcountry(): Promise<Country[]> {
+        const country = await this.countryrepo
+            .createQueryBuilder("country")
+         
+            .getMany();
+        return country;
+    }
+    async getaonecountry(country_name:string): Promise<Country> {
+        const country = await this.countryrepo
+            .createQueryBuilder("country")
+            .leftJoinAndSelect("country.city","city")
+            .where("country.country_name=:country_name",{country_name:country_name})
+            .getOne();
+        return country;
     }
     async getalllacation(cityname:string){
         const city = await this.cityrepo

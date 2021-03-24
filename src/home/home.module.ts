@@ -12,11 +12,12 @@ import { LocationRepository } from '../reposatory/location.repository';
 import { PriceRepository } from '../reposatory/price.repositery';
 import { PropertyCategoryRepositery } from '../reposatory/propertycatogory.reposatory';
 import { PropertytypeRepositery } from '../reposatory/propertytype.reposatory';
+import { CountryRepository } from '../reposatory/country.reposatory';
 
 
 @Module({
   imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,AreasizeRepositery,BathRepositery,BedsRepositery,
-  CityRepository,LocationRepository,PriceRepository,PropertyCategoryRepositery,PropertytypeRepositery])],
+  CityRepository,LocationRepository,PriceRepository,PropertyCategoryRepositery,PropertytypeRepositery,CountryRepository])],
   controllers: [HomeController],
   providers: [HomeService]
 })

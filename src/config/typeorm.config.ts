@@ -11,6 +11,7 @@ import { PropertyType } from "src/entity/property_type.entity";
 import { User } from "src/entity/user.entity";
 import {Location} from "src/entity/location.entity";
 import { Propertyimage } from "src/entity/propertyimage.entity";
+import { Country } from "src/entity/country.entity";
 
 
 export const typeOrmConfig:TypeOrmModuleOptions = {
@@ -18,9 +19,9 @@ type:'postgres',
 host:'localhost',
 port:5432,
 username:'postgres',
-password:'omairomair5',
+password:'ahmed123',
 database:'abaadee',
-entities:[User,Price,Beds,Bathrooms,AreaSize,Areaofunit,Location,City
+entities:[User,Price,Beds,Bathrooms,AreaSize,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage],
 synchronize:true
 };
