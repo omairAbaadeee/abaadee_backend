@@ -1,0 +1,15 @@
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Addproperty } from "./addproperty.entity";
+
+@Entity()
+export class Beds {
+
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    beds_quantity: number;
+    
+    @OneToMany(()=>Addproperty,addproperty=>addproperty.bed_id)
+    addproperty:Addproperty[];
+}
