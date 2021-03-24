@@ -34,7 +34,7 @@ export class AuthService {
     async signUp(authCredentialsDto:AuthCredentialsDto):Promise<void>{
 
         var {name,email,password,phone_number,city,country,
-            location, is_active,is_verified,created_at,
+             is_active,is_verified,created_at,
         }= authCredentialsDto;
         is_active=true;
         is_verified=false;
@@ -62,11 +62,11 @@ export class AuthService {
         user.city=findcity;
 
 
-        const findlocation = await this.locationrepo
-        .createQueryBuilder("location")
-        .where("location.locationname = :locationname", { locationname: location })
-        .getOne();
-        user.location=findlocation;
+        // const findlocation = await this.locationrepo
+        // .createQueryBuilder("location")
+        // .where("location.locationname = :locationname", { locationname: location })
+        // .getOne();
+        // user.location=findlocation;
         user.is_active=is_active;
         user.is_verified=is_verified;
         user.created_at=created_at;

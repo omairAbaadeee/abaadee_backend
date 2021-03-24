@@ -17,7 +17,5 @@ export class Location {
     @OneToMany(()=>Addproperty,addproperty=>addproperty.Location_id)
     addproperty:Addproperty[];
 
-    @OneToMany(()=>User,user=>user.location)
-    user:User[];
 
 }

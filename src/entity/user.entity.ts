@@ -5,7 +5,7 @@ import { City } from "./city.entity";
 import {Location} from "./location.entity";
 import { Country } from "./country.entity";
 @Entity()
-@Unique(["name","email"])
+// @Unique(["name","email"])
 export class User extends BaseEntity {
 
     @PrimaryGeneratedColumn()
@@ -29,8 +29,7 @@ export class User extends BaseEntity {
     @ManyToOne(() => Country,country=>country.user)
     country:Country;
 
-    @ManyToOne(() => Location,location=>location.user)
-    location:Location;
+    
     
     @Column()
     is_active:boolean;
