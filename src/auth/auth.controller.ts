@@ -1,6 +1,6 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthCredentialsDto } from 'src/dto/auth-credential.dto';
+import { AuthCredentialsDto, AuthCredentialsMessage } from 'src/dto/auth-credential.dto';
 import { User } from 'src/entity/user.entity';
 import { AuthService } from './auth.service';
 import { GetUser } from './get-user.decorator';
@@ -15,7 +15,7 @@ export class AuthController {
         private authsevices:AuthService,
     ){}
     @Post('/signup')
-    signUp(@Body(ValidationPipe) authCredentialsDto:AuthCredentialsDto):Promise<void>{
+    signUp(@Body(ValidationPipe) authCredentialsDto:AuthCredentialsDto):Promise<AuthCredentialsMessage>{
         console.log(authCredentialsDto);
        return this.authsevices.signUp(authCredentialsDto);
         
@@ -28,9 +28,11 @@ export class AuthController {
     }
     @Get("/varification/:acccess")
     //  @UseGuards(AuthGuard())
-    varification(@Param("acccess") acccess){
+    varification(@Param("acccess") acccess,@Res() res){
         var decoded:DecodeDto = jwt_decode(acccess);
           this.authsevices.varification(decoded.name);
+          res.redirect('http://localhost:3000/add-property');
+          
     }
     // @Cron('5 * * * * *')
     // handleCron() {

@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthCredentialsDto } from 'src/dto/auth-credential.dto';
+import { AuthCredentialsDto, AuthCredentialsMessage } from 'src/dto/auth-credential.dto';
 import { User } from 'src/entity/user.entity';
 import { UserRepository } from 'src/reposatory/user.repository';
 import * as bcrypt from "bcrypt";
@@ -31,7 +31,7 @@ export class AuthService {
     ){}
     
     
-    async signUp(authCredentialsDto:AuthCredentialsDto):Promise<void>{
+    async signUp(authCredentialsDto:AuthCredentialsDto):Promise<AuthCredentialsMessage>{
 
         var {name,email,password,phone_number,city,country,
              is_active,is_verified,created_at,
@@ -75,9 +75,11 @@ export class AuthService {
         try {
             
             await this.userRepository.save(user);
+           
             const payload={name};
             const accessToken=await this.jwtService.sign(payload);
             this.utilityservice.sendEmail(email,accessToken);
+            return {message:"Please cheak your Email"};
           } catch (error) {
             console.log(typeof (error.code));
             if (error.code === '23505') {
