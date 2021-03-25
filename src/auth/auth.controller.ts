@@ -7,6 +7,7 @@ import { GetUser } from './get-user.decorator';
 import jwt_decode from "jwt-decode";
 import { DecodeDto } from 'src/dto/decode.dto';
 import {FacebookUser} from "src/dto/addproerty.dto";
+import { SigninDto } from 'src/dto/signin.dto';
 
 
 @Controller('auth')
@@ -23,8 +24,8 @@ export class AuthController {
 
     @Post('/signin')
     signIn(@Body(ValidationPipe
-    ) authCredentialsDto:AuthCredentialsDto) {
-     return this.authsevices.sigIn(authCredentialsDto);
+    ) signindto:SigninDto) {
+     return this.authsevices.sigIn(signindto);
     }
     @Get("/varification/:acccess")
     //  @UseGuards(AuthGuard())

@@ -11,6 +11,7 @@ import { JwtPayload } from './jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { throwError } from 'rxjs';
 import { CountryRepository } from 'src/reposatory/country.reposatory';
+import { SigninDto } from 'src/dto/signin.dto';
 @Injectable()
 export class AuthService {
     constructor(
@@ -91,8 +92,8 @@ export class AuthService {
           }
     }
     
-    async sigIn(authCredentialsDto:AuthCredentialsDto){
-        const username=await this.userRepository.validateUserpassword(authCredentialsDto);
+    async sigIn(sigindto:SigninDto){
+        const username=await this.userRepository.validateUserpassword(sigindto);
         console.log(username);
         
         if(!username){
