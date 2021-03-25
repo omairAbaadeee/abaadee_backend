@@ -33,7 +33,7 @@ export class AuthService {
     
     async signUp(authCredentialsDto:AuthCredentialsDto):Promise<AuthCredentialsMessage>{
 
-        var {name,email,password,phone_number,city,country,
+        var {user_name,email,password,phone_number,city,country,
              is_active,is_verified,created_at,
         }= authCredentialsDto;
         is_active=true;
@@ -42,7 +42,7 @@ export class AuthService {
    
         
         const user=new User();
-        user.name=name;
+        user.name=user_name;
         user.email=email;
         user.salt=await bcrypt.genSalt();
         user.password=await this.hashpassword(password,user.salt);
@@ -76,14 +76,14 @@ export class AuthService {
             
             await this.userRepository.save(user);
            
-            const payload={name};
+            const payload={email};
             const accessToken=await this.jwtService.sign(payload);
             this.utilityservice.sendEmail(email,accessToken);
             return {message:"Please cheak your Email"};
           } catch (error) {
             console.log(typeof (error.code));
             if (error.code === '23505') {
-              throw new ConflictException("Username Already exsist")
+              throw new ConflictException("Email Already exsist")
             }
             else {
               throw new InternalServerErrorException();
@@ -100,15 +100,19 @@ export class AuthService {
         }
         const payload:JwtPayload={username};
         const accessToken=await this.jwtService.sign(payload);
-        return {accessToken};
+        return {accessToken,username};
     }
-    async varification(Username:string){
+
+
+
+    async varification(email:string){
+      console.log(email);
       try{
       var update=await this.userRepository.
       createQueryBuilder()
       .update(User)
       .set({ is_verified:true})
-      .where("name = :name", { name:Username})
+      .where("email=:email", {email:email})
       .execute();
       return {massage:"Your account is varified"};
       }

@@ -6,8 +6,8 @@ import { User } from "../entity/user.entity";
 export class UserRepository extends Repository<User>{
   async validateUserpassword(authCredentialsDto:AuthCredentialsDto):Promise<string>
       {
-          const {name,password}=authCredentialsDto;
-          const user= await this.findOne({name});
+          const {email,password}=authCredentialsDto;
+          const user= await this.findOne({email});
 
           if (user && await user.validatPassword(password)) {
             return user.name;

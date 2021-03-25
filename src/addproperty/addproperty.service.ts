@@ -67,8 +67,8 @@ export class AddpropertyService {
    
        
 
-        const createdat = Date().toString();
-        const updateddat=Date().toString();
+        const createdat =new Date();
+        const updateddat=new  Date();
         const expiredate=Date().toString();
         const addproperty = new Addproperty();
         

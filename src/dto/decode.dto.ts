@@ -1,3 +1,3 @@
 export class DecodeDto{
-    name:string;
+    email:string;
 }

@@ -78,8 +78,8 @@ export class Addproperty {
     expiredate: string;
     
     @Column()
-    createdat: string;
+    createdat: Date;
     
     @Column()
-    updatedat:string;
+    updatedat:Date;
 }
