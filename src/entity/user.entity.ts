@@ -50,9 +50,5 @@ export class User extends BaseEntity {
     addproperty:Addproperty[];
 
 
-    async validatPassword(password:string){
-        const hash= await bcrypt.hash(password,this.salt);
-        return hash==this.password;
-    }
     
 } 

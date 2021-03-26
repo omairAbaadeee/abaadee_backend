@@ -12,6 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import { throwError } from 'rxjs';
 import { CountryRepository } from 'src/reposatory/country.reposatory';
 import { SigninDto } from 'src/dto/signin.dto';
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -63,11 +64,7 @@ export class AuthService {
         user.city=findcity;
 
 
-        // const findlocation = await this.locationrepo
-        // .createQueryBuilder("location")
-        // .where("location.locationname = :locationname", { locationname: location })
-        // .getOne();
-        // user.location=findlocation;
+    
         user.is_active=is_active;
         user.is_verified=is_verified;
         user.created_at=created_at;
@@ -84,21 +81,27 @@ export class AuthService {
           } catch (error) {
             console.log(typeof (error.code));
             if (error.code === '23505') {
-              throw new ConflictException("Email Already exsist")
+              return new ConflictException("Email Already exsist")
             }
             else {
-              throw new InternalServerErrorException();
+              return new InternalServerErrorException();
             }
           }
     }
     
     async sigIn(sigindto:SigninDto){
-        const username=await this.userRepository.validateUserpassword(sigindto);
+        const username=await this.validateUserpassword(sigindto);
         console.log(username);
         
-        if(!username){
-            throw new UnauthorizedException("invalid Cridential");
+        if(username==="1"){
+            return new UnauthorizedException("Email Does Not Exist");
         }
+        if(username==="2"){
+          return new UnauthorizedException("Password Does Not Exist");
+      }
+      if(username==="3"){
+        return new UnauthorizedException("You are Not varified");
+    }
         const payload:JwtPayload={username};
         const accessToken=await this.jwtService.sign(payload);
         return {accessToken,username};
@@ -149,5 +152,39 @@ export class AuthService {
           user: req.user
         }
       }
+      }
+      async validateUserpassword(signindto:SigninDto):Promise<string>
+      {
+          const {email,password}=signindto;
+          const user= await this.userRepository.createQueryBuilder("user")
+          .where("user.email=:email",{email:email})
+          .getOne();
+          console.log(user)
+          
+         
+    
+      if(user)
+      {
+      if(user.is_verified==true){
+        const hash= await bcrypt.hash(password,user.salt)  
+        if(hash==user.password)
+        {
+         return user.name;
+        }
+        else 
+        {
+         return "2";
+        }
+      }
+      else{
+        return "3";
+      }
+    }
+    else{
+      return "1";
+    }
+
+    
+
       }
 }

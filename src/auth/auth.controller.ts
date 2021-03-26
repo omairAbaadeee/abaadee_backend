@@ -25,6 +25,7 @@ export class AuthController {
     @Post('/signin')
     signIn(@Body(ValidationPipe
     ) signindto:SigninDto) {
+      console.log(signindto);
      return this.authsevices.sigIn(signindto);
     }
     @Get("/varification/:acccess")
