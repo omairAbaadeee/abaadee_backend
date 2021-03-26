@@ -4,19 +4,19 @@ export class Addpropertydto{
     id: number;
     username:string;
     purpose: Purpose;
-    propertytype: string;
-    propertysubtype: string;
-    cityname: string;
-    locationname: string;
-    propertytitle: string;
-    propertydescription: string;
+    property_type: string;
+    property_category: string;
+    city_name: string;
+    location_name: string;
+    property_title: string;
+    property_description: string;
     price: number;
-    landarea: number;
-    areaunitname: string;
+    land_area: number;
+    area_unit_name: string;
     bed: number;
     //propertyimage:Addimagedto;
-    bathroomid: number;
-    expiredate: Date;
+    bathroom: number;
+    expire_date: Date;
   
 }
 export class Addimagedto{
