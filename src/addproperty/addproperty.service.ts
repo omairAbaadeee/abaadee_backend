@@ -69,7 +69,7 @@ export class AddpropertyService {
 
         const createdat =new Date();
         const updateddat=new  Date();
-        const expiredate=Date().toString();
+        const expiredate=new Date();
         const addproperty = new Addproperty();
         
 
@@ -94,10 +94,16 @@ export class AddpropertyService {
 
       
       
-        const findcity = await this.cityrepo.findOne(city_name);
+        const findcity = await  this.cityrepo
+        .createQueryBuilder("city")
+        .where("city.city_name = :city_name", { city_name: city_name })
+        .getOne();
         addproperty.city_id = findcity;
         //console.log(findcity);
-        const findlocation = await this.locationrepo.findOne(location_name);
+        const findlocation = await this.locationrepo
+        .createQueryBuilder("location")
+        .where("location.location_name = :location_name", { location_name: location_name })
+        .getOne();
         addproperty.Location_id = findlocation;
         //console.log(findlocation);
         const findbeds = await this.bedsrepo.findOne(bed);
@@ -119,7 +125,7 @@ export class AddpropertyService {
         .where("propertycatogoryname.property_category_name = :property_category_name", { property_category_name: property_category })
         .getOne();
        // const findprosubtype = await this.propertycatogoryrepo.findOne(propertysubtype);
-        addproperty.propertysubtype = findprosubtype;
+        addproperty.property_category = findprosubtype;
         //console.log(findprosubtype);
         
 
@@ -128,7 +134,7 @@ export class AddpropertyService {
         .where("propertytype.property_type_name = :property_type_name", { property_type_name: property_type })
         .getOne();
         //const findprotype = await this.propertytyperepo.findOne(propertytype);
-        addproperty.propertytype = findprotype;
+        addproperty.property_type = findprotype;
         //console.log(findprotype);
         
 

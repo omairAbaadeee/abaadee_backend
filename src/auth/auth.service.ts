@@ -59,7 +59,7 @@ export class AuthService {
 
         const findcity = await this.cityrepo
         .createQueryBuilder("city")
-        .where("city.cityname = :cityname", { cityname: city })
+        .where("city.city_name = :city_name", { city_name: city })
         .getOne();
         user.city=findcity;
 

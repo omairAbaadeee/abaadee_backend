@@ -3,6 +3,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 import { Location } from "./location.entity"
 import { Addproperty } from "./addproperty.entity";
 import { User } from "./user.entity";
+import { Country } from "./country.entity";
 
 
 
@@ -14,6 +15,8 @@ export class City {
     @Column()
     city_name:string;
 
+@ManyToOne(()=>Country,country=>country.city)
+country:Country;
 
 
     @OneToMany(type => Location, location => location.city)

@@ -3,6 +3,7 @@ import * as bcrypt from "bcrypt";
 import { Addproperty } from "./addproperty.entity";
 import { City } from "./city.entity";
 import {Location} from "./location.entity";
+import { Country } from "./country.entity";
 @Entity()
 //@Unique(["email"])//
 export class User extends BaseEntity {
@@ -45,11 +46,11 @@ export class User extends BaseEntity {
 
     @OneToMany(()=>Addproperty,addproperty=>addproperty.userid)
     addproperty:Addproperty[];
+    
+    @ManyToOne(()=>Country,country=>country.city)
+    country:Country;
 
 
-    async validatPassword(password:string){
-        const hash= await bcrypt.hash(password,this.salt);
-        return hash==this.password;
-    }
+   
     
 }

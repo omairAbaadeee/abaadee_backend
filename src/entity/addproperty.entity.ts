@@ -75,11 +75,11 @@ property_category: PropertyCategory;
     images: Propertyimage[];
     
     @Column()
-    expiredate: string;
+    expiredate: Date;
     
     @Column()
-    createdat: string;
+    createdat: Date;
     
     @Column()
-    updatedat:string;
+    updatedat:Date;
 }
