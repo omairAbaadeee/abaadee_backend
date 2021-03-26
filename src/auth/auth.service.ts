@@ -41,6 +41,10 @@ export class AuthService {
         is_active=true;
         is_verified=false;
         created_at=new Date();
+        const user1= await this.userRepository.createQueryBuilder("user")
+          .where("user.email=:email",{email:email})
+          .getOne();
+ 
    
         
         const user=new User();
@@ -68,6 +72,7 @@ export class AuthService {
         user.is_active=is_active;
         user.is_verified=is_verified;
         user.created_at=created_at;
+    
      
         
         try {
@@ -78,7 +83,8 @@ export class AuthService {
             const accessToken=await this.jwtService.sign(payload);
             this.utilityservice.sendEmail(email,accessToken);
             return {message:"Please cheak your Email"};
-          } catch (error) {
+          } 
+          catch (error) {
             console.log(typeof (error.code));
             if (error.code === '23505') {
               return new ConflictException("Email Already exsist")
@@ -169,7 +175,7 @@ export class AuthService {
         const hash= await bcrypt.hash(password,user.salt)  
         if(hash==user.password)
         {
-         return user.name;
+         return user.email;
         }
         else 
         {

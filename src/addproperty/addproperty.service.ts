@@ -346,7 +346,7 @@ async find_data_From_Cityname_Locationname(Cname:string  , lname:string):Promise
     .leftJoinAndSelect("addproperty.bedid","bedid")
     .leftJoinAndSelect("addproperty.propertytype","propertytype")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("cityid.cityname =:cityname",{cityname:Cname})
+    .andWhere("cityid.cityname =:cityname",{cityname:Cname})
     .where("Locationid.locationname =:locationname",{locationname:lname})
     .getMany();
     if(!findonedatabyCity_Location){

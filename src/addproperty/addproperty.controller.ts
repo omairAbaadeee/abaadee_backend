@@ -165,6 +165,7 @@ export class AddpropertyController {
     { */
 
         if (cityname && locationname && !BathroomNumber && !AreaUnitname && !BedNumber && !PropertyTypeName && !Property_Category) {
+           console.log("salman");
             return this.addproservice.find_data_From_Cityname_Locationname(cityname, locationname);
         }
        /* else {
