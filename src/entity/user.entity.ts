@@ -3,9 +3,8 @@ import * as bcrypt from "bcrypt";
 import { Addproperty } from "./addproperty.entity";
 import { City } from "./city.entity";
 import {Location} from "./location.entity";
-import { Country } from "./country.entity";
 @Entity()
-@Unique(["email"])
+//@Unique(["email"])//
 export class User extends BaseEntity {
 
     @PrimaryGeneratedColumn()
@@ -25,11 +24,9 @@ export class User extends BaseEntity {
 
     @ManyToOne(() => City,city=>city.user)
     city:City;
-    
-    @ManyToOne(() => Country,country=>country.user)
-    country:Country;
 
-    
+    @ManyToOne(() => Location,location=>location.user)
+    location:Location;
     
     @Column()
     is_active:boolean;
@@ -50,5 +47,9 @@ export class User extends BaseEntity {
     addproperty:Addproperty[];
 
 
+    async validatPassword(password:string){
+        const hash= await bcrypt.hash(password,this.salt);
+        return hash==this.password;
+    }
     
-} 
+}

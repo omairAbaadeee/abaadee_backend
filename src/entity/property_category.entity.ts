@@ -12,7 +12,7 @@ export class PropertyCategory {
     @Column()
     property_category_name: string;
    
-    @OneToMany(()=>Addproperty,addproperty=>addproperty.propertysubtype)
+    @OneToMany(()=>Addproperty,addproperty=>addproperty.property_category)
     addproperty:Addproperty[];
     
     @ManyToOne(type => PropertyType, type => type.property)

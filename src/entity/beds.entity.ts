@@ -5,7 +5,7 @@ import { Addproperty } from "./addproperty.entity";
 export class Beds {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    bed_id: number;
 
     @Column()
     beds_quantity: number;

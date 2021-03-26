@@ -5,7 +5,7 @@ import { Addproperty } from "./addproperty.entity";
 export class Areaofunit {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    area_unit_id: number;
 
     @Column()
     area_name: string;

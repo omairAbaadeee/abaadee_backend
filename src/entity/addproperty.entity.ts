@@ -30,11 +30,11 @@ export class Addproperty {
     
     @ManyToOne(()=>PropertyType,propertytype=>propertytype.addproperty)
     @JoinColumn()
-    propertytype: PropertyType;
+    property_type: PropertyType;
     
     @ManyToOne(() => PropertyCategory,propertycatogory=>propertycatogory.addproperty)
     @JoinColumn()
-    propertysubtype: PropertyCategory;
+property_category: PropertyCategory;
 
     
     @ManyToOne(() => City,city=>city.addproperty)
@@ -78,8 +78,8 @@ export class Addproperty {
     expiredate: string;
     
     @Column()
-    createdat: Date;
+    createdat: string;
     
     @Column()
-    updatedat:Date;
+    updatedat:string;
 }
