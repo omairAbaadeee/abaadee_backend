@@ -98,7 +98,7 @@ export class AddpropertyController {
 
     @Get("image/:imagename")
     findimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
-        return of(res.sendFile(join(process.cwd(), 'uploads/' + imagename)));
+        return of(res.sendFile(join(process.cwd(), 'uploads/images/' + imagename)));
     }
 
     @Get("getalldata")
@@ -127,11 +127,8 @@ export class AddpropertyController {
         }
          if (locationname && !cityname && !BathroomNumber && !AreaUnitname && !BedNumber && !PropertyTypeName && !Property_Category) {
             return this.addproservice.find_data_From_locationname(locationname);
-
-
         }
          if (BathroomNumber && !cityname && !locationname && !AreaUnitname && !BedNumber && !PropertyTypeName && !Property_Category) {
-
             return this.addproservice.find_data_From_Bathroom(BathroomNumber);
 
         }

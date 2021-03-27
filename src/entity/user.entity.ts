@@ -5,7 +5,7 @@ import { City } from "./city.entity";
 import {Location} from "./location.entity";
 import { Country } from "./country.entity";
 @Entity()
-//@Unique(["email"])//
+@Unique(["email"])
 export class User extends BaseEntity {
 
     @PrimaryGeneratedColumn()

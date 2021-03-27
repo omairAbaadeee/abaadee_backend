@@ -79,7 +79,7 @@ export class HomeService {
         const city = await this.cityrepo
         .createQueryBuilder("city")
          .leftJoinAndSelect("city.location","location")
-         .where("city.cityname=:cityname",{cityname:cityname})
+         .where("city.city_name=:city_name",{city_name:cityname})
         .getMany();
     return city;
 

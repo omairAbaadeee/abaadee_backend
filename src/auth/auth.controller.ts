@@ -32,6 +32,7 @@ export class AuthController {
     //  @UseGuards(AuthGuard())
     varification(@Param("acccess") acccess,@Res() res){
         var decoded:DecodeDto = jwt_decode(acccess);
+        console.log(decoded.email)
           this.authsevices.varification(decoded.email);
           res.redirect('http://localhost:3000/add-property');
           
