@@ -205,8 +205,8 @@ async find_data_From_cityname(Cname:string , purpose:Purpose):Promise<Addpropert
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
-    .where("city_id.city_name=:city_name",{city_name:Cname})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("city_id.city_name=:city_name",{city_name:Cname})
     .getMany();
     if(!findDataByCity){
         return ;
@@ -227,9 +227,8 @@ async find_data_From_cityname(Cname:string , purpose:Purpose):Promise<Addpropert
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
-
-    .where("Location_id.location_name =:location_name",{location_name:lname})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("Location_id.location_name =:location_name",{location_name:lname})
     .getMany();
     if(!findDataByLocation){
         return ;
@@ -250,9 +249,9 @@ async find_data_From_Bathroom(BathroomNumber:Number ,  purpose:Purpose):Promise<
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
+    .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
     .getMany();
     if(!findDataByBathroom){
         return ;
@@ -272,9 +271,9 @@ async find_data_From_AreaUnit(AreaUnitname:string,  purpose:Purpose):Promise<Add
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
+    .andWhere("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
     .getMany();
     return findDataByAreaUnit;
 }
@@ -289,9 +288,9 @@ async find_data_From_Bed(BedNumber:Number,  purpose:Purpose):Promise<Addproperty
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("bed_id.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
+    .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
 
     .getMany();
     if(!findDataByBed){
@@ -314,9 +313,9 @@ async find_data_From_PropertyType(PropertyTypeName:string ,  purpose:Purpose):Pr
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("property_type.property_type_name =:property_type_name",{property_type_name:PropertyTypeName})
+    .andWhere("property_type.property_type_name =:property_type_name",{property_type_name:PropertyTypeName})
     .getMany();
     if(!findDataByPropertyType){
         return ;
@@ -336,9 +335,9 @@ async find_data_From_PropertySubType(property_category:string ,  purpose:Purpose
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("property_category.property_category_name =:property_category_name",{property_category_name:property_category})
+    .andWhere("property_category.property_category_name =:property_category_name",{property_category_name:property_category})
     .getMany();
     if(!findDataByproperty_category){
         return ;
@@ -360,10 +359,10 @@ async find_data_From_Cityname_Locationname(Cname:string  , lname:string ,  purpo
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
     .andWhere("city_id.city_name =:city_name",{city_name:Cname})
-    .where("Location_id.location_name =:location_name",{location_name:lname})
+    .andWhere("Location_id.location_name =:location_name",{location_name:lname})
     .getMany();
     if(!findonedatabyCity_Location){
         return null;
@@ -384,11 +383,11 @@ async find_data_From_Cityname_Locationname_BathroomNumber(Cname:string  , lname:
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("city_id.city_name =:city_name",{city_name:Cname})
-    .where("Location_id.location_name =:location_name",{location_name:lname})
-    .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
+    .andWhere("city_id.city_name =:city_name",{city_name:Cname})
+    .andWhere("Location_id.location_name =:location_name",{location_name:lname})
+    .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
 
     .getMany();
     if(!findonedatabyCity_Location_Bathroom){
@@ -410,12 +409,12 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(Cname:string 
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("city_id.city_name =:city_name",{city_name:Cname})
-    .where("Location_id.location_name =:location_name",{location_name:lname})
-    .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
-    .where("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
+    .andWhere("city_id.city_name =:city_name",{city_name:Cname})
+    .andWhere("Location_id.location_name =:location_name",{location_name:lname})
+    .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
+    .andWhere("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
 
 
     .getMany();
@@ -439,13 +438,13 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(Cna
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("city_id.city_name =:city_name",{city_name:Cname})
-    .where("Location_id.location_name =:location_name",{location_name:lname})
-    .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
-    .where("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
-    .where("bedi_d.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
+    .andWhere("city_id.city_name =:city_name",{city_name:Cname})
+    .andWhere("Location_id.location_name =:location_name",{location_name:lname})
+    .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
+    .andWhere("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
+    .andWhere("bedi_d.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
 
 
 
@@ -472,14 +471,14 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("city_id.city_name =:city_name",{city_name:Cname})
-    .where("Location_id.location_name =:location_name",{location_name:lname})
-    .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
-    .where("areaunit_id.area_name =:area_name",{area_name:AreaUnitname})
-    .where("bed_id.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
-    .where("property_type.property_type_name =:property_type_name",{property_type_name:PropertyTypeName})
+    .andWhere("city_id.city_name =:city_name",{city_name:Cname})
+    .andWhere("Location_id.location_name =:location_name",{location_name:lname})
+    .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
+    .andWhere("areaunit_id.area_name =:area_name",{area_name:AreaUnitname})
+    .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
+    .andWhere("property_type.property_type_name =:property_type_name",{property_type_name:PropertyTypeName})
 
 
 
@@ -507,9 +506,9 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .where("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-    .where("city_id.city_name =:city_name",{city_name:Cname})
+    .andWhere("city_id.city_name =:city_name",{city_name:Cname})
     .andWhere("Location_id.location_name =:location_name",{location_name:lname})
     .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
     .andWhere("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
