@@ -7,7 +7,7 @@ import { diskStorage } from 'multer';
 import { join } from 'path';
 import { Observable, of } from 'rxjs';
 import { Propertyimage } from 'src/entity/propertyimage.entity';
-import { Addproperty } from 'src/entity/addproperty.entity';
+import { Addproperty, Purpose } from 'src/entity/addproperty.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/entity/user.entity';
@@ -120,29 +120,30 @@ export class AddpropertyController {
         @Body('BedNumber') BedNumber: number,
         @Body('PropertyTypeName') PropertyTypeName: string,
         @Body('Property_Category') Property_Category: string,
+        @Body('purpose') purpose: Purpose,
     ): Promise<Addproperty[]> {
         if (cityname && !locationname && !BathroomNumber && !AreaUnitname && !BedNumber && !PropertyTypeName && !Property_Category) {  
 
-            return this.addproservice.find_data_From_cityname(cityname);
+            return this.addproservice.find_data_From_cityname(cityname,purpose);
         }
          if (locationname && !cityname && !BathroomNumber && !AreaUnitname && !BedNumber && !PropertyTypeName && !Property_Category) {
-            return this.addproservice.find_data_From_locationname(locationname);
+            return this.addproservice.find_data_From_locationname(locationname,purpose);
         }
          if (BathroomNumber && !cityname && !locationname && !AreaUnitname && !BedNumber && !PropertyTypeName && !Property_Category) {
-            return this.addproservice.find_data_From_Bathroom(BathroomNumber);
+            return this.addproservice.find_data_From_Bathroom(BathroomNumber,purpose);
 
         }
          if (AreaUnitname && !cityname && !locationname && !BathroomNumber && !BedNumber && !PropertyTypeName && !Property_Category) {
-            return this.addproservice.find_data_From_AreaUnit(AreaUnitname);
+            return this.addproservice.find_data_From_AreaUnit(AreaUnitname,purpose);
         }
          if (BedNumber && !cityname && !locationname && !BathroomNumber && !AreaUnitname && !PropertyTypeName && !Property_Category) {
-            return this.addproservice.find_data_From_Bed(BedNumber);
+            return this.addproservice.find_data_From_Bed(BedNumber,purpose);
         }
          if (PropertyTypeName && !cityname && !locationname && !BathroomNumber && !AreaUnitname && !BedNumber && !Property_Category) {
-            return this.addproservice.find_data_From_PropertyType(PropertyTypeName);
+            return this.addproservice.find_data_From_PropertyType(PropertyTypeName,purpose);
         }
          if (Property_Category && !cityname && !locationname && !BathroomNumber && !AreaUnitname && !BedNumber && !PropertyTypeName) {
-            return this.addproservice.find_data_From_PropertySubType(Property_Category);
+            return this.addproservice.find_data_From_PropertySubType(Property_Category,purpose);
         }
       /*  else {
             
@@ -163,7 +164,7 @@ export class AddpropertyController {
 
         if (cityname && locationname && !BathroomNumber && !AreaUnitname && !BedNumber && !PropertyTypeName && !Property_Category) {
            console.log("salman");
-            return this.addproservice.find_data_From_Cityname_Locationname(cityname, locationname);
+            return this.addproservice.find_data_From_Cityname_Locationname(cityname, locationname,purpose);
         }
        /* else {
 
@@ -183,19 +184,19 @@ export class AddpropertyController {
         {*/
 
         if (cityname && locationname && BathroomNumber && !AreaUnitname && !BedNumber && !PropertyTypeName && !Property_Category) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber(cityname, locationname, BathroomNumber);
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber(cityname, locationname, BathroomNumber,purpose);
         }
          if (cityname && locationname && BathroomNumber && AreaUnitname && !BedNumber && !PropertyTypeName && !Property_Category) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(cityname, locationname, BathroomNumber, AreaUnitname);
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(cityname, locationname, BathroomNumber, AreaUnitname,purpose);
         }
          if (cityname && locationname && BathroomNumber && AreaUnitname && BedNumber && !PropertyTypeName && !Property_Category) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(cityname, locationname, BathroomNumber, AreaUnitname, BedNumber);
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(cityname, locationname, BathroomNumber, AreaUnitname, BedNumber,purpose);
         }
          if (cityname && locationname && BathroomNumber && AreaUnitname && BedNumber && PropertyTypeName && !Property_Category) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(cityname, locationname, BathroomNumber, AreaUnitname, BedNumber, PropertyTypeName);
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(cityname, locationname, BathroomNumber, AreaUnitname, BedNumber, PropertyTypeName,purpose);
         }
          if (cityname && locationname && BathroomNumber && AreaUnitname && BedNumber && PropertyTypeName && Property_Category) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(cityname, locationname, BathroomNumber, AreaUnitname, BedNumber, PropertyTypeName, Property_Category);
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(cityname, locationname, BathroomNumber, AreaUnitname, BedNumber, PropertyTypeName, Property_Category,purpose);
         }
         else {
             return null;

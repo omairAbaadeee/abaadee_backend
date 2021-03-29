@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { response } from 'express';
 import { Addimagedto, Addpropertydto } from 'src/dto/addproerty.dto';
-import { Addproperty } from 'src/entity/addproperty.entity';
+import { Addproperty, Purpose } from 'src/entity/addproperty.entity';
 import { Propertyimage } from 'src/entity/propertyimage.entity';
 import { User } from 'src/entity/user.entity';
 import { AddpropertyRepo } from 'src/reposatory/addproperty.reposatory';
@@ -195,7 +195,7 @@ export class AddpropertyService {
     //  console.log(findalldata)
      return findalldata;    
 }
-async find_data_From_cityname(Cname:string):Promise<Addproperty[]>{
+async find_data_From_cityname(Cname:string , purpose:Purpose):Promise<Addproperty[]>{
     const findDataByCity=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -205,6 +205,7 @@ async find_data_From_cityname(Cname:string):Promise<Addproperty[]>{
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
     .where("city_id.city_name=:city_name",{city_name:Cname})
     .getMany();
     if(!findDataByCity){
@@ -216,7 +217,7 @@ async find_data_From_cityname(Cname:string):Promise<Addproperty[]>{
     
 }
 //FindWithLocationName//
-    async find_data_From_locationname(lname:string):Promise<Addproperty[]>{
+    async find_data_From_locationname(lname:string ,  purpose:Purpose):Promise<Addproperty[]>{
     const findDataByLocation=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -226,6 +227,8 @@ async find_data_From_cityname(Cname:string):Promise<Addproperty[]>{
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("Location_id.location_name =:location_name",{location_name:lname})
     .getMany();
     if(!findDataByLocation){
@@ -237,7 +240,7 @@ async find_data_From_cityname(Cname:string):Promise<Addproperty[]>{
     
 }
 //FindWithBathroomQuantity//
-async find_data_From_Bathroom(BathroomNumber:Number):Promise<Addproperty[]>{
+async find_data_From_Bathroom(BathroomNumber:Number ,  purpose:Purpose):Promise<Addproperty[]>{
     const findDataByBathroom=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -247,6 +250,8 @@ async find_data_From_Bathroom(BathroomNumber:Number):Promise<Addproperty[]>{
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
     .getMany();
     if(!findDataByBathroom){
@@ -257,7 +262,7 @@ async find_data_From_Bathroom(BathroomNumber:Number):Promise<Addproperty[]>{
     }
 }
 //FindByAreaUnit
-async find_data_From_AreaUnit(AreaUnitname:string):Promise<Addproperty[]>{
+async find_data_From_AreaUnit(AreaUnitname:string,  purpose:Purpose):Promise<Addproperty[]>{
     const findDataByAreaUnit=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -267,12 +272,14 @@ async find_data_From_AreaUnit(AreaUnitname:string):Promise<Addproperty[]>{
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
     .getMany();
     return findDataByAreaUnit;
 }
 //FindByBed//
-async find_data_From_Bed(BedNumber:Number):Promise<Addproperty[]>{
+async find_data_From_Bed(BedNumber:Number,  purpose:Purpose):Promise<Addproperty[]>{
     const findDataByBed=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -282,7 +289,10 @@ async find_data_From_Bed(BedNumber:Number):Promise<Addproperty[]>{
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("bed_id.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
+
     .getMany();
     if(!findDataByBed){
         return ;
@@ -294,7 +304,7 @@ async find_data_From_Bed(BedNumber:Number):Promise<Addproperty[]>{
 
 
 //FindByPropertyType//
-async find_data_From_PropertyType(PropertyTypeName:string):Promise<Addproperty[]>{
+async find_data_From_PropertyType(PropertyTypeName:string ,  purpose:Purpose):Promise<Addproperty[]>{
     const findDataByPropertyType=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -304,6 +314,8 @@ async find_data_From_PropertyType(PropertyTypeName:string):Promise<Addproperty[]
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("property_type.property_type_name =:property_type_name",{property_type_name:PropertyTypeName})
     .getMany();
     if(!findDataByPropertyType){
@@ -314,7 +326,7 @@ async find_data_From_PropertyType(PropertyTypeName:string):Promise<Addproperty[]
     }
 }
 //FindByPropertySubType//
-async find_data_From_PropertySubType(property_category:string):Promise<Addproperty[]>{
+async find_data_From_PropertySubType(property_category:string ,  purpose:Purpose):Promise<Addproperty[]>{
     const findDataByproperty_category=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -324,6 +336,8 @@ async find_data_From_PropertySubType(property_category:string):Promise<Addproper
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("property_category.property_category_name =:property_category_name",{property_category_name:property_category})
     .getMany();
     if(!findDataByproperty_category){
@@ -336,7 +350,7 @@ async find_data_From_PropertySubType(property_category:string):Promise<Addproper
 
 //FindDataFromCityname,Locationname//
 
-async find_data_From_Cityname_Locationname(Cname:string  , lname:string):Promise<Addproperty[]>{
+async find_data_From_Cityname_Locationname(Cname:string  , lname:string ,  purpose:Purpose):Promise<Addproperty[]>{
     const findonedatabyCity_Location=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -346,6 +360,8 @@ async find_data_From_Cityname_Locationname(Cname:string  , lname:string):Promise
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .andWhere("city_id.city_name =:city_name",{city_name:Cname})
     .where("Location_id.location_name =:location_name",{location_name:lname})
     .getMany();
@@ -358,7 +374,7 @@ async find_data_From_Cityname_Locationname(Cname:string  , lname:string):Promise
 }
 //FindDataFromCityname,Locationname,BathroomNumber//
 
-async find_data_From_Cityname_Locationname_BathroomNumber(Cname:string  , lname:string , BathroomNumber:number):Promise<Addproperty[]>{
+async find_data_From_Cityname_Locationname_BathroomNumber(Cname:string  , lname:string , BathroomNumber:number ,  purpose:Purpose):Promise<Addproperty[]>{
     const findonedatabyCity_Location_Bathroom=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -368,6 +384,8 @@ async find_data_From_Cityname_Locationname_BathroomNumber(Cname:string  , lname:
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("city_id.city_name =:city_name",{city_name:Cname})
     .where("Location_id.location_name =:location_name",{location_name:lname})
     .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
@@ -382,7 +400,7 @@ async find_data_From_Cityname_Locationname_BathroomNumber(Cname:string  , lname:
 }
 //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit//
 
-async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string):Promise<Addproperty[]>{
+async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string ,  purpose:Purpose):Promise<Addproperty[]>{
     const findonedatabyCity_Location_Bathroom_AreaUnit=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -392,6 +410,8 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(Cname:string 
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("city_id.city_name =:city_name",{city_name:Cname})
     .where("Location_id.location_name =:location_name",{location_name:lname})
     .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
@@ -409,7 +429,7 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(Cname:string 
 
 //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber//
 
-async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string , BedNumber:number  ):Promise<Addproperty[]>{
+async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string , BedNumber:number  ,  purpose:Purpose ):Promise<Addproperty[]>{
     const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -419,6 +439,8 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(Cna
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("city_id.city_name =:city_name",{city_name:Cname})
     .where("Location_id.location_name =:location_name",{location_name:lname})
     .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
@@ -440,7 +462,7 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(Cna
 //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber,PropertyType//
 
 
-async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string , BedNumber:number , PropertyTypeName:string  ):Promise<Addproperty[]>{
+async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string , BedNumber:number , PropertyTypeName:string ,  purpose:Purpose ):Promise<Addproperty[]>{
     const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -450,6 +472,8 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("city_id.city_name =:city_name",{city_name:Cname})
     .where("Location_id.location_name =:location_name",{location_name:lname})
     .where("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
@@ -473,7 +497,7 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
 
 
 //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber,PropertyType,PropertySubType//
-async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string , BedNumber:number , PropertyTypeName:string , property_category ):Promise<Addproperty[]>{
+async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string , BedNumber:number , PropertyTypeName:string , property_category ,  purpose:Purpose ):Promise<Addproperty[]>{
     const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType_PropertySubType=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
@@ -483,6 +507,8 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
     .leftJoinAndSelect("addproperty.bed_id","bed_id")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
+    .where("addproperty.purpose=:purpose",{purpose:purpose})
+
     .where("city_id.city_name =:city_name",{city_name:Cname})
     .andWhere("Location_id.location_name =:location_name",{location_name:lname})
     .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})

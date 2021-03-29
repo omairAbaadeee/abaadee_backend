@@ -12,6 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import { throwError } from 'rxjs';
 import { CountryRepository } from 'src/reposatory/country.reposatory';
 import { SigninDto } from 'src/dto/signin.dto';
+import { createQueryBuilder } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -110,7 +111,9 @@ export class AuthService {
     }
         const payload:JwtPayload={username};
         const accessToken=await this.jwtService.sign(payload);
-        return {accessToken,username};
+        const findusername=await this.userRepository.createQueryBuilder("user").where("user.email=:email" ,{email:username}).getOne();
+        const findname= findusername.name;
+        return {accessToken,findname};
     }
 
 
