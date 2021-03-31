@@ -14,7 +14,11 @@ import { SigninDto } from 'src/dto/signin.dto';
 export class AuthController {
     constructor(
         private authsevices:AuthService,
+        
     ){}
+
+
+    public decode:DecodeDto;
     @Post('/signup')
     signUp(@Body(ValidationPipe) authCredentialsDto:AuthCredentialsDto):Promise<AuthCredentialsMessage>{
         console.log(authCredentialsDto);
@@ -25,22 +29,41 @@ export class AuthController {
     @Post('/signin')
     signIn(@Body(ValidationPipe
     ) signindto:SigninDto) {
-      console.log(signindto);
+     console.log(signindto);
      return this.authsevices.sigIn(signindto);
     }
-    @Get("/varification/:acccess")
-    //  @UseGuards(AuthGuard())
-    varification(@Param("acccess") acccess,@Res() res){
-        var decoded:DecodeDto = jwt_decode(acccess);
-        console.log(decoded.email)
+    @Get("/varification/:access")
+  
+    varification(@Param("access") access,@Res() res){
+        var decoded:DecodeDto = jwt_decode(access);
+       console.log(decoded.email)
           this.authsevices.varification(decoded.email);
           res.redirect('http://localhost:3000/add-property');
           
     }
-    // @Cron('5 * * * * *')
-    // handleCron() {
-    // console.log("Run")
-    // }
+
+
+    @Post("/Forgetemail")
+    Forgetmail(@Body("email") email:string){
+
+     return this.authsevices.Forgetmail(email);
+    }
+
+    @Get("/Forgetpass/:access")
+    Redirect(@Param("access") access,@Res() res){
+      this.decode= jwt_decode(access);
+      console.log(this.decode.email);
+     
+    }
+
+    @Post("/Forgetpass")
+    Forgetpass(@Body("password") password:string){
+
+
+      return this.authsevices.Forgetpass(this.decode.email,password);
+    }
+
+    
     @Get("/facebook")
     @UseGuards(AuthGuard("facebook"))
     async facebookLogin(): Promise<any> {

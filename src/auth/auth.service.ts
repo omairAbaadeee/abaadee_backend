@@ -80,9 +80,10 @@ export class AuthService {
             
             await this.userRepository.save(user);
            
-            const payload={email};
+            const payload:JwtPayload={email};
             const accessToken=await this.jwtService.sign(payload);
-            this.utilityservice.sendEmail(email,accessToken);
+            const para="Thank you for choosing <strong>Abaadee.com</strong> First, you need to confirm your account. Just press the button below.";
+            this.utilityservice.sendEmail(email,"/varification/"+accessToken,"Confirm Account",para);
             return {message:"Please cheak your Email"};
           } 
           catch (error) {
@@ -96,27 +97,65 @@ export class AuthService {
           }
     }
     
+
+
+
     async sigIn(sigindto:SigninDto){
-        const username=await this.validateUserpassword(sigindto);
-        console.log(username);
+        const email=await this.validateUserpassword(sigindto);
+        console.log(email);
         
-        if(username==="1"){
+        if(email==="1"){
             return new UnauthorizedException("Email Does Not Exist");
         }
-        if(username==="2"){
+        if(email==="2"){
           return new UnauthorizedException("Password Does Not Exist");
       }
-      if(username==="3"){
+      if(email==="3"){
         return new UnauthorizedException("You are Not varified");
     }
-        const payload:JwtPayload={username};
+        const payload:JwtPayload={email};
         const accessToken=await this.jwtService.sign(payload);
-        const findusername=await this.userRepository.createQueryBuilder("user").where("user.email=:email" ,{email:username}).getOne();
+        const findusername=await this.userRepository.createQueryBuilder("user").where("user.email=:email" ,{email:email}).getOne();
         const findname= findusername.name;
         return {accessToken,findname};
     }
 
 
+   async Forgetmail(email:string):Promise<string>{
+
+    const query= await this.userRepository.createQueryBuilder("user").
+    where("user.email=:email",{email:email})
+    .andWhere("user.is_verified=:is_verified",{is_verified:true})
+    .getOne();
+    if(query){
+      const payload:JwtPayload={email};
+      const accessToken=await this.jwtService.sign(payload);
+      console.log(accessToken);
+      const para="Please click <strong>Below Button</strong> to change your password";
+     this.utilityservice.sendEmail(email,"/Forgetpass/"+accessToken,"Click Here",para);
+     return "Your Password has been sent to the specified email address"
+    }
+    else{
+      return "Invalid email or Email doesn't exist";
+    }
+   
+    
+   }
+
+   async Forgetpass(email:string,password:string){
+    const salt=await bcrypt.genSalt();
+    const password1=await this.hashpassword(password,salt);
+
+    var update=await this.userRepository.
+    createQueryBuilder()
+    .update(User)
+    .set({ password:password1,salt:salt})
+    .where("email=:email", {email:email})
+    .execute();
+
+    return "Password change successfully";
+
+   }
 
     async varification(email:string){
       console.log(email);

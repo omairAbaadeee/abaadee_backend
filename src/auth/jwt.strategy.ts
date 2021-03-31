@@ -22,10 +22,10 @@ constructor(
 
 async validate(payload:JwtPayload):Promise<User>{
 
-    const {username}=payload;
+    const {email}=payload;
     const finduser = await this.userRepository
     .createQueryBuilder("user")
-    .where("user.email = :email", { email: username })
+    .where("user.email = :email", { email: email })
     .getOne();
 
     if(!finduser){

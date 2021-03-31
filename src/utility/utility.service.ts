@@ -17,9 +17,9 @@ export class UtilityService {
         });
     }
   
-    async sendEmail(userEmail:string,payload: String) {
+    async sendEmail(userEmail:string,payload: String ,btnname:string, para:string) {
        
-        const url=`http://localhost:3200/auth/varification/${payload}`;
+        const url=`http://localhost:3200/auth${payload}`;
       
         let info = await this.transporter.sendMail({
             from: '"Application Server', // sender address
@@ -131,13 +131,13 @@ export class UtilityService {
     </style>
 </head>
 
-<body style="background-color: #F4D329; margin: 0 !important; padding: 0 !important;">
+<body style="background-color: #fcb812; margin: 0 !important; padding: 0 !important;">
     <!-- HIDDEN PREHEADER TEXT -->
     <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;"> We're thrilled to have you here! Get ready to dive into your new account. </div>
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <!-- LOGO -->
         <tr>
-            <td bgcolor="#F4D329" align="center">
+            <td bgcolor="#fcb812" align="center">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td align="center" valign="top" style="padding: 40px 10px 40px 10px;"> </td>
@@ -146,7 +146,7 @@ export class UtilityService {
             </td>
         </tr>
         <tr>
-            <td bgcolor="#F4D329" align="center" style="padding: 0px 10px 0px 10px;">
+            <td bgcolor="#fcb812" align="center" style="padding: 0px 10px 0px 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; line-height: 48px;">
@@ -161,7 +161,7 @@ export class UtilityService {
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;">Thank you for choosing <strong>Abaadee.com</strong> First, you need to confirm your account. Just press the button below.</p>
+                            <p style="margin: 0;">${para}</p>
                         </td>
                     </tr>
                     <tr>
@@ -171,7 +171,7 @@ export class UtilityService {
                                     <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
                                         <table border="0" cellspacing="0" cellpadding="0">
                                             <tr>
-                                                <td align="center" style="border-radius: 20px;" bgcolor="#F4D329"><a href="${url}" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 20px; border: 1px solid #FFA73B; display: inline-block;">Confirm Account</a></td>
+                                                <td align="center" style="border-radius: 20px;" bgcolor="#fcb812"><a href="${url}" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 20px; border: 1px solid #FFA73B; display: inline-block;">${btnname}</a></td>
                                             </tr>
                                         </table>
                                     </td>
