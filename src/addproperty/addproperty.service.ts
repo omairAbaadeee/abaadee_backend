@@ -196,314 +196,127 @@ export class AddpropertyService {
     //  console.log(findalldata)
      return findalldata;    
 }
-// async find_data_From_cityname(Cname:string , purpose:Purpose):Promise<Addproperty[]>{
-//     const findDataByCity=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
-//     .andWhere("city_id.city_name=:city_name",{city_name:Cname})
-//     .getMany();
-//     if(!findDataByCity){
-//         return ;
-//     }
-//     else{
-//     return findDataByCity;
-//     }
+async find_data_From_cityname(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
+    const {purpose,city_name}=addpropertysearch;
+    const findDataByCity=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("city_id.city_name=:city_name",{city_name:city_name})
+    .getMany();
+    if(!findDataByCity){
+        return ;
+    }
+    else{
+    return findDataByCity;
+    }
     
-// }
+}
 
-// //FindWithLocationName//
-//     async find_data_From_locationname(lname:string ,  purpose:Purpose):Promise<Addproperty[]>{
-//     const findDataByLocation=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
-//     .andWhere("Location_id.location_name =:location_name",{location_name:lname})
-//     .getMany();
-//     if(!findDataByLocation){
-//         return ;
-//     }
-//     else{
-//     return findDataByLocation;
-//     }
+//FindWithLocationName//
+    async find_data_From_locationname(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
+        const {purpose,location_name}=addpropertysearch;
+    const findDataByLocation=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
+    .getMany();
+    if(!findDataByLocation){
+        return ;
+    }
+    else{
+    return findDataByLocation;
+    }
     
-// }
-// //FindWithBathroomQuantity//
-// async find_data_From_Bathroom(BathroomNumber:Number ,  purpose:Purpose):Promise<Addproperty[]>{
-//     const findDataByBathroom=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+}
+//FindWithBathroomQuantity//
+//FindByAreaUnit
+async find_data_From_AreaUnit(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
+    const {area_unit_name,purpose}=addpropertysearch;
+    const findDataByAreaUnit=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-//     .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
-//     .getMany();
-//     if(!findDataByBathroom){
-//         return ;
-//     }
-//     else{
-//     return findDataByBathroom;
-//     }
-// }
-// //FindByAreaUnit
-// async find_data_From_AreaUnit(AreaUnitname:string,  purpose:Purpose):Promise<Addproperty[]>{
-//     const findDataByAreaUnit=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("area_unit_id.area_name =:area_name",{area_name:area_unit_name})
+    .getMany();
+    return findDataByAreaUnit;
+}
+//FindByBed//
+async find_data_From_Bed(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
+    const {beds,purpose}=addpropertysearch;
+    const findDataByBed=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-//     .andWhere("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
-//     .getMany();
-//     return findDataByAreaUnit;
-// }
-// //FindByBed//
-// async find_data_From_Bed(BedNumber:Number,  purpose:Purpose):Promise<Addproperty[]>{
-//     const findDataByBed=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:beds})
 
-//     .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
-
-//     .getMany();
-//     if(!findDataByBed){
-//         return ;
-//     }
-//     else{
-//     return findDataByBed;
-//     }
-// }
-
-
-// //FindByPropertyType//
-// async find_data_From_PropertyType(PropertyTypeName:string ,  purpose:Purpose):Promise<Addproperty[]>{
-//     const findDataByPropertyType=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
-
-//     .andWhere("property_type.property_type_name =:property_type_name",{property_type_name:PropertyTypeName})
-//     .getMany();
-//     if(!findDataByPropertyType){
-//         return ;
-//     }
-//     else{
-//     return findDataByPropertyType;
-//     }
-// }
-// //FindByPropertySubType//
-// async find_data_From_PropertySubType(property_category:string ,  purpose:Purpose):Promise<Addproperty[]>{
-//     const findDataByproperty_category=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
-
-//     .andWhere("property_category.property_category_name =:property_category_name",{property_category_name:property_category})
-//     .getMany();
-//     if(!findDataByproperty_category){
-//         return ;
-//     }
-//     else{
-//     return findDataByproperty_category;
-//     }
-// }
-
-// //FindDataFromCityname,Locationname//
-
-// async find_data_From_Cityname_Locationname(Cname:string  , lname:string ,  purpose:Purpose):Promise<Addproperty[]>{
-//     const findonedatabyCity_Location=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
-
-//     .andWhere("city_id.city_name =:city_name",{city_name:Cname})
-//     .andWhere("Location_id.location_name =:location_name",{location_name:lname})
-//     .getMany();
-//     if(!findonedatabyCity_Location){
-//         return null;
-//     }
-//     else{
-//     return findonedatabyCity_Location;
-//     }
-// }
-// //FindDataFromCityname,Locationname,BathroomNumber//
-
-// async find_data_From_Cityname_Locationname_BathroomNumber(Cname:string  , lname:string , BathroomNumber:number ,  purpose:Purpose):Promise<Addproperty[]>{
-//     const findonedatabyCity_Location_Bathroom=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
-
-//     .andWhere("city_id.city_name =:city_name",{city_name:Cname})
-//     .andWhere("Location_id.location_name =:location_name",{location_name:lname})
-//     .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
-
-//     .getMany();
-//     if(!findonedatabyCity_Location_Bathroom){
-//         return ;
-//     }
-//     else{
-//     return findonedatabyCity_Location_Bathroom;
-//     }
-// }
-// //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit//
-
-// async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string ,  purpose:Purpose):Promise<Addproperty[]>{
-//     const findonedatabyCity_Location_Bathroom_AreaUnit=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
-
-//     .andWhere("city_id.city_name =:city_name",{city_name:Cname})
-//     .andWhere("Location_id.location_name =:location_name",{location_name:lname})
-//     .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
-//     .andWhere("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
-
-
-//     .getMany();
-//     if(!findonedatabyCity_Location_Bathroom_AreaUnit){
-//         return ;
-//     }
-//     else{
-//     return findonedatabyCity_Location_Bathroom_AreaUnit;
-//     }
-// }
-
-// //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber//
-
-// async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string , BedNumber:number  ,  purpose:Purpose ):Promise<Addproperty[]>{
-//     const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
-
-//     .andWhere("city_id.city_name =:city_name",{city_name:Cname})
-//     .andWhere("Location_id.location_name =:location_name",{location_name:lname})
-//     .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
-//     .andWhere("area_unit_id.area_name =:area_name",{area_name:AreaUnitname})
-//     .andWhere("bedi_d.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
+    .getMany();
+    if(!findDataByBed){
+        return ;
+    }
+    else{
+    return findDataByBed;
+    }
+}
 
 
 
+//FindByPropertySubType//
+async find_data_From_PropertySubType(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
+    const {property_catogory,purpose}=addpropertysearch;
+    const findDataByproperty_category=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
 
-//     .getMany();
-//     if(!findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber){
-//         return ;
-//     }
-//     else{
-//     return findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber;
-//     }
-// }
+    .andWhere("property_category.property_category_name =:property_category_name",{property_category_name:property_catogory})
+    .getMany();
+    if(!findDataByproperty_category){
+        return ;
+    }
+    else{
+    return findDataByproperty_category;
+    }
+}
 
-// //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber,PropertyType//
+//FindDataFromCityname,Locationname//
 
-
-// async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(Cname:string  , lname:string , BathroomNumber:number , AreaUnitname:string , BedNumber:number , PropertyTypeName:string ,  purpose:Purpose ):Promise<Addproperty[]>{
-//     const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType=await this.addpropertyrepo.createQueryBuilder("addproperty")
-//     .leftJoinAndSelect("addproperty.images","images")
-//     .leftJoinAndSelect("addproperty.city_id","city_id")
-//     .leftJoinAndSelect("addproperty.Location_id","Location_id")
-//     .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-//     .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-//     .leftJoinAndSelect("addproperty.bed_id","bed_id")
-//     .leftJoinAndSelect("addproperty.property_type","property_type")
-//     .leftJoinAndSelect("addproperty.property_category","property_category")
-//     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
-
-//     .andWhere("city_id.city_name =:city_name",{city_name:Cname})
-//     .andWhere("Location_id.location_name =:location_name",{location_name:lname})
-//     .andWhere("bathroom_id.bathroom_quantity =:bathroom_quantity",{bathroom_quantity:BathroomNumber})
-//     .andWhere("areaunit_id.area_name =:area_name",{area_name:AreaUnitname})
-//     .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:BedNumber})
-//     .andWhere("property_type.property_type_name =:property_type_name",{property_type_name:PropertyTypeName})
-
-
-
-
-
-//     .getMany();
-//     if(!findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType){
-//         return ;
-//     }
-//     else{
-//     return findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType;
-//     }
-// }
-
-
-
-//FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber,PropertyType,PropertySubType//
-async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(addpropertysearch:AddpropertySearch ):Promise<Addproperty[]>{
-     const {purpose, city_name, location_name, property_type, min_price,max_price,min_area,max_area,beds,area_unit_name}=addpropertysearch;
-const minprice=min_price.replace(",","")
-const maxprice=max_price.replace(",","")
-
-     const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType_PropertySubType=await this.addpropertyrepo.createQueryBuilder("addproperty")
+async find_data_From_Cityname_Locationname(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
+    const {city_name,location_name,purpose}=addpropertysearch;
+    const findonedatabyCity_Location=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city_id","city_id")
     .leftJoinAndSelect("addproperty.Location_id","Location_id")
@@ -516,14 +329,166 @@ const maxprice=max_price.replace(",","")
 
     .andWhere("city_id.city_name =:city_name",{city_name:city_name})
     .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
+    .getMany();
+    if(!findonedatabyCity_Location){
+        return null;
+    }
+    else{
+    return findonedatabyCity_Location;
+    }
+}
+//FindDataFromCityname,Locationname,BathroomNumber//
+
+async find_data_From_Cityname_Locationname_BathroomNumber(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
+    const {city_name,location_name,purpose}=addpropertysearch;
+    const findonedatabyCity_Location_Bathroom=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+
+    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
+
+
+    .getMany();
+    if(!findonedatabyCity_Location_Bathroom){
+        return ;
+    }
+    else{
+    return findonedatabyCity_Location_Bathroom;
+    }
+}
+//FindDataFromCityname,Locationname,BathroomNumber,AreaUnit//
+
+async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
+    const {city_name,location_name,area_unit_name,purpose}=addpropertysearch;
+    const findonedatabyCity_Location_Bathroom_AreaUnit=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+
+    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
+  
+    .andWhere("area_unit_id.area_name =:area_name",{area_name:area_unit_name})
+
+
+    .getMany();
+    if(!findonedatabyCity_Location_Bathroom_AreaUnit){
+        return ;
+    }
+    else{
+    return findonedatabyCity_Location_Bathroom_AreaUnit;
+    }
+}
+
+//FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber//
+
+async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
+    const {city_name,location_name,area_unit_name,purpose,beds}=addpropertysearch;
+    const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+
+    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
+
+    .andWhere("area_unit_id.area_name =:area_name",{area_name:area_unit_name})
+    .andWhere("bedi_d.beds_quantity =:beds_quantity",{beds_quantity:beds})
+
+
+
+
+    .getMany();
+    if(!findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber){
+        return ;
+    }
+    else{
+    return findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber;
+    }
+}
+
+//FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber,PropertyType//
+
+
+async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(addpropertysearch:AddpropertySearch ):Promise<Addproperty[]>{
+    const {city_name,location_name,area_unit_name,purpose,beds,property_catogory}=addpropertysearch;
+    const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+
+    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
+
+    .andWhere("areaunit_id.area_name =:area_name",{area_name:area_unit_name})
+    .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:beds})
+    .andWhere("property_category.property_category_name =:property_category_name",{property_category_name:property_catogory})
+
+
+
+
+
+    .getMany();
+    if(!findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType){
+        return ;
+    }
+    else{
+    return findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType;
+    }
+}
+
+
+
+//FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber,PropertyType,PropertySubType//
+async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(addpropertysearch:AddpropertySearch ):Promise<Addproperty[]>{
+     const {purpose, city_name, location_name, property_catogory, min_price,max_price,min_area,max_area,beds,area_unit_name}=addpropertysearch;
+     const minprice=parseInt(min_price.replace(",",""));
+     const maxprice=parseInt(max_price.replace(",",""))
+     console.log(typeof(minprice))
+
+     const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType_PropertySubType=await this.addpropertyrepo.createQueryBuilder("addproperty")
+    .leftJoinAndSelect("addproperty.images","images")
+    .leftJoinAndSelect("addproperty.city_id","city_id")
+    .leftJoinAndSelect("addproperty.Location_id","Location_id")
+    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
+    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
+    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
+    .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
+    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
     .andWhere("area_unit_id.area_name =:area_name",{area_name:area_unit_name})
     .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:beds})
-    .andWhere("addproperty.price >=price",{price:parseInt(minprice)})
-    .andWhere("addproperty.price >=price",{price:parseInt(maxprice)})
-    .andWhere("addproperty.land_area >= land_area",{land_area:parseInt(min_area)})
-    .andWhere("addproperty.land_area >=land_area",{land_area:parseInt(max_area)})
-
-    .andWhere("property_category.property_category_name =:property_category_name",{property_category_name:property_type})
+    .andWhere(`addproperty.price BETWEEN '${minprice}' AND '${maxprice}'`)
+    .andWhere(`addproperty.land_area BETWEEN '${parseInt(min_area)}' AND '${parseInt(max_area)}'`)
+    .andWhere("property_category.property_category_name =:property_category_name",{property_category_name:property_catogory})
 
 
     .getMany();

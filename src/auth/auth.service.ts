@@ -83,7 +83,7 @@ export class AuthService {
             const payload:JwtPayload={email};
             const accessToken=await this.jwtService.sign(payload);
             const para="Thank you for choosing <strong>Abaadee.com</strong> First, you need to confirm your account. Just press the button below.";
-            this.utilityservice.sendEmail(email,"/varification/"+accessToken,"Confirm Account",para);
+            this.utilityservice.sendEmail(email,"/varification/"+accessToken,"Confirm Account",para,"Account Varification");
             return {message:"Please cheak your Email"};
           } 
           catch (error) {
@@ -121,7 +121,7 @@ export class AuthService {
     }
 
 
-   async Forgetmail(email:string):Promise<string>{
+   async Forgetmail(email:string):Promise<any>{
 
     const query= await this.userRepository.createQueryBuilder("user").
     where("user.email=:email",{email:email})
@@ -132,11 +132,11 @@ export class AuthService {
       const accessToken=await this.jwtService.sign(payload);
       console.log(accessToken);
       const para="Please click <strong>Below Button</strong> to change your password";
-     this.utilityservice.sendEmail(email,"/Forgetpass/"+accessToken,"Click Here",para);
-     return "Your Password has been sent to the specified email address"
+     this.utilityservice.sendEmail(email,"/Forgetpass/"+accessToken,"Click Here",para,"Reset Password");
+     return {message:"Your Password has been sent to the specified email address"}
     }
     else{
-      return "Invalid email or Email doesn't exist";
+      return new UnauthorizedException("Invalid email or Email doesn't exist");
     }
    
     

@@ -111,81 +111,76 @@ export class AddpropertyController {
     @Post("getpropertydata")
 
     findpropertydata(@Body() addpropertysearch:AddpropertySearch): Promise<Addproperty[]> {
-        const {purpose, city_name, location_name, property_type, min_price,max_price,min_area,max_area,beds,area_unit_name}=addpropertysearch;
-    //     if (city_name && !location_name  && !area_unit_name && !beds && !PropertyTypeName && !property_type) {  
+        const {purpose, city_name, location_name, property_catogory, min_price,max_price,min_area,max_area,beds,area_unit_name}=addpropertysearch;
+        if (city_name && purpose && !location_name  && !area_unit_name && !beds  && !property_catogory) {  
 
-    //         return this.addproservice.find_data_From_cityname(city_name,purpose);
-    //     }
-    //      if (location_name && !city_name && !BathroomNumber && !area_unit_name && !beds && !PropertyTypeName && !property_type) {
-    //         return this.addproservice.find_data_From_locationname(locationname,purpose);
-    //     }
-    //      if (BathroomNumber && !city_name && !location_name && !area_unit_name && !beds && !PropertyTypeName && !property_type) {
-    //         return this.addproservice.find_data_From_Bathroom(BathroomNumber,purpose);
-
-    //     }
-    //      if (area_unit_name && !city_name && !location_name && !BathroomNumber && !beds && !PropertyTypeName && !property_type) {
-    //         return this.addproservice.find_data_From_AreaUnit(AreaUnitname,purpose);
-    //     }
-    //      if (beds && !city_name && !location_name && !BathroomNumber && !area_unit_name && !PropertyTypeName && !property_type) {
-    //         return this.addproservice.find_data_From_Bed(BedNumber,purpose);
-    //     }
-    //      if (PropertyTypeName && !city_name && !location_name && !BathroomNumber && !area_unit_name && !beds && !property_type) {
-    //         return this.addproservice.find_data_From_PropertyType(PropertyTypeName,purpose);
-    //     }
-    //      if (property_type && !city_name && !location_name && !BathroomNumber && !area_unit_name && !beds && !PropertyTypeName) {
-    //         return this.addproservice.find_data_From_PropertySubType(Property_Category,purpose);
-    //     }
-    //   /*  else {
+            return this.addproservice.find_data_From_cityname(addpropertysearch);
+        }
+         if (location_name && purpose && !city_name  && !area_unit_name && !beds  && !property_catogory) {
+            return this.addproservice.find_data_From_locationname(addpropertysearch);
+        }
+     
+         if (area_unit_name &&purpose &&  !city_name && !location_name  && !beds  && !property_catogory) {
+            return this.addproservice.find_data_From_AreaUnit(addpropertysearch);
+        }
+         if (beds &&purpose &&  !city_name && !location_name  && !area_unit_name && !property_catogory) {
+            return this.addproservice.find_data_From_Bed(addpropertysearch);
+        }
+         
+         if (property_catogory && !city_name && !location_name  && !area_unit_name && !beds ) {
+            return this.addproservice.find_data_From_PropertySubType(addpropertysearch);
+        }
+      /*  else {
             
-    //         return  null;
-    //     }
-    // }
-    // @Post("getpropertydata2")
+            return  null;
+        }
+    }
+    @Post("getpropertydata2")
 
-    // findpropertydata2(@Body('cityname') cityname: string,
-    //     @Body('locationname') locationname: string,
-    //     @Body('BathroomNumber') BathroomNumber: number,
-    //     @Body('AreaUnitname') AreaUnitname: string,
-    //     @Body('BedNumber') BedNumber: number,
-    //     @Body('PropertyTypeName') PropertyTypeName: string,
-    //     @Body('Property_Category') Property_Category: string,
-    // ): Promise<Addproperty[]>
-    // { */
+    findpropertydata2(@Body('cityname') cityname: string,
+        @Body('locationname') locationname: string,
+        @Body('BathroomNumber') BathroomNumber: number,
+        @Body('AreaUnitname') AreaUnitname: string,
+        @Body('BedNumber') BedNumber: number,
+        @Body('PropertyTypeName') PropertyTypeName: string,
+        @Body('Property_Category') Property_Category: string,
+    ): Promise<Addproperty[]>
+    { */
 
-    //     if (city_name && location_name && !BathroomNumber && !area_unit_name && !beds && !PropertyTypeName && !property_type) {
-    //        console.log("salman");
-    //         return this.addproservice.find_data_From_Cityname_Locationname(cityname, locationname,purpose);
-    //     }
-    //    /* else {
+        if (city_name && location_name && purpose  && !area_unit_name && !beds  && !property_catogory) {
+           console.log("salman");
+            return this.addproservice.find_data_From_Cityname_Locationname(addpropertysearch);
+        }
+       /* else {
 
-    //         return null;
-    //     }
-    // }
-    //     @Post("getpropertydata3")
+            return null;
+        }
+    }
+        @Post("getpropertydata3")
 
-    //     findpropertydata3(@Body('cityname') cityname: string,
-    //     @Body('locationname') locationname: string,
-    //     @Body('BathroomNumber') BathroomNumber: number,
-    //     @Body('AreaUnitname') AreaUnitname: string,
-    //     @Body('BedNumber') BedNumber: number,
-    //     @Body('PropertyTypeName') PropertyTypeName: string,
-    //     @Body('Property_Category') Property_Category: string,
-    // ): Promise<Addproperty[]>
-    //     {*/
+        findpropertydata3(@Body('cityname') cityname: string,
+        @Body('locationname') locationname: string,
+        @Body('BathroomNumber') BathroomNumber: number,
+        @Body('AreaUnitname') AreaUnitname: string,
+        @Body('BedNumber') BedNumber: number,
+        @Body('PropertyTypeName') PropertyTypeName: string,
+        @Body('Property_Category') Property_Category: string,
+    ): Promise<Addproperty[]>
+        {*/
 
-    //     if (city_name && location_name && BathroomNumber && !area_unit_name && !beds && !PropertyTypeName && !property_type) {
-    //         return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber(cityname, locationname, BathroomNumber,purpose);
-    //     }
-    //      if (city_name && location_name && BathroomNumber && area_unit_name && !beds && !PropertyTypeName && !property_type) {
-    //         return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(cityname, locationname, BathroomNumber, AreaUnitname,purpose);
-    //     }
-    //      if (city_name && location_name && BathroomNumber && area_unit_name && beds && !PropertyTypeName && !property_type) {
-    //         return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(cityname, locationname, BathroomNumber, AreaUnitname, BedNumber,purpose);
-    //     }
-    //      if (city_name && location_name && BathroomNumber && area_unit_name && beds && PropertyTypeName && !property_type) {
-    //         return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(cityname, locationname, BathroomNumber, AreaUnitname, BedNumber, PropertyTypeName,purpose);
-    //     }
-         if (city_name && location_name && min_price && max_price && min_area &&max_area && area_unit_name && beds && property_type) {
+        if (city_name && location_name && purpose  && !area_unit_name && !beds  && !property_catogory) {
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber(addpropertysearch);
+        }
+         if (city_name && location_name && purpose  && area_unit_name && !beds  && !property_catogory) {
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(addpropertysearch);
+        }
+         if (city_name && location_name && purpose  && area_unit_name && beds  && !property_catogory) {
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(addpropertysearch);
+        }
+         if (city_name && location_name &&purpose  && area_unit_name && beds  && !property_catogory) {
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(addpropertysearch);
+        }
+         if (city_name && location_name &&purpose &&  min_price && max_price && min_area &&max_area && area_unit_name && beds && property_catogory) {
             return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(addpropertysearch);
         }
         else {

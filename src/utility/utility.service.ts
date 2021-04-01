@@ -17,7 +17,7 @@ export class UtilityService {
         });
     }
   
-    async sendEmail(userEmail:string,payload: String ,btnname:string, para:string) {
+    async sendEmail(userEmail:string,payload: String ,btnname:string, para:string,subject:string) {
        
         const url=`http://localhost:3200/auth${payload}`;
       
@@ -25,7 +25,7 @@ export class UtilityService {
             from: '"Application Server', // sender address
             to: userEmail, // list of receivers
 
-            subject: `Account Verification`, // Subject line
+            subject:subject, // Subject line
             //text: `<b> Your Activation code is ${payload}</b>`, // plain text body
             html: `
             <!DOCTYPE html>

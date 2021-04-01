@@ -53,6 +53,7 @@ export class AuthController {
     Redirect(@Param("access") access,@Res() res){
       this.decode= jwt_decode(access);
       console.log(this.decode.email);
+      res.redirect("http://localhost:3000/reset/password");
      
     }
 

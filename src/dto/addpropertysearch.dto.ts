@@ -5,7 +5,7 @@ export class AddpropertySearch{
 purpose:Purpose;
 city_name:string;
 location_name:string;
-property_type:string;
+property_catogory:string;
 min_price:string;
 max_price:string;
 min_area:string;
