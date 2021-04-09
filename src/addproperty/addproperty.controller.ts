@@ -112,6 +112,9 @@ export class AddpropertyController {
 
     findpropertydata(@Body() addpropertysearch:AddpropertySearch): Promise<Addproperty[]> {
         const {purpose, city_name, location_name, property_catogory, min_price,max_price,min_area,max_area,beds,area_unit_name}=addpropertysearch;
+        if (!city_name && purpose && !location_name  && !area_unit_name && !beds  && !property_catogory) {
+            return this.addproservice.find_data_From_Purpose(addpropertysearch.purpose);
+        }
         if (city_name && purpose && !location_name  && !area_unit_name && !beds  && !property_catogory) {  
 
             return this.addproservice.find_data_From_cityname(addpropertysearch);
@@ -127,50 +130,12 @@ export class AddpropertyController {
             return this.addproservice.find_data_From_Bed(addpropertysearch);
         }
          
-         if (property_catogory && !city_name && !location_name  && !area_unit_name && !beds ) {
+         if (property_catogory && purpose && !city_name && !location_name  && !area_unit_name && !beds ) {
             return this.addproservice.find_data_From_PropertySubType(addpropertysearch);
         }
-      /*  else {
-            
-            return  null;
-        }
-    }
-    @Post("getpropertydata2")
-
-    findpropertydata2(@Body('cityname') cityname: string,
-        @Body('locationname') locationname: string,
-        @Body('BathroomNumber') BathroomNumber: number,
-        @Body('AreaUnitname') AreaUnitname: string,
-        @Body('BedNumber') BedNumber: number,
-        @Body('PropertyTypeName') PropertyTypeName: string,
-        @Body('Property_Category') Property_Category: string,
-    ): Promise<Addproperty[]>
-    { */
-
         if (city_name && location_name && purpose  && !area_unit_name && !beds  && !property_catogory) {
-           console.log("salman");
             return this.addproservice.find_data_From_Cityname_Locationname(addpropertysearch);
-        }
-       /* else {
-
-            return null;
-        }
-    }
-        @Post("getpropertydata3")
-
-        findpropertydata3(@Body('cityname') cityname: string,
-        @Body('locationname') locationname: string,
-        @Body('BathroomNumber') BathroomNumber: number,
-        @Body('AreaUnitname') AreaUnitname: string,
-        @Body('BedNumber') BedNumber: number,
-        @Body('PropertyTypeName') PropertyTypeName: string,
-        @Body('Property_Category') Property_Category: string,
-    ): Promise<Addproperty[]>
-        {*/
-
-        if (city_name && location_name && purpose  && !area_unit_name && !beds  && !property_catogory) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber(addpropertysearch);
-        }
+        }        
          if (city_name && location_name && purpose  && area_unit_name && !beds  && !property_catogory) {
             return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(addpropertysearch);
         }
