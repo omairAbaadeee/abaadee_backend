@@ -8,6 +8,7 @@ import { Location } from "./location.entity";
 import { PropertyCategory } from "./property_category.entity";
 import { PropertyType } from "./property_type.entity";
 import { Propertyimage } from "./propertyimage.entity";
+import { Features } from "./features.entity";
 
 export enum Purpose {
     ForSale = "Buy",
@@ -23,27 +24,28 @@ export class Addproperty {
     id: number;
 
     @ManyToOne(()=>User,userid=>userid.addproperty)
+    @JoinColumn({name:"user_id"})
     userid:User;
     
     @Column()
     purpose: Purpose;
     
     @ManyToOne(()=>PropertyType,propertytype=>propertytype.addproperty)
-    @JoinColumn()
+    @JoinColumn({name:"property_type_id"})
     property_type: PropertyType;
     
     @ManyToOne(() => PropertyCategory,propertycatogory=>propertycatogory.addproperty)
-    @JoinColumn()
-property_category: PropertyCategory;
+    @JoinColumn({name:"property_category_id"})
+    property_category: PropertyCategory;
 
     
     @ManyToOne(() => City,city=>city.addproperty)
-    @JoinColumn()
-    city_id: City;
+    @JoinColumn({name:"city_id"})
+    city: City;
     
     @ManyToOne(() => Location,location=>location.addproperty)
-    @JoinColumn()
-    Location_id: Location;
+    @JoinColumn({name:"location_id"})
+    Location: Location;
     
     @Column()
     property_title: string;
@@ -57,23 +59,34 @@ property_category: PropertyCategory;
     @Column()
     land_area: number;
 
+    @Column()
+    title_image: string;
+
+    @Column()
+    is_verified: boolean;
+
     @ManyToOne(() => Areaofunit,areaofunit=>areaofunit.addproperty)
-    @JoinColumn()
-    area_unit_id: Areaofunit;
+    @JoinColumn({name:"area_unit_id"})
+    area_unit: Areaofunit;
 
     @ManyToOne(() => Beds,beds=>beds.addproperty)
-    @JoinColumn()
-    bed_id: Beds;
+    @JoinColumn({name:"bed_id"})
+    bed: Beds;
 
 
     @ManyToOne(() => Bathrooms,bathrooms=>bathrooms.addproperty)
-    @JoinColumn()
-    bathroom_id: Bathrooms;
+    @JoinColumn({name:"bathroom_id"})
+    bathroom: Bathrooms;
 
     @OneToMany(()=>Propertyimage,images=>images.addproperty)
-    @JoinColumn()
+    @JoinColumn({name:"image_id"})
     images: Propertyimage[];
     
+    
+    @OneToMany(()=>Features,feature=>feature.addproperty)
+    @JoinColumn({name:"feature_id"})
+    feature: Features[];
+
     @Column()
     expiredate: Date;
     

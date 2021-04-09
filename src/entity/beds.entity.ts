@@ -10,6 +10,6 @@ export class Beds {
     @Column()
     beds_quantity: number;
     
-    @OneToMany(()=>Addproperty,addproperty=>addproperty.bed_id)
+    @OneToMany(()=>Addproperty,addproperty=>addproperty.bed)
     addproperty:Addproperty[];
 }

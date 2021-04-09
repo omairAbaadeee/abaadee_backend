@@ -22,7 +22,7 @@ country:Country;
     @OneToMany(type => Location, location => location.city)
     location: Location[];
 
-    @OneToMany(()=>Addproperty,addproperty=>addproperty.city_id)
+    @OneToMany(()=>Addproperty,addproperty=>addproperty.city)
     addproperty:Addproperty[];
 
     @OneToMany(()=>User,user=>user.city)

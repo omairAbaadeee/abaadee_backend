@@ -10,6 +10,6 @@ export class Bathrooms {
     @Column()
     bathroom_quantity: number;
     
-    @OneToMany(()=>Addproperty,addproperty=>addproperty.bathroom_id)
+    @OneToMany(()=>Addproperty,addproperty=>addproperty.bathroom)
     addproperty:Addproperty[];
 }

@@ -14,7 +14,7 @@ export class Location {
 
     @ManyToOne(type => City, city => city.location)
     city: City;
-    @OneToMany(()=>Addproperty,addproperty=>addproperty.Location_id)
+    @OneToMany(()=>Addproperty,addproperty=>addproperty.Location)
     addproperty:Addproperty[];
 
     @OneToMany(()=>User,user=>user.location)

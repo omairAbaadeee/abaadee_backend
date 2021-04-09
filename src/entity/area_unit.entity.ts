@@ -10,6 +10,6 @@ export class Areaofunit {
     @Column()
     area_name: string;
 
-    @OneToMany(()=>Addproperty,addproperty=>addproperty.area_unit_id)
+    @OneToMany(()=>Addproperty,addproperty=>addproperty.area_unit)
     addproperty:Addproperty[];
 }

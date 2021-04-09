@@ -71,7 +71,7 @@ export class AddpropertyService {
         bathroom, property_type,
         property_category,
         city_name,
-        location_name, price } = addpropertydto;
+        location_name, price ,title_image,is_verified} = addpropertydto;
    
        
 
@@ -98,6 +98,8 @@ export class AddpropertyService {
         //console.log(updateddat);
         addproperty.expiredate=expiredate;
         //console.log(expiredate);
+        addproperty.title_image=title_image;
+        addproperty.is_verified=is_verified;
 
 
       
@@ -106,26 +108,26 @@ export class AddpropertyService {
         .createQueryBuilder("city")
         .where("city.city_name = :city_name", { city_name: city_name })
         .getOne();
-        addproperty.city_id = findcity;
+        addproperty.city = findcity;
         //console.log(findcity);
         const findlocation = await this.locationrepo
         .createQueryBuilder("location")
         .where("location.location_name = :location_name", { location_name: location_name })
         .getOne();
-        addproperty.Location_id = findlocation;
+        addproperty.Location = findlocation;
         //console.log(findlocation);
         const findbeds = await this.bedsrepo.findOne(bed);
-        addproperty.bed_id = findbeds;
+        addproperty.bed = findbeds;
         //console.log(findbeds);
         const findbaths = await this.bathrepo.findOne(bathroom);
-        addproperty.bathroom_id = findbaths;
+        addproperty.bathroom = findbaths;
         //console.log(findbaths);
         const findareaunit = await this.areaunitrepo
            .createQueryBuilder("areaofunit")
            .where("areaofunit.area_name = :area_name", { area_name: area_unit_name })
            .getOne();
         // const findareaunit = await this.areaunitrepo.findOne({areaunitname});
-        addproperty.area_unit_id = findareaunit;
+        addproperty.area_unit = findareaunit;
         //console.log(findareaunit);
 
         const findprosubtype = await this.propertycatogoryrepo
@@ -183,19 +185,18 @@ export class AddpropertyService {
         propertyimage.addproperty=propertyid;
         await this.proimageRepository.save(propertyimage); 
     })
-                
-  
+
 }
     async getalldata():Promise<Addproperty[]>{
     const findalldata=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.cityid","cityid")
-    .leftJoinAndSelect("addproperty.Locationid","Locationid")
-    .leftJoinAndSelect("addproperty.bathroomid","bathroomid")
-    .leftJoinAndSelect("addproperty.areaunitid","areaunitid")
-    .leftJoinAndSelect("addproperty.bedid","bedid")
-    .leftJoinAndSelect("addproperty.propertytype","propertytype")
-    .leftJoinAndSelect("addproperty.propertysubtype","propertysubtype")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
+    .leftJoinAndSelect("addproperty.property_type","property_type")
+    .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
     .getMany();
     // console.log(findalldata);
@@ -209,16 +210,16 @@ async find_data_From_cityname(addpropertysearch:AddpropertySearch):Promise<Addpr
    
     const findDataByCity=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .andWhere("city_id.city_name=:city_name",{city_name:city_name})
+    .andWhere("city.city_name=:city_name",{city_name:city_name})
     .getMany();
     if(!findDataByCity){
         return this.find_data_From_Purpose(purpose);
@@ -234,16 +235,16 @@ async find_data_From_cityname(addpropertysearch:AddpropertySearch):Promise<Addpr
         const {purpose,location_name}=addpropertysearch;
     const findDataByLocation=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
+    .andWhere("Location.location_name =:location_name",{location_name:location_name})
     .getMany();
     if(!findDataByLocation){
         return this.find_data_From_Purpose(purpose);
@@ -259,16 +260,16 @@ async find_data_From_AreaUnit(addpropertysearch:AddpropertySearch):Promise<Addpr
     const {area_unit_name,purpose}=addpropertysearch;
     const findDataByAreaUnit=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .andWhere("area_unit_id.area_name =:area_name",{area_name:area_unit_name})
+    .andWhere("area_unit.area_name =:area_name",{area_name:area_unit_name})
     .getMany();
     return findDataByAreaUnit;
 }
@@ -277,16 +278,16 @@ async find_data_From_Bed(addpropertysearch:AddpropertySearch):Promise<Addpropert
     const {beds,purpose}=addpropertysearch;
     const findDataByBed=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:beds})
+    .andWhere("bed.beds_quantity =:beds_quantity",{beds_quantity:beds})
 
     .getMany();
     if(!findDataByBed){
@@ -304,11 +305,11 @@ async find_data_From_PropertySubType(addpropertysearch:AddpropertySearch):Promis
     const {property_catogory,purpose}=addpropertysearch;
     const findDataByproperty_category=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
@@ -327,20 +328,20 @@ async find_data_From_PropertySubType(addpropertysearch:AddpropertySearch):Promis
 
 async find_data_From_Cityname_Locationname(addpropertysearch:AddpropertySearch):Promise<Addproperty[]>{
     const {city_name,location_name,purpose}=addpropertysearch;
-    console.log("Ahmed")
+   // console.log("Ahmed")
     const findonedatabyCity_Location=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
-    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
+    .andWhere("city.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location.location_name =:location_name",{location_name:location_name})
     .getMany();
     if(!findonedatabyCity_Location){
         return this.find_data_From_Purpose(purpose);
@@ -356,18 +357,18 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(addpropertyse
     const {city_name,location_name,area_unit_name,purpose}=addpropertysearch;
     const findonedatabyCity_Location_Bathroom_AreaUnit=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
-    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
-    .andWhere("area_unit_id.area_name =:area_name",{area_name:area_unit_name})
+    .andWhere("city.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location.location_name =:location_name",{location_name:location_name})
+    .andWhere("area_unit.area_name =:area_name",{area_name:area_unit_name})
     .getMany();
     if(!findonedatabyCity_Location_Bathroom_AreaUnit){
         return this.find_data_From_Purpose(purpose);
@@ -383,19 +384,19 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(add
     const {city_name,location_name,area_unit_name,purpose,beds}=addpropertysearch;
     const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
-    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
-    .andWhere("area_unit_id.area_name =:area_name",{area_name:area_unit_name})
-    .andWhere("bedi_d.beds_quantity =:beds_quantity",{beds_quantity:beds})
+    .andWhere("city.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location.location_name =:location_name",{location_name:location_name})
+    .andWhere("area_unit.area_name =:area_name",{area_name:area_unit_name})
+    .andWhere("bed.beds_quantity =:beds_quantity",{beds_quantity:beds})
     .getMany();
     if(!findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber){
         return this.find_data_From_Purpose(purpose);
@@ -412,19 +413,19 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
     const {city_name,location_name,area_unit_name,purpose,beds,property_catogory}=addpropertysearch;
     const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
-    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
-    .andWhere("areaunit_id.area_name =:area_name",{area_name:area_unit_name})
-    .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:beds})
+    .andWhere("city.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location.location_name =:location_name",{location_name:location_name})
+    .andWhere("areaunit.area_name =:area_name",{area_name:area_unit_name})
+    .andWhere("bed.beds_quantity =:beds_quantity",{beds_quantity:beds})
     .andWhere("property_category.property_category_name =:property_category_name",{property_category_name:property_catogory})
     .getMany();
     if(!findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType){
@@ -445,20 +446,20 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
      const maxprice=parseInt(max_price.replace(",",""))
      console.log(typeof(minprice))
      const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType_PropertySubType=await this.addpropertyrepo.createQueryBuilder("addproperty")
-    .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
-    .leftJoinAndSelect("addproperty.property_type","property_type")
-    .leftJoinAndSelect("addproperty.property_category","property_category")
+     .leftJoinAndSelect("addproperty.images","images")
+     .leftJoinAndSelect("addproperty.city","city")
+     .leftJoinAndSelect("addproperty.Location","Location")
+     .leftJoinAndSelect("addproperty.bathroom","bathroom")
+     .leftJoinAndSelect("addproperty.area_unit","area_unit")
+     .leftJoinAndSelect("addproperty.bed","bed")
+     .leftJoinAndSelect("addproperty.property_type","property_type")
+     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .andWhere("city_id.city_name =:city_name",{city_name:city_name})
-    .andWhere("Location_id.location_name =:location_name",{location_name:location_name})
-    .andWhere("area_unit_id.area_name =:area_name",{area_name:area_unit_name})
-    .andWhere("bed_id.beds_quantity =:beds_quantity",{beds_quantity:beds})
+    .andWhere("city.city_name =:city_name",{city_name:city_name})
+    .andWhere("Location.location_name =:location_name",{location_name:location_name})
+    .andWhere("area_unit.area_name =:area_name",{area_name:area_unit_name})
+    .andWhere("bed.beds_quantity =:beds_quantity",{beds_quantity:beds})
     .andWhere(`addproperty.price BETWEEN '${minprice}' AND '${maxprice}'`)
     .andWhere(`addproperty.land_area BETWEEN '${parseInt(min_area)}' AND '${parseInt(max_area)}'`)
     .andWhere("property_category.property_category_name =:property_category_name",{property_category_name:property_catogory})
@@ -473,15 +474,15 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
 async getalldataByPurpose(purpose:string):Promise<Addproperty[]>{
     const findalldataByPurpose=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
-    .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
-    .where("addproperty.purpose=:purpose", {purpose:purpose})
+    .where("addproperty.expiredate >:expiredate",{expiredate:this.date})
+    .andWhere("addproperty.purpose=:purpose", {purpose:purpose})
     .getMany();
     if(!findalldataByPurpose){
         return ;
@@ -493,11 +494,11 @@ async getalldataByPurpose(purpose:string):Promise<Addproperty[]>{
 async find_data_From_Purpose(purpose:string):Promise<Addproperty[]>{
     const findDataByAreaUnit=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
-    .leftJoinAndSelect("addproperty.city_id","city_id")
-    .leftJoinAndSelect("addproperty.Location_id","Location_id")
-    .leftJoinAndSelect("addproperty.bathroom_id","bathroom_id")
-    .leftJoinAndSelect("addproperty.area_unit_id","area_unit_id")
-    .leftJoinAndSelect("addproperty.bed_id","bed_id")
+    .leftJoinAndSelect("addproperty.city","city")
+    .leftJoinAndSelect("addproperty.Location","Location")
+    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    .leftJoinAndSelect("addproperty.area_unit","area_unit")
+    .leftJoinAndSelect("addproperty.bed","bed")
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
