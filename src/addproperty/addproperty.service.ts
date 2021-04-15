@@ -4,8 +4,10 @@ import { response } from 'express';
 import { Addimagedto, Addpropertydto } from 'src/dto/addproerty.dto';
 import { AddpropertySearch } from 'src/dto/addpropertysearch.dto';
 import { Addproperty, Purpose } from 'src/entity/addproperty.entity';
+import { Features } from 'src/entity/features.entity';
 import { Propertyimage } from 'src/entity/propertyimage.entity';
 import { User } from 'src/entity/user.entity';
+import { AddfeatureReposatory } from 'src/reposatory/addfeature.dto';
 import { AddpropertyRepo } from 'src/reposatory/addproperty.reposatory';
 import { AreasizeRepositery } from 'src/reposatory/areasize.reposatory';
 import { AreaofunitRepositery } from 'src/reposatory/areaunit.reposatory';
@@ -53,6 +55,9 @@ export class AddpropertyService {
 
         @InjectRepository(PropertyimagesRepositery)
         private proimageRepository:PropertyimagesRepositery,
+
+        @InjectRepository(AddfeatureReposatory)
+        private addfeaturerepo:AddfeatureReposatory,
     ) { }
    public date=new Date();
    
@@ -71,7 +76,7 @@ export class AddpropertyService {
         bathroom, property_type,
         property_category,
         city_name,
-        location_name, price ,title_image,is_verified} = addpropertydto;
+        location_name, price ,title_image,is_verified,featurename} = addpropertydto;
    
        
 
@@ -100,7 +105,7 @@ export class AddpropertyService {
         //console.log(expiredate);
         addproperty.title_image=title_image;
         addproperty.is_verified=is_verified;
-
+         addproperty.title_image="Ahmed";
 
       
       
@@ -156,23 +161,26 @@ export class AddpropertyService {
         //const finduser = await this.userRepository.findOne(username);
         //console.log(finduser);
         addproperty.userid = user;
-        
 
-        // images.forEach(async element=>{
-
-        //     const findimage = await this.proimageRepository
-        //     .createQueryBuilder("image")
-        //     .where("image.imageurl = :imageurl", { imageurl: element.filename })
-        //     .getOne();
-        //       addproperty.images=[findimage];
-         
-        // })
-       // addproperty.images=[]
-        
          await this.addpropertyrepo.save(addproperty);
          
          this.addimage(images,addproperty);
+         this.Addfeature(addproperty,featurename)
 
+
+    }
+    async Addfeature(addproperty:Addproperty,feature:string){
+    var Array=[];
+    Array.push(feature);
+    Array.forEach(Element=>{
+        console.log(Element);
+        Element.forEach(element => {
+            const features=new Features();
+            features.addproperty=addproperty;
+            features.feature_name=element;
+            this.addfeaturerepo.save(features);
+        })
+    })
 
     }
 
@@ -181,7 +189,7 @@ export class AddpropertyService {
        
     images.forEach(async element=>{
         const propertyimage=new Propertyimage();
-        propertyimage.imageurl=element.filename;
+        propertyimage.imageurl="http://localhost:3200/addproperty/image/"+element.filename;
         propertyimage.addproperty=propertyid;
         await this.proimageRepository.save(propertyimage); 
     })

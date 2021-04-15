@@ -18,7 +18,7 @@ export class Addpropertydto{
     expire_date: Date;
     title_image:string;
     is_verified:boolean;
-
+    featurename:string;
   
 }
 export class Addimagedto{

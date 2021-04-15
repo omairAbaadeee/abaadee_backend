@@ -12,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/entity/user.entity';
 import {AddpropertySearch} from "src/dto/addpropertysearch.dto";
+import { FeatureDto } from 'src/dto/feature.dto';
 @Controller('addproperty')
 export class AddpropertyController {
     constructor(
@@ -51,19 +52,25 @@ export class AddpropertyController {
     }
 
 
-    @Post('uploadMultipleFiles')
+    @Post('uploaddata')
     @UseGuards(AuthGuard())
+    
     @UseInterceptors(
-        FilesInterceptor('image', 11, {
+
+        FilesInterceptor(
+            'image', 11, {
             storage: diskStorage({
                 destination: './uploads/images',
                 filename: editFileName,
-            }),
+            }
+            ),
             fileFilter: imageFileFilter,
-        }),
+        }
+        ),
     )
     async uploadMultipleFiles(@UploadedFiles() files,@Body() addpropertydto: Addpropertydto,
     @GetUser() user:User) {
+        console.log(addpropertydto);
         const response = [];
         files.forEach(file => {
             const fileReponse = {
@@ -73,19 +80,9 @@ export class AddpropertyController {
             };
             response.push(fileReponse);
         });
-
-
-
         //save first Addproperty in database then images save
         console.log(addpropertydto);
         this.addproservice.addproperty(addpropertydto,user,response);
-
-        // console.log(files);
-        // this.addproservice.addimage(response);
-
-      
-        
-        
         return {
             status: HttpStatus.OK,
             message: 'Images uploaded successfully!',
@@ -107,6 +104,7 @@ export class AddpropertyController {
         return this.addproservice.getalldataByPurpose(purpose);
 
     }
+   
 
     @Post("getpropertydata")
 

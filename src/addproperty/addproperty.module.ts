@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
+import { AddfeatureReposatory } from 'src/reposatory/addfeature.dto';
 import { AddpropertyRepo } from 'src/reposatory/addproperty.reposatory';
 import { AreasizeRepositery } from 'src/reposatory/areasize.reposatory';
 import { AreaofunitRepositery } from 'src/reposatory/areaunit.reposatory';
@@ -20,7 +21,7 @@ import { AddpropertyService } from './addproperty.service';
 @Module({
   imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,AreasizeRepositery,BathRepositery,BedsRepositery,
     CityRepository,LocationRepository,PriceRepository,PropertyimagesRepositery
-    ,PropertyCategoryRepositery,PropertytypeRepositery,UserRepository]),
+    ,PropertyCategoryRepositery,PropertytypeRepositery,UserRepository,AddfeatureReposatory]),
     AuthModule
   ],
   controllers: [AddpropertyController],
