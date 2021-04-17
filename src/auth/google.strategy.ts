@@ -17,13 +17,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         });
     }
     async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
-        const { name, emails, photos} = profile
+        const { name, emails, photos,city} = profile
         const user = {
             email: emails[0].value,
             firstName: name.givenName,
             lastName: name.familyName,
-            picture: photos[0].value,
-         
+            picture: photos[0].value,     
+            // city  :    city[0].value,   
             accessToken
         }
         done(null, user);

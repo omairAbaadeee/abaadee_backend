@@ -1,18 +1,16 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Addpropertydto } from 'src/dto/addproerty.dto';
 import { AddpropertyService } from './addproperty.service';
 import { editFileName, imageFileFilter } from './file.upload';
 import { diskStorage } from 'multer';
 import { join } from 'path';
 import { Observable, of } from 'rxjs';
-import { Propertyimage } from 'src/entity/propertyimage.entity';
 import { Addproperty, Purpose } from 'src/entity/addproperty.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/entity/user.entity';
 import {AddpropertySearch} from "src/dto/addpropertysearch.dto";
-import { FeatureDto } from 'src/dto/feature.dto';
 @Controller('addproperty')
 export class AddpropertyController {
     constructor(
@@ -26,17 +24,19 @@ export class AddpropertyController {
     @Get()
     Addproperty() {
         return "Hello";
+        
     }
 
     @Post("/upload")
-    @UseInterceptors(
-        FileInterceptor('image', {
+    @UseInterceptors( 
+        FileInterceptor('image', {  
             storage: diskStorage({
                 destination: './uploads/images',
                 filename: editFileName,
             }),
             fileFilter: imageFileFilter,
         }),
+        
     )
     async uploadedFile(@UploadedFile() file) {
         const response = {
@@ -56,6 +56,7 @@ export class AddpropertyController {
     @UseGuards(AuthGuard())
     
     @UseInterceptors(
+        
 
         FilesInterceptor(
             'image', 11, {
@@ -68,9 +69,10 @@ export class AddpropertyController {
         }
         ),
     )
+  
     async uploadMultipleFiles(@UploadedFiles() files,@Body() addpropertydto: Addpropertydto,
     @GetUser() user:User) {
-        console.log(addpropertydto);
+     
         const response = [];
         files.forEach(file => {
             const fileReponse = {
@@ -81,7 +83,7 @@ export class AddpropertyController {
             response.push(fileReponse);
         });
         //save first Addproperty in database then images save
-        console.log(addpropertydto);
+      
         this.addproservice.addproperty(addpropertydto,user,response);
         return {
             status: HttpStatus.OK,
@@ -104,7 +106,15 @@ export class AddpropertyController {
         return this.addproservice.getalldataByPurpose(purpose);
 
     }
-   
+    @Post('upload1')
+    @UseInterceptors(FileFieldsInterceptor([
+      { name: 'image1', maxCount: 5 },
+      { name: 'image2', maxCount: 1 },
+    ]))
+    uploadFile(@UploadedFiles() files) {
+      console.log(files);
+    }
+    
 
     @Post("getpropertydata")
 

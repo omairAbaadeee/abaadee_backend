@@ -69,7 +69,9 @@ export class AddpropertyService {
     }
 
     async addproperty(addpropertydto: Addpropertydto,user:User,images:Addimagedto[]) {
-
+    //  console.log (addpropertydto);
+    //  console.log (user);
+    //  console.log (images); 
         const { purpose, property_title, property_description, land_area,  
          area_unit_name,
         bed,
@@ -77,7 +79,8 @@ export class AddpropertyService {
         property_category,
         city_name,
         location_name, price ,title_image,is_verified,featurename} = addpropertydto;
-   
+        const {filename}=images[0];
+         console.log(filename);
        
 
         const createdat =new Date();
@@ -103,9 +106,9 @@ export class AddpropertyService {
         //console.log(updateddat);
         addproperty.expiredate=expiredate;
         //console.log(expiredate);
-        addproperty.title_image=title_image;
+        addproperty.title_image="http://localhost:3200/addproperty/image/"+filename;
         addproperty.is_verified=is_verified;
-         addproperty.title_image="Ahmed";
+        //  addproperty.title_image="Ahmed";
 
       
       
@@ -173,7 +176,7 @@ export class AddpropertyService {
     var Array=[];
     Array.push(feature);
     Array.forEach(Element=>{
-        console.log(Element);
+     
         Element.forEach(element => {
             const features=new Features();
             features.addproperty=addproperty;

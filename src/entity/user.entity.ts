@@ -20,7 +20,7 @@ export class User extends BaseEntity {
     @Column()
     password:string;
 
-    @Column()
+    @Column({nullable:true})
     phone_number:string;
 
     @ManyToOne(() => City,city=>city.user)
