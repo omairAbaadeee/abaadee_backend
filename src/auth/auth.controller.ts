@@ -93,7 +93,8 @@ export class AuthController {
   
     @Get('google/callback')
     @UseGuards(AuthGuard('google'))
-    googleAuthRedirect(@Req() req) {
+    googleAuthRedirect(@Req() req,@Res() res) {
+      res.redirect("http://localhost:3000/add-property");
       return this.authsevices.googleLogin(req)
     }
 }

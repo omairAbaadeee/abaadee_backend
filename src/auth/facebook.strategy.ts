@@ -6,9 +6,9 @@ import { Profile, Strategy } from "passport-facebook";
 export class FacebookStrategy extends PassportStrategy(Strategy, "facebook") {
   constructor() {
     super({
-      clientID: '3716283385159965',
-      clientSecret: "f46ff0a5efdfeff779a140cc89891f4d",
-      callbackURL: "http://localhost:3000/facebook/redirect",
+      clientID: '139973884762961',
+      clientSecret: "9d18c8ea45e1a79a8a8b0dc0768b57a6",
+      callbackURL: "http://localhost:3200/facebook/redirect",
       scope: "email",
       profileFields: ["emails", "name"],
     });

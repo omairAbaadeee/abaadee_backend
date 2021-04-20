@@ -186,6 +186,10 @@ export class AuthService {
       return 'No user from google'
     }
     else {
+      const user = await this.userRepository.createQueryBuilder("user")
+      .where("user.email=:email", { email: req.user.email })
+      .getOne();
+      if(!user && user.is_verified==false){
       const pass=req.user.lastName+"-abaadee";
       // console.log(req.user);
       const user1=new User();
@@ -201,12 +205,13 @@ export class AuthService {
       user1.country=null;
       user1.phone_number=null;
       await this.userRepository.save(user1);
+      }
       const email=req.user.email;
       const payload: JwtPayload = { email };
       const accessToken = await this.jwtService.sign(payload);
       return {
-        
-        user: accessToken
+        user: accessToken,
+        name: req.user.firstName+req.user.lastName
       }
     }
   }
