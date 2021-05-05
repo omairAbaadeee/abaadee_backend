@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { response } from 'express';
 import { Addimagedto, Addpropertydto } from 'src/dto/addproerty.dto';
 import { AddpropertySearch } from 'src/dto/addpropertysearch.dto';
+import { Main_Feature } from 'src/dto/featureodject.dto';
 import { Addproperty, Purpose } from 'src/entity/addproperty.entity';
 import { Features } from 'src/entity/features.entity';
 import { Propertyimage } from 'src/entity/propertyimage.entity';
@@ -11,8 +12,6 @@ import { AddfeatureReposatory } from 'src/reposatory/addfeature.dto';
 import { AddpropertyRepo } from 'src/reposatory/addproperty.reposatory';
 import { AreasizeRepositery } from 'src/reposatory/areasize.reposatory';
 import { AreaofunitRepositery } from 'src/reposatory/areaunit.reposatory';
-import { BathRepositery } from 'src/reposatory/bath.reposatory';
-import { BedsRepositery } from 'src/reposatory/beds.reposatory';
 import { CityRepository } from 'src/reposatory/city.repositery';
 import { LocationRepository } from 'src/reposatory/location.repository';
 import { PropertyCategoryRepositery } from 'src/reposatory/propertycatogory.reposatory';
@@ -28,12 +27,6 @@ export class AddpropertyService {
 
         @InjectRepository(LocationRepository)
         private locationrepo: LocationRepository,
-
-        @InjectRepository(BedsRepositery)
-        private bedsrepo: BedsRepositery,
-
-        @InjectRepository(BathRepositery)
-        private bathrepo: BathRepositery,
 
         @InjectRepository(AreasizeRepositery)
         private areasizerepo: AreasizeRepositery,
@@ -74,13 +67,13 @@ export class AddpropertyService {
     //  console.log (images); 
         const { purpose, property_title, property_description, land_area,  
          area_unit_name,
-        bed,
-        bathroom, property_type,
+
+         property_type,
         property_category,
         city_name,
-        location_name, price ,title_image,is_verified,featurename} = addpropertydto;
+        location_name, price ,features} = addpropertydto;
         const {filename}=images[0];
-         console.log(filename);
+         console.log(features);
        
 
         const createdat =new Date();
@@ -107,7 +100,7 @@ export class AddpropertyService {
         addproperty.expiredate=expiredate;
         //console.log(expiredate);
         addproperty.title_image="http://localhost:3200/addproperty/image/"+filename;
-        addproperty.is_verified=is_verified;
+        addproperty.is_verified=false;
         //  addproperty.title_image="Ahmed";
 
       
@@ -123,13 +116,6 @@ export class AddpropertyService {
         .where("location.location_name = :location_name", { location_name: location_name })
         .getOne();
         addproperty.Location = findlocation;
-        //console.log(findlocation);
-        const findbeds = await this.bedsrepo.findOne(bed);
-        addproperty.bed = findbeds;
-        //console.log(findbeds);
-        const findbaths = await this.bathrepo.findOne(bathroom);
-        addproperty.bathroom = findbaths;
-        //console.log(findbaths);
         const findareaunit = await this.areaunitrepo
            .createQueryBuilder("areaofunit")
            .where("areaofunit.area_name = :area_name", { area_name: area_unit_name })
@@ -165,10 +151,10 @@ export class AddpropertyService {
         //console.log(finduser);
         addproperty.userid = user;
 
-         await this.addpropertyrepo.save(addproperty);
+        //  await this.addpropertyrepo.save(addproperty);
          
-         this.addimage(images,addproperty);
-         this.Addfeature(addproperty,featurename)
+        //  this.addimage(images,addproperty);
+        //  this.Addfeature(addproperty,features)
 
 
     }
@@ -198,14 +184,26 @@ export class AddpropertyService {
     })
 
 }
+   addfeature(feature:Main_Feature){
+    console.log(feature)
+   for(var x of Object.entries(feature)){
+       if(x[1]==true){
+           console.log(x[0])
+       }
+   }
+    //    const feature1=Object.keys(feature);
+       //console.log(feature1)
+
+      
+   }
     async getalldata():Promise<Addproperty[]>{
     const findalldata=await this.addpropertyrepo.createQueryBuilder("addproperty")
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.expiredate >:expiredate",{expiredate:this.date})
@@ -223,9 +221,9 @@ async find_data_From_cityname(addpropertysearch:AddpropertySearch):Promise<Addpr
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+   
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+   
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
@@ -248,9 +246,9 @@ async find_data_From_cityname(addpropertysearch:AddpropertySearch):Promise<Addpr
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+  
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+  
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
@@ -273,9 +271,9 @@ async find_data_From_AreaUnit(addpropertysearch:AddpropertySearch):Promise<Addpr
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+   
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+  
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
@@ -291,9 +289,9 @@ async find_data_From_Bed(addpropertysearch:AddpropertySearch):Promise<Addpropert
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
@@ -318,9 +316,9 @@ async find_data_From_PropertySubType(addpropertysearch:AddpropertySearch):Promis
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+   
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+ 
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .andWhere("addproperty.purpose=:purpose",{purpose:purpose})
@@ -344,9 +342,9 @@ async find_data_From_Cityname_Locationname(addpropertysearch:AddpropertySearch):
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+    
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
@@ -370,9 +368,9 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(addpropertyse
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+   
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
@@ -397,9 +395,9 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(add
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
@@ -426,9 +424,9 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+ 
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
@@ -460,9 +458,9 @@ async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_Pro
      .leftJoinAndSelect("addproperty.images","images")
      .leftJoinAndSelect("addproperty.city","city")
      .leftJoinAndSelect("addproperty.Location","Location")
-     .leftJoinAndSelect("addproperty.bathroom","bathroom")
+
      .leftJoinAndSelect("addproperty.area_unit","area_unit")
-     .leftJoinAndSelect("addproperty.bed","bed")
+
      .leftJoinAndSelect("addproperty.property_type","property_type")
      .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})
@@ -487,9 +485,9 @@ async getalldataByPurpose(purpose:string):Promise<Addproperty[]>{
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.expiredate >:expiredate",{expiredate:this.date})
@@ -507,9 +505,9 @@ async find_data_From_Purpose(purpose:string):Promise<Addproperty[]>{
     .leftJoinAndSelect("addproperty.images","images")
     .leftJoinAndSelect("addproperty.city","city")
     .leftJoinAndSelect("addproperty.Location","Location")
-    .leftJoinAndSelect("addproperty.bathroom","bathroom")
+
     .leftJoinAndSelect("addproperty.area_unit","area_unit")
-    .leftJoinAndSelect("addproperty.bed","bed")
+
     .leftJoinAndSelect("addproperty.property_type","property_type")
     .leftJoinAndSelect("addproperty.property_category","property_category")
     .where("addproperty.purpose=:purpose",{purpose:purpose})

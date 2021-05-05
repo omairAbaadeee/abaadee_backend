@@ -6,8 +6,6 @@ import { AddfeatureReposatory } from 'src/reposatory/addfeature.dto';
 import { AddpropertyRepo } from 'src/reposatory/addproperty.reposatory';
 import { AreasizeRepositery } from 'src/reposatory/areasize.reposatory';
 import { AreaofunitRepositery } from 'src/reposatory/areaunit.reposatory';
-import { BathRepositery } from 'src/reposatory/bath.reposatory';
-import { BedsRepositery } from 'src/reposatory/beds.reposatory';
 import { CityRepository } from 'src/reposatory/city.repositery';
 import { LocationRepository } from 'src/reposatory/location.repository';
 import { PriceRepository } from 'src/reposatory/price.repositery';
@@ -19,7 +17,7 @@ import { AddpropertyController } from './addproperty.controller';
 import { AddpropertyService } from './addproperty.service';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,AreasizeRepositery,BathRepositery,BedsRepositery,
+  imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,AreasizeRepositery,
     CityRepository,LocationRepository,PriceRepository,PropertyimagesRepositery
     ,PropertyCategoryRepositery,PropertytypeRepositery,UserRepository,AddfeatureReposatory]),
     AuthModule

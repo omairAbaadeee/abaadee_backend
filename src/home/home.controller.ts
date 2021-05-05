@@ -1,8 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AreaSize } from 'src/entity/area_size.entity';
 import { Areaofunit } from 'src/entity/area_unit.entity';
-import { Bathrooms } from 'src/entity/bathroom.entity';
-import { Beds } from 'src/entity/beds.entity';
 import { City } from 'src/entity/city.entity';
 import { Country } from 'src/entity/country.entity';
 import { Price } from 'src/entity/price.entity';

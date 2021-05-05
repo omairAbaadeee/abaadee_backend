@@ -1,7 +1,5 @@
 import { Column, Entity, JoinColumn,  ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Areaofunit } from "./area_unit.entity";
-import { Bathrooms } from "./bathroom.entity";
-import { Beds } from "./beds.entity";
 import { City } from "./city.entity";
 import { User } from "./user.entity";
 import { Location } from "./location.entity";
@@ -9,9 +7,10 @@ import { PropertyCategory } from "./property_category.entity";
 import { PropertyType } from "./property_type.entity";
 import { Propertyimage } from "./propertyimage.entity";
 import { Features } from "./features.entity";
+import { General_Information } from "./featureGeneralInfo.entity";
 
 export enum Purpose {
-    ForSale = "Buy",
+    ForSale = "Sale",
     Rent = "Rent",
     Wanted = "Wanted",
     Project="Project"
@@ -69,14 +68,6 @@ export class Addproperty {
     @JoinColumn({name:"area_unit_id"})
     area_unit: Areaofunit;
 
-    @ManyToOne(() => Beds,beds=>beds.addproperty)
-    @JoinColumn({name:"bed_id"})
-    bed: Beds;
-
-
-    @ManyToOne(() => Bathrooms,bathrooms=>bathrooms.addproperty)
-    @JoinColumn({name:"bathroom_id"})
-    bathroom: Bathrooms;
 
     @OneToMany(()=>Propertyimage,images=>images.addproperty)
     @JoinColumn({name:"image_id"})
@@ -86,6 +77,10 @@ export class Addproperty {
     @OneToMany(()=>Features,feature=>feature.addproperty)
     @JoinColumn({name:"feature_id"})
     feature: Features[];
+
+    @OneToMany(()=>Features,feature=>feature.addproperty)
+    @JoinColumn({name:"general_info_id"})
+    general_info: General_Information[];
 
     @Column()
     expiredate: Date;

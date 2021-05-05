@@ -3,8 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AddpropertyRepo } from '../reposatory/addproperty.reposatory';
 import { AreasizeRepositery } from '../reposatory/areasize.reposatory';
 import { AreaofunitRepositery } from '../reposatory/areaunit.reposatory';
-import { BathRepositery } from '../reposatory/bath.reposatory';
-import { BedsRepositery } from '../reposatory/beds.reposatory';
 import { CityRepository } from '../reposatory/city.repositery';
 import { HomeController } from './home.controller';
 import { HomeService } from './home.service';
@@ -16,7 +14,7 @@ import { CountryRepository } from '../reposatory/country.reposatory';
 
 
 @Module({
-  imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,AreasizeRepositery,BathRepositery,BedsRepositery,
+  imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,AreasizeRepositery,
   CityRepository,LocationRepository,PriceRepository,PropertyCategoryRepositery,PropertytypeRepositery,CountryRepository])],
   controllers: [HomeController],
   providers: [HomeService]

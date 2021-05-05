@@ -2,21 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AreaSize } from 'src/entity/area_size.entity';
 import { Areaofunit } from 'src/entity/area_unit.entity';
-import { Beds } from 'src/entity/beds.entity';
 import { City } from 'src/entity/city.entity';
 import { Price } from 'src/entity/price.entity';
 import { PropertyCategory } from 'src/entity/property_category.entity';
 import { PropertyType } from 'src/entity/property_type.entity';
 import { AreasizeRepositery } from 'src/reposatory/areasize.reposatory';
 import { AreaofunitRepositery } from 'src/reposatory/areaunit.reposatory';
-import { BedsRepositery } from 'src/reposatory/beds.reposatory';
 import { CityRepository } from 'src/reposatory/city.repositery';
 import { LocationRepository } from 'src/reposatory/location.repository';
 import { PriceRepository } from 'src/reposatory/price.repositery';
 import { PropertyCategoryRepositery } from 'src/reposatory/propertycatogory.reposatory';
 import { PropertytypeRepositery } from 'src/reposatory/propertytype.reposatory';
-import { BathRepositery } from 'src/reposatory/bath.reposatory';
-import { Bathrooms } from 'src/entity/bathroom.entity';
 import { CountryRepository } from 'src/reposatory/country.reposatory';
 import { Country } from 'src/entity/country.entity';
 @Injectable()
@@ -33,9 +29,6 @@ export class HomeService {
         @InjectRepository(LocationRepository)
         private locationrepo: LocationRepository,
 
-        @InjectRepository(BedsRepositery)
-        private bedsrepo: BedsRepositery,
-
         @InjectRepository(AreasizeRepositery)
         private areasizerepo: AreasizeRepositery,
 
@@ -48,8 +41,6 @@ export class HomeService {
         @InjectRepository(PropertyCategoryRepositery)
         private propertycatogoryrepo: PropertyCategoryRepositery,
 
-        @InjectRepository(BathRepositery)
-        private bathrepo: BathRepositery,
         @InjectRepository(CountryRepository)
         private countryrepo: CountryRepository,
     ) { }
@@ -115,15 +106,7 @@ export class HomeService {
         await this.pricerepo.save(price);
     }
     //Beds Get And Post
-    async getallbed(): Promise<Beds[]> {
-        return this.bedsrepo.find();
-    }
-
-    async createbed(beds_quantity: number) {
-        const bed = new Beds();
-        bed.beds_quantity = beds_quantity;
-        await this.bedsrepo.save(bed);
-    }
+  
        //Working on area_size
        async getallareasize(): Promise<AreaSize[]> {
         return this.areasizerepo.find();
@@ -153,15 +136,7 @@ export class HomeService {
         .getMany();
         return propertytype;
     }
-    async createbathroom(bathroom_quaintity:number){
-        console.log(bathroom_quaintity);
-       const bath=new Bathrooms();
-       bath.bathroom_quantity=bathroom_quaintity;
-        await this.bathrepo.save(bath);
-    }
-    async getallbathrooom():Promise<Bathrooms[]>{
-        return await this.bathrepo.find();
-    }
+ 
 
     async createPropertycatogory() {
      const propertycatogory=new PropertyCategory();

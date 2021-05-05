@@ -1,7 +1,6 @@
 import { Purpose } from "src/entity/addproperty.entity";
 
 export class Addpropertydto{
-    id: number;
     purpose: Purpose;
     property_type: string;
     property_category: string;
@@ -12,13 +11,10 @@ export class Addpropertydto{
     price: number;
     land_area: number;
     area_unit_name: string;
-    bed: number;
     //propertyimage:Addimagedto;
-    bathroom: number;
-    expire_date: Date;
     title_image:string;
-    is_verified:boolean;
-    featurename:string;
+    features:string;
+    wanted_for:string;
   
 }
 export class Addimagedto{
