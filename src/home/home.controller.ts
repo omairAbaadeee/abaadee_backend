@@ -1,9 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { AreaSize } from 'src/entity/area_size.entity';
+
 import { Areaofunit } from 'src/entity/area_unit.entity';
 import { City } from 'src/entity/city.entity';
 import { Country } from 'src/entity/country.entity';
-import { Price } from 'src/entity/price.entity';
 import { PropertyType } from 'src/entity/property_type.entity';
 import { HomeService } from './home.service';
 

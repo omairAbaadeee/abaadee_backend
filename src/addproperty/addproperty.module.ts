@@ -4,11 +4,10 @@ import { AuthModule } from 'src/auth/auth.module';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { AddfeatureReposatory } from 'src/reposatory/addfeature.dto';
 import { AddpropertyRepo } from 'src/reposatory/addproperty.reposatory';
-import { AreasizeRepositery } from 'src/reposatory/areasize.reposatory';
 import { AreaofunitRepositery } from 'src/reposatory/areaunit.reposatory';
 import { CityRepository } from 'src/reposatory/city.repositery';
+import { General_Info_Repository } from 'src/reposatory/generalinfo.reposatory';
 import { LocationRepository } from 'src/reposatory/location.repository';
-import { PriceRepository } from 'src/reposatory/price.repositery';
 import { PropertyCategoryRepositery } from 'src/reposatory/propertycatogory.reposatory';
 import { PropertyimagesRepositery } from 'src/reposatory/propertyimage.reposatory';
 import { PropertytypeRepositery } from 'src/reposatory/propertytype.reposatory';
@@ -17,9 +16,9 @@ import { AddpropertyController } from './addproperty.controller';
 import { AddpropertyService } from './addproperty.service';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,AreasizeRepositery,
-    CityRepository,LocationRepository,PriceRepository,PropertyimagesRepositery
-    ,PropertyCategoryRepositery,PropertytypeRepositery,UserRepository,AddfeatureReposatory]),
+  imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,
+    CityRepository,LocationRepository,PropertyimagesRepositery
+    ,PropertyCategoryRepositery,PropertytypeRepositery,UserRepository,AddfeatureReposatory,General_Info_Repository]),
     AuthModule
   ],
   controllers: [AddpropertyController],

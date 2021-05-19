@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AreaSize } from 'src/entity/area_size.entity';
 import { Areaofunit } from 'src/entity/area_unit.entity';
 import { City } from 'src/entity/city.entity';
-import { Price } from 'src/entity/price.entity';
 import { PropertyCategory } from 'src/entity/property_category.entity';
 import { PropertyType } from 'src/entity/property_type.entity';
-import { AreasizeRepositery } from 'src/reposatory/areasize.reposatory';
 import { AreaofunitRepositery } from 'src/reposatory/areaunit.reposatory';
 import { CityRepository } from 'src/reposatory/city.repositery';
 import { LocationRepository } from 'src/reposatory/location.repository';
-import { PriceRepository } from 'src/reposatory/price.repositery';
 import { PropertyCategoryRepositery } from 'src/reposatory/propertycatogory.reposatory';
 import { PropertytypeRepositery } from 'src/reposatory/propertytype.reposatory';
 import { CountryRepository } from 'src/reposatory/country.reposatory';
@@ -18,19 +14,12 @@ import { Country } from 'src/entity/country.entity';
 @Injectable()
 export class HomeService {
     constructor(
-        @InjectRepository(PriceRepository)
-        private pricerepo: PriceRepository,
-
-     
-
         @InjectRepository(CityRepository)
         private cityrepo: CityRepository,
 
         @InjectRepository(LocationRepository)
         private locationrepo: LocationRepository,
 
-        @InjectRepository(AreasizeRepositery)
-        private areasizerepo: AreasizeRepositery,
 
         @InjectRepository(AreaofunitRepositery)
         private areaunitrepo: AreaofunitRepositery,
@@ -96,27 +85,19 @@ export class HomeService {
     //     }
 
     //Price Get And Post
-    async getallprice(): Promise<Price[]> {
-        return await this.pricerepo.find();
-    }
-    async createprice(prices: string) {
-        const price = new Price();
-        price.price = prices;
 
-        await this.pricerepo.save(price);
-    }
     //Beds Get And Post
   
        //Working on area_size
-       async getallareasize(): Promise<AreaSize[]> {
-        return this.areasizerepo.find();
-    }
+    //    async getallareasize(): Promise<AreaSize[]> {
+    //     return this.areasizerepo.find();
+    // }
 
-    async createareasize(area_size: number) {
-        const areasize = new AreaSize();
-        areasize.area_size = area_size;
-        await this.areasizerepo.save(areasize);
-    }
+    // async createareasize(area_size: number) {
+    //     const areasize = new AreaSize();
+    //     areasize.area_size = area_size;
+    //     await this.areasizerepo.save(areasize);
+    // }
       //Working on area_unit
     async getallareaunit(): Promise<Areaofunit[]> {
         return this.areaunitrepo.find();

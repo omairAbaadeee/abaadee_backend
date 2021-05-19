@@ -68,24 +68,66 @@ export class AddpropertyController {
     async uploadMultipleFiles(@UploadedFiles() files, @Body() addpropertydto: Addpropertydto,
         @GetUser() user: User) {
         //console.log(files)
-        const feature=addpropertydto.features;
-        const array1=[];
-        array1.push(addpropertydto.features);
-        console.log(array1);
+    
+        //const data=eval(feature);
+     
+  
+        // const array1 = [];
+        // array1.push(addpropertydto.features);
 
-        array1.forEach(first=>{
-            first.forEach(second=>{
-                console.log(second);
-               let parse1= JSON.parse(second);
-                const {main_features,utilities,facing}=parse1;
-                //console.log(main_features,utilities,facing);
-                  this.addproservice.addfeature(main_features);
-            })
-        })
-        
-        
-        
-        
+
+        // var second1;
+           // array1.pop();
+        // array1.forEach(first => {
+        //     first.forEach(second => {
+        // //const stringified = JSON.stringify(second)
+        // console.log(second)
+             
+        //         // const parsedObj = JSON.parse(stringified);
+            
+        //        // const data=JSON.stringify(second);
+        //     //    second.replace("[object Object]","")
+            
+        //         //second1=second;
+                
+        //         // var parse1 = JSON.parse(second)
+        //         // const { general_information, main_features, utilities, business_and_communication, facing } = parse1;
+        //         // // main_features1=main_features;
+        //         // console.log(general_information)
+        //         // console.log(main_features)
+        //         // console.log(utilities)
+        //         // console.log(business_and_communication)
+        //         // console.log(facing)
+
+
+        //         //console.log(main_features,utilities,facing);
+        //         //this.addproservice.addfeature(main_features);
+        //     })
+        // })
+
+        //     for(var i=0;i<second1.lenght-1;i++){
+        //         var parse1= JSON.parse(second1)
+
+        //         const {general_information,main_features,utilities,business_and_communication,facing}=parse1;
+        //         // main_features1=main_features;
+        //         console.log(general_information)
+        //         console.log(main_features)
+        //         console.log(utilities)
+        //         console.log(business_and_communication)
+        //         console.log(facing)
+
+        //    }
+        //    const data=eval(feature);
+        //    data.forEach(data=>{
+        //      console.log(data);
+        //      const stringified = JSON.stringify(data);
+        //     const parsedObj = JSON.parse(stringified);
+        //      const {general_information,main_features,utilities,business_and_communication,facing}=parsedObj;
+        //      console.log(general_information)
+        //    })
+        //console.log(data,typeof(data));
+
+
         const response = [];
         files.forEach(file => {
             const fileReponse = {
@@ -93,7 +135,7 @@ export class AddpropertyController {
             };
             response.push(fileReponse);
         });
-        //this.addproservice.addproperty(addpropertydto,user,response);
+        this.addproservice.addproperty(addpropertydto,user,response);
         return {
             status: HttpStatus.OK,
             message: 'Images uploaded successfully!',
@@ -106,10 +148,10 @@ export class AddpropertyController {
         return of(res.sendFile(join(process.cwd(), 'uploads/images/' + imagename)));
     }
 
-    @Get("getalldata")
-    findalldata(): Promise<Addproperty[]> {
-        return this.addproservice.getalldata();
-    }
+    // @Get("getalldata")
+    // findalldata(): Promise<Addproperty[]> {
+    //     return this.addproservice.getalldata();
+    // }
     @Get('getpropertydata/:purpose')
     getdatabypurpose(@Param('purpose') purpose: string): Promise<Addproperty[]> {
         return this.addproservice.getalldataByPurpose(purpose);
@@ -123,7 +165,11 @@ export class AddpropertyController {
     uploadFile(@UploadedFiles() files) {
         console.log(files);
     }
+    @Get("databyid/:id")
+    Getalldatabyid(@Param("id") id:number):Promise<Addproperty[]>{
+        return this.addproservice.getalldata(id);
 
+    }
 
     @Post("getpropertydata")
 

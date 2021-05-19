@@ -78,9 +78,9 @@ export class Addproperty {
     @JoinColumn({name:"feature_id"})
     feature: Features[];
 
-    @OneToMany(()=>Features,feature=>feature.addproperty)
+    @OneToMany(()=>General_Information,general_info=>general_info.addproperty)
     @JoinColumn({name:"general_info_id"})
-    general_info: General_Information[];
+    general_info: General_Information;
 
     @Column()
     expiredate: Date;
