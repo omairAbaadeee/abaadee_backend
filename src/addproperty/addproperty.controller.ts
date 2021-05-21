@@ -1,11 +1,11 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Post, Query, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Addpropertydto } from 'src/dto/addproerty.dto';
 import { AddpropertyService } from './addproperty.service';
 import { editFileName, imageFileFilter } from './file.upload';
 import { diskStorage } from 'multer';
 import { join, parse } from 'path';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Addproperty, Purpose } from 'src/entity/addproperty.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
@@ -17,11 +17,6 @@ export class AddpropertyController {
     constructor(
         private addproservice: AddpropertyService
     ) { }
-    // @Post("/:username")
-    // CreateProperty(@Body() addpropertydto: Addpropertydto, @Param("username") username: string) {
-    //     //console.log(addpropertydto,username);
-    //     this.addproservice.addproperty(addpropertydto, username);
-    // }
     @Get()
     Addproperty() {
         return "Hello";
@@ -67,67 +62,7 @@ export class AddpropertyController {
     )
     async uploadMultipleFiles(@UploadedFiles() files, @Body() addpropertydto: Addpropertydto,
         @GetUser() user: User) {
-        //console.log(files)
-    
-        //const data=eval(feature);
-     
-  
-        // const array1 = [];
-        // array1.push(addpropertydto.features);
-
-
-        // var second1;
-           // array1.pop();
-        // array1.forEach(first => {
-        //     first.forEach(second => {
-        // //const stringified = JSON.stringify(second)
-        // console.log(second)
-             
-        //         // const parsedObj = JSON.parse(stringified);
-            
-        //        // const data=JSON.stringify(second);
-        //     //    second.replace("[object Object]","")
-            
-        //         //second1=second;
-                
-        //         // var parse1 = JSON.parse(second)
-        //         // const { general_information, main_features, utilities, business_and_communication, facing } = parse1;
-        //         // // main_features1=main_features;
-        //         // console.log(general_information)
-        //         // console.log(main_features)
-        //         // console.log(utilities)
-        //         // console.log(business_and_communication)
-        //         // console.log(facing)
-
-
-        //         //console.log(main_features,utilities,facing);
-        //         //this.addproservice.addfeature(main_features);
-        //     })
-        // })
-
-        //     for(var i=0;i<second1.lenght-1;i++){
-        //         var parse1= JSON.parse(second1)
-
-        //         const {general_information,main_features,utilities,business_and_communication,facing}=parse1;
-        //         // main_features1=main_features;
-        //         console.log(general_information)
-        //         console.log(main_features)
-        //         console.log(utilities)
-        //         console.log(business_and_communication)
-        //         console.log(facing)
-
-        //    }
-        //    const data=eval(feature);
-        //    data.forEach(data=>{
-        //      console.log(data);
-        //      const stringified = JSON.stringify(data);
-        //     const parsedObj = JSON.parse(stringified);
-        //      const {general_information,main_features,utilities,business_and_communication,facing}=parsedObj;
-        //      console.log(general_information)
-        //    })
-        //console.log(data,typeof(data));
-
-
+            console.log(addpropertydto);
         const response = [];
         files.forEach(file => {
             const fileReponse = {
@@ -135,12 +70,15 @@ export class AddpropertyController {
             };
             response.push(fileReponse);
         });
+        try{
         this.addproservice.addproperty(addpropertydto,user,response);
         return {
             status: HttpStatus.OK,
-            message: 'Images uploaded successfully!',
-            data: response,
+            message: 'Property uploaded successfully!',
         };
+        }catch{
+            return throwError("Error");
+        }
     }
 
     @Get("image/:imagename")
@@ -166,8 +104,10 @@ export class AddpropertyController {
         console.log(files);
     }
     @Get("databyid/:id")
-    Getalldatabyid(@Param("id") id:number):Promise<Addproperty[]>{
-        return this.addproservice.getalldata(id);
+    Getalldatabyid(@Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10,@Param("id") id:number):Promise<Addproperty[]>{
+        return this.addproservice.getalldata(
+          id);
 
     }
 
@@ -175,6 +115,7 @@ export class AddpropertyController {
 
     findpropertydata(@Body() addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
         const { purpose, city_name, location_name, property_catogory, min_price, max_price, min_area, max_area, beds, area_unit_name } = addpropertysearch;
+       // console.log(addpropertysearch);
         if (!city_name && purpose && !location_name && !area_unit_name && !beds && !property_catogory) {
             return this.addproservice.find_data_From_Purpose(addpropertysearch.purpose);
         }

@@ -19,6 +19,12 @@ import { PropertyCategoryRepositery } from 'src/reposatory/propertycatogory.repo
 import { PropertyimagesRepositery } from 'src/reposatory/propertyimage.reposatory';
 import { PropertytypeRepositery } from 'src/reposatory/propertytype.reposatory';
 import { UserRepository } from 'src/reposatory/user.repository';
+import {
+    paginate,
+    Pagination,
+    IPaginationOptions,
+  } from 'nestjs-typeorm-paginate';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class AddpropertyService {
@@ -53,6 +59,8 @@ export class AddpropertyService {
 
         @InjectRepository(General_Info_Repository)
         private general_info_repo: General_Info_Repository,
+
+        
     ) { }
     public date = new Date();
 
@@ -72,7 +80,7 @@ export class AddpropertyService {
             property_type,
             property_category,
             city_name,
-            location_name, price, features } = addpropertydto;
+            location_name, price, latitude,longitude } = addpropertydto;
         const { filename } = images[0];
         // console.log(features);
 
@@ -102,6 +110,8 @@ export class AddpropertyService {
         //console.log(expiredate);
         addproperty.title_image = "http://localhost:3200/addproperty/image/" + filename;
         addproperty.is_verified = true;
+        addproperty.latitude=latitude;
+        addproperty.longitude=longitude;
         //  addproperty.title_image="Ahmed";
 
 
@@ -157,24 +167,22 @@ export class AddpropertyService {
         this.addimage(images, addproperty);
         var parse1 = JSON.parse(addpropertydto.features)
         const { general_information, main_features, utilities, business_and_communication, facing } = parse1;
-        //main_features1=main_features;
-        console.log(general_information)
-        console.log(main_features)
-        console.log(utilities)
-        console.log(business_and_communication)
-        console.log(facing)
+       
         if (addpropertydto.property_type == "Homes" || addpropertydto.property_type == "Commercial") {
             await this.addmainfeature(main_features, addproperty);
             await this.addutilities(utilities, addproperty);
             await this.addfacing(facing, addproperty);
             await this.add_bussness_and_communication(business_and_communication, addproperty);
             await this.addgeneralinfo(general_information, addproperty);
+           
         }
         else {
             await this.addmainfeature(main_features, addproperty);
             await this.addutilities(utilities, addproperty);
             await this.addfacing(facing, addproperty);
+           
         }
+    
 
 
     }
@@ -281,7 +289,6 @@ export class AddpropertyService {
 
     async getalldata(id:number): Promise<Addproperty[]> {
         const findalldata = await this.addpropertyrepo.createQueryBuilder("addproperty")
-       
             .leftJoinAndSelect("addproperty.images", "images")
             .leftJoinAndSelect("addproperty.city", "city")
             .leftJoinAndSelect("addproperty.Location", "Location")
@@ -292,13 +299,12 @@ export class AddpropertyService {
             .leftJoinAndSelect("addproperty.general_info", "general_info")
             .andWhere("addproperty.id=:id",{id:id})
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
-          
             .getMany();
         // console.log(findalldata);
         //  const findalldata= await this.proimageRepository.createQueryBuilder("images")
         //  .leftJoinAndSelect("images.addproperty","addproperty").getMany();
         //  console.log(findalldata)
-        return findalldata;
+          return findalldata;
     }
     async find_data_From_cityname(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
         const { purpose, city_name } = addpropertysearch;
@@ -390,7 +396,7 @@ export class AddpropertyService {
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
-            .andWhere("bed.beds_quantity =:beds_quantity", { beds_quantity: beds })
+            .andWhere("general_info.bedrooms =:bedrooms", { bedrooms: beds })
 
             .getMany();
         if (!findDataByBed) {

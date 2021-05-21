@@ -28,6 +28,12 @@ export class Addproperty {
     
     @Column()
     purpose: Purpose;
+
+    @Column()
+    latitude: string;
+    
+    @Column()
+    longitude: string;
     
     @ManyToOne(()=>PropertyType,propertytype=>propertytype.addproperty)
     @JoinColumn({name:"property_type_id"})

@@ -15,6 +15,8 @@ export class Addpropertydto{
     title_image:string;
     features:string;
     wanted_for:string;
+    latitude:string;
+    longitude:string;
   
 }
 export class Addimagedto{
