@@ -287,7 +287,7 @@ export class AddpropertyService {
 
 
 
-    async getalldata(id:number): Promise<Addproperty[]> {
+    async getalldata(options: IPaginationOptions,id:number): Promise<Pagination<Addproperty>> {
         const findalldata = await this.addpropertyrepo.createQueryBuilder("addproperty")
             .leftJoinAndSelect("addproperty.images", "images")
             .leftJoinAndSelect("addproperty.city", "city")
@@ -298,15 +298,15 @@ export class AddpropertyService {
             .leftJoinAndSelect("addproperty.feature", "feature")
             .leftJoinAndSelect("addproperty.general_info", "general_info")
             .andWhere("addproperty.id=:id",{id:id})
-            .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
-            .getMany();
+            .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date });
+  
         // console.log(findalldata);
         //  const findalldata= await this.proimageRepository.createQueryBuilder("images")
         //  .leftJoinAndSelect("images.addproperty","addproperty").getMany();
         //  console.log(findalldata)
-          return findalldata;
+        return paginate<Addproperty>(findalldata, options);
     }
-    async find_data_From_cityname(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_cityname(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>>{
         const { purpose, city_name } = addpropertysearch;
 
         const findDataByCity = await this.addpropertyrepo.createQueryBuilder("addproperty")
@@ -322,19 +322,20 @@ export class AddpropertyService {
              ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
-            .andWhere("city.city_name=:city_name", { city_name: city_name })
-            .getMany();
+            .andWhere("city.city_name=:city_name", { city_name: city_name });
+           
         if (!findDataByCity) {
-            return this.find_data_From_Purpose(purpose);
+            return this.find_data_From_Purpose(options,purpose);
         }
         else {
-            return findDataByCity;
+            console.log(findDataByCity);
+            return paginate<Addproperty>(findDataByCity, options);
         }
 
     }
 
     //FindWithLocationName//
-    async find_data_From_locationname(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_locationname(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>>{
         const { purpose, location_name } = addpropertysearch;
         const findDataByLocation = await this.addpropertyrepo.createQueryBuilder("addproperty")
         .leftJoinAndSelect("addproperty.images", "images")
@@ -349,19 +350,19 @@ export class AddpropertyService {
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
-            .andWhere("Location.location_name =:location_name", { location_name: location_name })
-            .getMany();
+            .andWhere("Location.location_name =:location_name", { location_name: location_name });
+         
         if (!findDataByLocation) {
-            return this.find_data_From_Purpose(purpose);
+            return this.find_data_From_Purpose(options,purpose);
         }
         else {
-            return findDataByLocation;
+            return paginate<Addproperty>(findDataByLocation, options);
         }
 
     }
     //FindWithBathroomQuantity//
     //FindByAreaUnit
-    async find_data_From_AreaUnit(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_AreaUnit(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>> {
         const { area_unit_name, purpose } = addpropertysearch;
         const findDataByAreaUnit = await this.addpropertyrepo.createQueryBuilder("addproperty")
         .leftJoinAndSelect("addproperty.images", "images")
@@ -376,12 +377,12 @@ export class AddpropertyService {
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
-            .andWhere("area_unit.area_name =:area_name", { area_name: area_unit_name })
-            .getMany();
-        return findDataByAreaUnit;
+            .andWhere("area_unit.area_name =:area_name", { area_name: area_unit_name });
+         
+            return paginate<Addproperty>(findDataByAreaUnit, options);
     }
     //FindByBed//
-    async find_data_From_Bed(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_Bed(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>> {
         const { beds, purpose } = addpropertysearch;
         const findDataByBed = await this.addpropertyrepo.createQueryBuilder("addproperty")
         .leftJoinAndSelect("addproperty.images", "images")
@@ -396,21 +397,21 @@ export class AddpropertyService {
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
-            .andWhere("general_info.bedrooms =:bedrooms", { bedrooms: beds })
+            .andWhere("general_info.bedrooms =:bedrooms", { bedrooms: beds });
 
-            .getMany();
+        
         if (!findDataByBed) {
-            return this.find_data_From_Purpose(purpose);
+            return this.find_data_From_Purpose(options,purpose);
         }
         else {
-            return findDataByBed;
+            return paginate<Addproperty>(findDataByBed, options);
         }
     }
 
 
 
     //FindByPropertySubType//
-    async find_data_From_PropertySubType(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_PropertySubType(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>> {
         const { property_catogory, purpose } = addpropertysearch;
         const findDataByproperty_category = await this.addpropertyrepo.createQueryBuilder("addproperty")
         .leftJoinAndSelect("addproperty.images", "images")
@@ -425,19 +426,18 @@ export class AddpropertyService {
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
-            .andWhere("property_category.property_category_name =:property_category_name", { property_category_name: property_catogory })
-            .getMany();
+            .andWhere("property_category.property_category_name =:property_category_name", { property_category_name: property_catogory });
         if (!findDataByproperty_category) {
-            return this.find_data_From_Purpose(purpose);
+            return this.find_data_From_Purpose(options,purpose);
         }
         else {
-            return findDataByproperty_category;
+            return paginate<Addproperty>(findDataByproperty_category, options);
         }
     }
 
     //FindDataFromCityname,Locationname//
 
-    async find_data_From_Cityname_Locationname(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_Cityname_Locationname(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>> {
         const { city_name, location_name, purpose } = addpropertysearch;
         // console.log("Ahmed")
         const findonedatabyCity_Location = await this.addpropertyrepo.createQueryBuilder("addproperty")
@@ -454,19 +454,19 @@ export class AddpropertyService {
             .where("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("city.city_name =:city_name", { city_name: city_name })
-            .andWhere("Location.location_name =:location_name", { location_name: location_name })
-            .getMany();
+            .andWhere("Location.location_name =:location_name", { location_name: location_name });
+           
         if (!findonedatabyCity_Location) {
-            return this.find_data_From_Purpose(purpose);
+            return this.find_data_From_Purpose(options,purpose);
         }
         else {
-            return findonedatabyCity_Location;
+            return paginate<Addproperty>(findonedatabyCity_Location, options);
         }
     }
 
     //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit//
 
-    async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>> {
         const { city_name, location_name, area_unit_name, purpose } = addpropertysearch;
         const findonedatabyCity_Location_Bathroom_AreaUnit = await this.addpropertyrepo.createQueryBuilder("addproperty")
         .leftJoinAndSelect("addproperty.images", "images")
@@ -483,19 +483,19 @@ export class AddpropertyService {
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("city.city_name =:city_name", { city_name: city_name })
             .andWhere("Location.location_name =:location_name", { location_name: location_name })
-            .andWhere("area_unit.area_name =:area_name", { area_name: area_unit_name })
-            .getMany();
+            .andWhere("area_unit.area_name =:area_name", { area_name: area_unit_name });
+           
         if (!findonedatabyCity_Location_Bathroom_AreaUnit) {
-            return this.find_data_From_Purpose(purpose);
+            return this.find_data_From_Purpose(options,purpose);
         }
         else {
-            return findonedatabyCity_Location_Bathroom_AreaUnit;
+            return paginate<Addproperty>(findonedatabyCity_Location_Bathroom_AreaUnit, options);
         }
     }
 
     //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber//
 
-    async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>>{
         const { city_name, location_name, area_unit_name, purpose, beds } = addpropertysearch;
         const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber = await this.addpropertyrepo.createQueryBuilder("addproperty")
         .leftJoinAndSelect("addproperty.images", "images")
@@ -513,20 +513,20 @@ export class AddpropertyService {
             .andWhere("city.city_name =:city_name", { city_name: city_name })
             .andWhere("Location.location_name =:location_name", { location_name: location_name })
             .andWhere("area_unit.area_name =:area_name", { area_name: area_unit_name })
-            .andWhere("bed.beds_quantity =:beds_quantity", { beds_quantity: beds })
-            .getMany();
+            .andWhere("bed.beds_quantity =:beds_quantity", { beds_quantity: beds });
+         
         if (!findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber) {
-            return this.find_data_From_Purpose(purpose);
+            return this.find_data_From_Purpose(options,purpose);
         }
         else {
-            return findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber;
+            return paginate<Addproperty>(findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber, options);
         }
     }
 
     //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber,PropertyType//
 
 
-    async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>>{
         const { city_name, location_name, area_unit_name, purpose, beds, property_catogory } = addpropertysearch;
         const findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType = await this.addpropertyrepo.createQueryBuilder("addproperty")
         .leftJoinAndSelect("addproperty.images", "images")
@@ -545,20 +545,19 @@ export class AddpropertyService {
             .andWhere("Location.location_name =:location_name", { location_name: location_name })
             .andWhere("areaunit.area_name =:area_name", { area_name: area_unit_name })
             .andWhere("bed.beds_quantity =:beds_quantity", { beds_quantity: beds })
-            .andWhere("property_category.property_category_name =:property_category_name", { property_category_name: property_catogory })
-            .getMany();
+            .andWhere("property_category.property_category_name =:property_category_name", { property_category_name: property_catogory });
         if (!findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType) {
-            return this.find_data_From_Purpose(purpose);
+            return this.find_data_From_Purpose(options,purpose);
         }
         else {
-            return findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType;
+            return paginate<Addproperty>(findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType, options);
         }
     }
 
 
 
     //FindDataFromCityname,Locationname,BathroomNumber,AreaUnit,BedNumber,PropertyType,PropertySubType//
-    async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    async find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>>{
         const { purpose, city_name, location_name, property_catogory, min_price, max_price, min_area, max_area, beds, area_unit_name } = addpropertysearch;
 
         const minprice = parseInt(min_price.replace(",", ""));
@@ -580,19 +579,18 @@ export class AddpropertyService {
             .andWhere("city.city_name =:city_name", { city_name: city_name })
             .andWhere("Location.location_name =:location_name", { location_name: location_name })
             .andWhere("area_unit.area_name =:area_name", { area_name: area_unit_name })
-            .andWhere("bed.beds_quantity =:beds_quantity", { beds_quantity: beds })
+            //.andWhere("bed.beds_quantity =:beds_quantity", { beds_quantity: beds })
             .andWhere(`addproperty.price BETWEEN '${minprice}' AND '${maxprice}'`)
             .andWhere(`addproperty.land_area BETWEEN '${parseInt(min_area)}' AND '${parseInt(max_area)}'`)
-            .andWhere("property_category.property_category_name =:property_category_name", { property_category_name: property_catogory })
-            .getMany();
+            .andWhere("property_category.property_category_name =:property_category_name", { property_category_name: property_catogory });
         if (!findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType_PropertySubType) {
-            return this.find_data_From_Purpose(purpose);
+            return this.find_data_From_Purpose(options,purpose);
         }
         else {
-            return findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType_PropertySubType;
+            return paginate<Addproperty>(findonedatabyCity_Location_Bathroom_AreaUnit_BedNumber_PropertyType_PropertySubType, options);   
         }
     }
-    async getalldataByPurpose(purpose: string): Promise<Addproperty[]> {
+    async getalldataByPurpose(options: IPaginationOptions,purpose: string): Promise<Pagination<Addproperty>> {
         const findalldataByPurpose = await this.addpropertyrepo.createQueryBuilder("addproperty")
         .leftJoinAndSelect("addproperty.images", "images")
         .leftJoinAndSelect("addproperty.city", "city")
@@ -605,16 +603,16 @@ export class AddpropertyService {
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .where("addproperty.expiredate >:expiredate", { expiredate: this.date })
-            .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
-            .getMany();
+            .andWhere("addproperty.purpose=:purpose", { purpose: purpose });
+            
         if (!findalldataByPurpose) {
             return;
         }
         else {
-            return findalldataByPurpose;
+            return paginate<Addproperty>(findalldataByPurpose, options);
         }
     }
-    async find_data_From_Purpose(purpose: string): Promise<Addproperty[]> {
+    async find_data_From_Purpose(options: IPaginationOptions,purpose: string): Promise<Pagination<Addproperty>>{
         const findDataByAreaUnit = await this.addpropertyrepo.createQueryBuilder("addproperty")
         .leftJoinAndSelect("addproperty.images", "images")
         .leftJoinAndSelect("addproperty.city", "city")
@@ -627,8 +625,8 @@ export class AddpropertyService {
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .where("addproperty.purpose=:purpose", { purpose: purpose })
-            .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
-            .getMany();
-        return findDataByAreaUnit;
+            .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date });
+            return paginate<Addproperty>(findDataByAreaUnit, options);
     }
+
 }

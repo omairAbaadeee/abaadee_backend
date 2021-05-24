@@ -12,6 +12,8 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/entity/user.entity';
 import { AddpropertySearch } from "src/dto/addpropertysearch.dto";
 import { json } from 'express';
+import { Pagination } from 'nestjs-typeorm-paginate';
+var watermark = require('image-watermark');
 @Controller('addproperty')
 export class AddpropertyController {
     constructor(
@@ -27,17 +29,32 @@ export class AddpropertyController {
             storage: diskStorage({
                 destination: './uploads/images',
                 filename: editFileName,
+                
             }),
             fileFilter: imageFileFilter,
         }),
 
     )
     async uploadedFile(@UploadedFile() file) {
-        const response = {
+        console.log(file)
+      const response = {
             originalname: file.originalname,
             filename: file.filename,
             imagePath: file.path
         };
+        // var options = {
+        //     'text': 'watermark-test',
+        //     'textSize': 6, //Should be between 1-8
+           
+        // };
+
+         await watermark.embedWatermark('./uploads/images/'+file.filename, {'text':'salman watermark'} , function(err) {
+            if (!err){
+                console.log('Succefully embetermaded wark');}
+                else{
+                    console.log('Succefully not embetermaded wark');
+                }
+        });
         return {
             status: HttpStatus.OK,
             message: 'Image uploaded successfully!',
@@ -54,6 +71,7 @@ export class AddpropertyController {
             storage: diskStorage({
                 destination: './uploads/images',
                 filename: editFileName,
+                
             }
             ),
             fileFilter: imageFileFilter,
@@ -91,8 +109,13 @@ export class AddpropertyController {
     //     return this.addproservice.getalldata();
     // }
     @Get('getpropertydata/:purpose')
-    getdatabypurpose(@Param('purpose') purpose: string): Promise<Addproperty[]> {
-        return this.addproservice.getalldataByPurpose(purpose);
+    getdatabypurpose(  @Query('page') page: number = 1,
+    @Query('limit') limit: number = 2,@Param('purpose') purpose: string):Promise<Pagination<Addproperty>> {
+        return this.addproservice.find_data_From_Purpose({
+            page,
+            limit,
+            route: 'http://localhost:3200/addproperty/getpropertydata',
+          },purpose);
 
     }
     @Post('upload1')
@@ -104,57 +127,110 @@ export class AddpropertyController {
         console.log(files);
     }
     @Get("databyid/:id")
-    Getalldatabyid(@Query('page', ParseIntPipe) page: number = 1,
-    @Query('limit', ParseIntPipe) limit: number = 10,@Param("id") id:number):Promise<Addproperty[]>{
-        return this.addproservice.getalldata(
-          id);
+    Getalldatabyid(@Query('page') page: number = 1,
+    @Query('limit') limit: number = 11,@Param("id") id:number): Promise<Pagination<Addproperty>>{
+        limit = limit > 100 ? 100 : limit;
+        return this.addproservice.getalldata({
+            page,
+            limit,
+            route: 'http://localhost:3200/addproperty/databyid',
+          },id);
 
     }
 
     @Post("getpropertydata")
 
-    findpropertydata(@Body() addpropertysearch: AddpropertySearch): Promise<Addproperty[]> {
+    findpropertydata( @Query('page') page: number = 1,
+    @Query('limit') limit: number = 11,
+    @Body() addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>> {
+        limit = limit > 100 ? 100 : limit;
         const { purpose, city_name, location_name, property_catogory, min_price, max_price, min_area, max_area, beds, area_unit_name } = addpropertysearch;
        // console.log(addpropertysearch);
         if (!city_name && purpose && !location_name && !area_unit_name && !beds && !property_catogory) {
-            return this.addproservice.find_data_From_Purpose(addpropertysearch.purpose);
+            return this.addproservice.find_data_From_Purpose({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch.purpose);
         }
         if (city_name && purpose && !location_name && !area_unit_name && !beds && !property_catogory) {
 
-            return this.addproservice.find_data_From_cityname(addpropertysearch);
+            return this.addproservice.find_data_From_cityname({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
         if (location_name && purpose && !city_name && !area_unit_name && !beds && !property_catogory) {
-            return this.addproservice.find_data_From_locationname(addpropertysearch);
+            return this.addproservice.find_data_From_locationname({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
 
         if (area_unit_name && purpose && !city_name && !location_name && !beds && !property_catogory) {
-            return this.addproservice.find_data_From_AreaUnit(addpropertysearch);
+            return this.addproservice.find_data_From_AreaUnit({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
         if (beds && purpose && !city_name && !location_name && !area_unit_name && !property_catogory) {
-            return this.addproservice.find_data_From_Bed(addpropertysearch);
+            return this.addproservice.find_data_From_Bed({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
 
         if (property_catogory && purpose && !city_name && !location_name && !area_unit_name && !beds) {
-            return this.addproservice.find_data_From_PropertySubType(addpropertysearch);
+            return this.addproservice.find_data_From_PropertySubType({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
         if (city_name && location_name && purpose && !area_unit_name && !beds && !property_catogory) {
-            return this.addproservice.find_data_From_Cityname_Locationname(addpropertysearch);
+            return this.addproservice.find_data_From_Cityname_Locationname({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
         if (city_name && location_name && purpose && area_unit_name && !beds && !property_catogory) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit(addpropertysearch);
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
         if (city_name && location_name && purpose && area_unit_name && beds && !property_catogory) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber(addpropertysearch);
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
         if (city_name && location_name && purpose && area_unit_name && beds && !property_catogory) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType(addpropertysearch);
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
         if (city_name && location_name && purpose && min_price && max_price && min_area && max_area && area_unit_name && beds && property_catogory) {
-            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType(addpropertysearch);
+            return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType({
+                page,
+                limit,
+                route: 'http://localhost:3200/addproperty/getpropertydata',
+              },addpropertysearch);
         }
         else {
             return null;
         }
 
     }
+    
 }
+
