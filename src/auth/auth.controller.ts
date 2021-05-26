@@ -104,8 +104,8 @@ export class AuthController {
     
     @Post("/socialsignup")
     SocialSignup(@Body("username") username:string , @Body("email") email:string , @Body("imageurl")imageurl:string){
-      console.log(email);
-      // return this.authsevices.SocialSignup(username,email,imageurl);
+      //console.log(email);
+       return this.authsevices.SocialSignup(username,email,imageurl);
     }
 
 }

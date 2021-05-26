@@ -13,6 +13,8 @@ import { User } from 'src/entity/user.entity';
 import { AddpropertySearch } from "src/dto/addpropertysearch.dto";
 import { json } from 'express';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { get } from 'node:http';
+import { url } from 'src/Global/Variable';
 var watermark = require('image-watermark');
 @Controller('addproperty')
 export class AddpropertyController {
@@ -115,7 +117,7 @@ export class AddpropertyController {
         return this.addproservice.find_data_From_Purpose({
             page,
             limit,
-            route: 'http://localhost:3200/addproperty/getpropertydata',
+            route:  url+'/addproperty/getpropertydata',
           },purpose);
 
     }
@@ -137,7 +139,7 @@ export class AddpropertyController {
     @Post("getpropertydata")
 
     findpropertydata( @Query('page') page: number = 1,
-    @Query('limit') limit: number = 2,
+    @Query('limit') limit: number = 11,
     @Body() addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>> {
         limit = limit > 100 ? 100 : limit;
         const { purpose, city_name, location_name, property_catogory, min_price, max_price, min_area, max_area, beds, area_unit_name } = addpropertysearch;
@@ -146,7 +148,7 @@ export class AddpropertyController {
             return this.addproservice.find_data_From_Purpose({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch.purpose);
         }
         if (city_name && purpose && !location_name && !area_unit_name && !beds && !property_catogory) {
@@ -154,14 +156,14 @@ export class AddpropertyController {
             return this.addproservice.find_data_From_cityname({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
         if (location_name && purpose && !city_name && !area_unit_name && !beds && !property_catogory) {
             return this.addproservice.find_data_From_locationname({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
 
@@ -169,14 +171,14 @@ export class AddpropertyController {
             return this.addproservice.find_data_From_AreaUnit({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
         if (beds && purpose && !city_name && !location_name && !area_unit_name && !property_catogory) {
             return this.addproservice.find_data_From_Bed({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
 
@@ -184,48 +186,75 @@ export class AddpropertyController {
             return this.addproservice.find_data_From_PropertySubType({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
         if (city_name && location_name && purpose && !area_unit_name && !beds && !property_catogory) {
             return this.addproservice.find_data_From_Cityname_Locationname({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
         if (city_name && location_name && purpose && area_unit_name && !beds && !property_catogory) {
             return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
         if (city_name && location_name && purpose && area_unit_name && beds && !property_catogory) {
             return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
         if (city_name && location_name && purpose && area_unit_name && beds && !property_catogory) {
             return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
         if (city_name && location_name && purpose && min_price && max_price && min_area && max_area && area_unit_name && beds && property_catogory) {
             return this.addproservice.find_data_From_Cityname_Locationname_BathroomNumber_AreaUnit_BedNumber_PropertyType_PropertySubType({
                 page,
                 limit,
-                route: 'http://localhost:3200/addproperty/getpropertydata',
+                route: url+'/addproperty/getpropertydata',
               },addpropertysearch);
         }
         else {
             return null;
         }
 
+    }
+    //front page link 
+    @Get("homelinks1/:catogory/:purpose/:cityname")
+    Links(@Query('page') page: number = 1,
+    @Query('limit') limit: number = 11,
+    @Param('purpose') purpose: string,
+    @Param('cityname') cityname: string,
+    @Param('catogory') catogory: string):Promise<Pagination<Addproperty>> {
+        return this.addproservice.Get_data_From_cityname({
+            page,
+            limit,
+            route: url+'/addproperty/homelinks1/'+catogory+'/'+purpose+'/'+cityname,
+          },purpose,cityname,catogory);
+    }
+
+
+    @Get("homelinks2/:catogory/:purpose/:locationname")
+    Links2(@Query('page') page: number = 1,
+    @Query('limit') limit: number = 11,
+    @Param('purpose') purpose: string,
+    @Param('locationname') locationname: string,
+    @Param('catogory') catogory: string):Promise<Pagination<Addproperty>> {
+        return this.addproservice.Get_data_From_location({
+            page,
+            limit,
+            route: url+'/addproperty/homelinks2/'+catogory+'/'+purpose+'/'+locationname,
+          },purpose,locationname,catogory);
     }
     
 }

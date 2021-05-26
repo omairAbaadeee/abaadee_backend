@@ -83,7 +83,7 @@ export class AuthService {
       const payload: JwtPayload = { email };
       const accessToken = await this.jwtService.sign(payload);
       const para = "Thank you for choosing <strong>Abaadee.com</strong> First, you need to confirm your account. Just press the button below.";
-      this.utilityservice.sendEmail(email, "/varification/" + accessToken, "Confirm Account", para, "Account Varification");
+      this.utilityservice.sendEmail(email, "http://localhost:3200/auth/varification/" + accessToken, "Confirm Account", para, "Account Varification");
       return { message: "Please cheak your Email" };
     }
     catch (error) {
@@ -132,7 +132,7 @@ export class AuthService {
       const accessToken = await this.jwtService.sign(payload);
       console.log(accessToken);
       const para = "Please click <strong>Below Button</strong> to change your password";
-      this.utilityservice.sendEmail(email, "/Forgetpass/" + accessToken, "Click Here", para, "Reset Password");
+      this.utilityservice.sendEmail(email, "http://localhost:3200/auth/Forgetpass/" + accessToken, "Click Here", para, "Reset Password");
       return { message: "Your Password has been sent to the specified email address" }
     }
     else {
@@ -284,7 +284,7 @@ export class AuthService {
     const accessToken = await this.jwtService.sign(payload);
     const para = " Your new Login Credentials AT ABAADEE.COM Are : <br/>"
     +"USERNAME :" +username+" <br/> PASSWORD : "+pass;
-      this.utilityservice.sendEmail(email,"","", para, "ABAADEE LOGIN");
+      this.utilityservice.sendEmail(email,"http://localhost:3000","Go To Abaadee", para, "ABAADEE LOGIN");
     return {
       user: accessToken,
       name:username

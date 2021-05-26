@@ -19,7 +19,7 @@ export class UtilityService {
   
     async sendEmail(userEmail:string,payload: String ,btnname:string, para:string,subject:string) {
        
-        const url=`http://localhost:3200/auth${payload}`;
+        const url=`${payload}`;
       
         let info = await this.transporter.sendMail({
             from: 'Application Server', // sender address
