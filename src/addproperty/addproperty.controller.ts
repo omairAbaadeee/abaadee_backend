@@ -19,9 +19,10 @@ export class AddpropertyController {
     constructor(
         private addproservice: AddpropertyService
     ) { }
-    @Get()
-    Addproperty() {
-        return "Hello";
+    @Get("non_varified")
+    Addproperty():Promise<Addproperty[]>{
+        return  this.addproservice.non_varified();
+        
     }
     @Post("/upload")
     @UseInterceptors(
@@ -48,7 +49,7 @@ export class AddpropertyController {
            
         // };
 
-         await watermark.embedWatermark('./uploads/images/'+file.filename, {'text':'salman watermark'} , function(err) {
+         await watermark.embedWatermark('\\uploads\\images\\'+file.filename, {'text':'salman watermark'} , function(err) {
             if (!err){
                 console.log('Succefully embetermaded wark');}
                 else{
@@ -127,21 +128,16 @@ export class AddpropertyController {
         console.log(files);
     }
     @Get("databyid/:id")
-    Getalldatabyid(@Query('page') page: number = 1,
-    @Query('limit') limit: number = 11,@Param("id") id:number): Promise<Pagination<Addproperty>>{
-        limit = limit > 100 ? 100 : limit;
-        return this.addproservice.getalldata({
-            page,
-            limit,
-            route: 'http://localhost:3200/addproperty/databyid',
-          },id);
+    Getalldatabyid(@Param("id") id:number): Promise<Addproperty[]>{
+       
+        return this.addproservice.getalldata(id);
 
     }
 
     @Post("getpropertydata")
 
     findpropertydata( @Query('page') page: number = 1,
-    @Query('limit') limit: number = 11,
+    @Query('limit') limit: number = 2,
     @Body() addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>> {
         limit = limit > 100 ? 100 : limit;
         const { purpose, city_name, location_name, property_catogory, min_price, max_price, min_area, max_area, beds, area_unit_name } = addpropertysearch;

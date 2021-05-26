@@ -245,4 +245,50 @@ export class AuthService {
 
 
   }
+
+
+  async SocialSignup(username:string,Email:string,imageurl:string){ 
+    const user = await this.userRepository.createQueryBuilder("user")
+    .where("user.email=:email", { email: Email })
+    .getOne();
+    if (user) {
+      const email=Email;
+      const payload: JwtPayload = { email };
+      const accessToken = await this.jwtService.sign(payload);
+      return {
+        user: accessToken,
+        name: username
+      }
+  }
+  else {
+   
+    
+    var pass=username+"-abaadee";
+    // console.log(req.user);
+    const user1=new User();
+    user1.name=username;
+    user1.email=Email;
+    user1.salt = await bcrypt.genSalt();
+    user1.password = await this.hashpassword(pass, user1.salt);
+    user1.created_at=new Date;
+    user1.is_active=true;
+    user1.is_verified=true;
+    user1.city=null;
+    user1.location=null;
+    user1.country=null;
+    user1.phone_number=null;
+    await this.userRepository.save(user1);
+    }
+    const email=Email;
+    const payload: JwtPayload = { email };
+    const accessToken = await this.jwtService.sign(payload);
+    const para = " Your new Login Credentials AT ABAADEE.COM Are : <br/>"
+    +"USERNAME :" +username+" <br/> PASSWORD : "+pass;
+      this.utilityservice.sendEmail(email,"","", para, "ABAADEE LOGIN");
+    return {
+      user: accessToken,
+      name:username
+    }
+  }
 }
+

@@ -22,6 +22,9 @@ export class User extends BaseEntity {
 
     @Column({nullable:true})
     phone_number:string;
+    
+    @Column({nullable:true})
+    imageurl:string;
 
     @ManyToOne(() => City,city=>city.user)
     city:City;

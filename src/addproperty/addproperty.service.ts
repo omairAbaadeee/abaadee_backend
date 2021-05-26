@@ -109,7 +109,7 @@ export class AddpropertyService {
         addproperty.expiredate = expiredate;
         //console.log(expiredate);
         addproperty.title_image = "http://localhost:3200/addproperty/image/" + filename;
-        addproperty.is_verified = true;
+        addproperty.is_verified = false;
         addproperty.latitude=latitude;
         addproperty.longitude=longitude;
         //  addproperty.title_image="Ahmed";
@@ -287,7 +287,7 @@ export class AddpropertyService {
 
 
 
-    async getalldata(options: IPaginationOptions,id:number): Promise<Pagination<Addproperty>> {
+    async getalldata(id:number): Promise<Addproperty[]> {
         const findalldata = await this.addpropertyrepo.createQueryBuilder("addproperty")
             .leftJoinAndSelect("addproperty.images", "images")
             .leftJoinAndSelect("addproperty.city", "city")
@@ -298,13 +298,14 @@ export class AddpropertyService {
             .leftJoinAndSelect("addproperty.feature", "feature")
             .leftJoinAndSelect("addproperty.general_info", "general_info")
             .andWhere("addproperty.id=:id",{id:id})
-            .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date });
+            .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
+            .getMany();
   
         // console.log(findalldata);
         //  const findalldata= await this.proimageRepository.createQueryBuilder("images")
         //  .leftJoinAndSelect("images.addproperty","addproperty").getMany();
         //  console.log(findalldata)
-        return paginate<Addproperty>(findalldata, options);
+        return findalldata;
     }
     async find_data_From_cityname(options: IPaginationOptions,addpropertysearch: AddpropertySearch): Promise<Pagination<Addproperty>>{
         const { purpose, city_name } = addpropertysearch;
@@ -320,6 +321,7 @@ export class AddpropertyService {
             .select(['addproperty.id', 'addproperty.property_title', 'addproperty.price',
              'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
              ,'general_info.bathrooms','city.city_name','Location.location_name'])
+            .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("city.city_name=:city_name", { city_name: city_name });
@@ -348,6 +350,7 @@ export class AddpropertyService {
         .select(['addproperty.id', 'addproperty.property_title', 'addproperty.price',
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
+         .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("Location.location_name =:location_name", { location_name: location_name });
@@ -375,6 +378,7 @@ export class AddpropertyService {
         .select(['addproperty.id', 'addproperty.property_title', 'addproperty.price',
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
+         .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("area_unit.area_name =:area_name", { area_name: area_unit_name });
@@ -395,6 +399,7 @@ export class AddpropertyService {
         .select(['addproperty.id', 'addproperty.property_title', 'addproperty.price',
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
+         .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("general_info.bedrooms =:bedrooms", { bedrooms: beds });
@@ -424,6 +429,7 @@ export class AddpropertyService {
         .select(['addproperty.id', 'addproperty.property_title', 'addproperty.price',
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
+         .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("property_category.property_category_name =:property_category_name", { property_category_name: property_catogory });
@@ -451,7 +457,9 @@ export class AddpropertyService {
         .select(['addproperty.id', 'addproperty.property_title', 'addproperty.price',
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
+         
             .where("addproperty.purpose=:purpose", { purpose: purpose })
+            .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("city.city_name =:city_name", { city_name: city_name })
             .andWhere("Location.location_name =:location_name", { location_name: location_name });
@@ -480,6 +488,7 @@ export class AddpropertyService {
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .where("addproperty.purpose=:purpose", { purpose: purpose })
+            .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("city.city_name =:city_name", { city_name: city_name })
             .andWhere("Location.location_name =:location_name", { location_name: location_name })
@@ -509,6 +518,7 @@ export class AddpropertyService {
              'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
              ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .where("addproperty.purpose=:purpose", { purpose: purpose })
+            .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("city.city_name =:city_name", { city_name: city_name })
             .andWhere("Location.location_name =:location_name", { location_name: location_name })
@@ -540,6 +550,7 @@ export class AddpropertyService {
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .where("addproperty.purpose=:purpose", { purpose: purpose })
+            .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("city.city_name =:city_name", { city_name: city_name })
             .andWhere("Location.location_name =:location_name", { location_name: location_name })
@@ -575,6 +586,7 @@ export class AddpropertyService {
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .where("addproperty.purpose=:purpose", { purpose: purpose })
+            .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .andWhere("city.city_name =:city_name", { city_name: city_name })
             .andWhere("Location.location_name =:location_name", { location_name: location_name })
@@ -603,6 +615,7 @@ export class AddpropertyService {
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .where("addproperty.expiredate >:expiredate", { expiredate: this.date })
+            .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.purpose=:purpose", { purpose: purpose });
             
         if (!findalldataByPurpose) {
@@ -625,8 +638,27 @@ export class AddpropertyService {
          'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
          ,'general_info.bathrooms','city.city_name','Location.location_name'])
             .where("addproperty.purpose=:purpose", { purpose: purpose })
+            .andWhere("addproperty.is_verified=:is_verified", { is_verified: true })
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date });
             return paginate<Addproperty>(findDataByAreaUnit, options);
     }
-
+    async non_varified(): Promise<Addproperty[]>{
+        const non_varified = await this.addpropertyrepo.createQueryBuilder("addproperty")
+        .leftJoinAndSelect("addproperty.images", "images")
+        .leftJoinAndSelect("addproperty.city", "city")
+        .leftJoinAndSelect("addproperty.Location", "Location")
+        .leftJoinAndSelect("addproperty.area_unit", "area_unit")
+        .leftJoinAndSelect("addproperty.property_type", "property_type")
+        .leftJoinAndSelect("addproperty.general_info", "general_info")
+        .leftJoinAndSelect("addproperty.property_category", "property_category")
+        .select(['addproperty.id', 'addproperty.property_title', 'addproperty.price','addproperty.purpose',
+        'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
+        ,'general_info.bathrooms','city.city_name','Location.location_name','property_type.property_type_name',
+        'property_category.property_category_name'])
+        .andWhere("addproperty.is_verified=:is_verified", { is_verified: false })
+        .getMany();
+        //.andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
+        //.andWhere("city.city_name=:city_name", { city_name: city_name });
+        return non_varified;
+    }
 }

@@ -97,4 +97,15 @@ export class AuthController {
       res.redirect("http://localhost:3000/add-property");
       return this.authsevices.googleLogin(req)
     }
+
+
+
+
+    
+    @Post("/socialsignup")
+    SocialSignup(@Body("username") username:string , @Body("email") email:string , @Body("imageurl")imageurl:string){
+      console.log(email);
+      // return this.authsevices.SocialSignup(username,email,imageurl);
+    }
+
 }

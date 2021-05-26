@@ -22,7 +22,7 @@ export class UtilityService {
         const url=`http://localhost:3200/auth${payload}`;
       
         let info = await this.transporter.sendMail({
-            from: '"Application Server', // sender address
+            from: 'Application Server', // sender address
             to: userEmail, // list of receivers
 
             subject:subject, // Subject line
