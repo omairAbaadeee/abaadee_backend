@@ -17,8 +17,8 @@ type:'postgres',
 host:'localhost',
 port:5432,
 username:'postgres',
-password:'admin654321',
-database:'abaadeeserver1',
+password:'unza123',
+database:'Abaadee',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information],
 synchronize:true

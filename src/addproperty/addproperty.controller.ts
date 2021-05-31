@@ -256,6 +256,12 @@ export class AddpropertyController {
             route: url+'/addproperty/homelinks2/'+catogory+'/'+purpose+'/'+locationname,
           },purpose,locationname,catogory);
     }
+
+    @Post()
+    async Varified_property(@Body("id") id:number):Promise<any>{
+      return  await this.addproservice.varified_property(id);
+    }
+
     
 }
 

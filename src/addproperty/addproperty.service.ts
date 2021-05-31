@@ -282,8 +282,21 @@ export class AddpropertyService {
 
 
     }
-    //    const feature1=Object.keys(feature);
-    //console.log(feature1)
+       //Varified_Property
+       async varified_property(id:number):Promise<any>{
+           
+      var update = await this.addpropertyrepo.
+       createQueryBuilder()
+      .update(Addproperty)
+      .set({ is_verified: true})
+      .where("id=:id", { id:id })
+      .execute();
+      if(update){
+        return { message: "Property Varified" }
+      }else{
+        return { message: "id not consist in database" }   
+      }
+    }
 
 
 
@@ -663,7 +676,7 @@ export class AddpropertyService {
         .leftJoinAndSelect("addproperty.property_type", "property_type")
         .leftJoinAndSelect("addproperty.general_info", "general_info")
         .leftJoinAndSelect("addproperty.property_category", "property_category")
-        .select(['addproperty.id', 'addproperty.property_title', 'addproperty.price',
+        .select(['addproperty.id','addproperty.purpose', 'addproperty.property_title', 'addproperty.price',
         'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
         ,'general_info.bathrooms','city.city_name','Location.location_name','property_type.property_type_name'
         ,'property_category.property_category_name'])
