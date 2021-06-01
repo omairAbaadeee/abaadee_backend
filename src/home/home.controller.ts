@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Contactdto } from 'src/dto/contact.dto';
 
 import { Areaofunit } from 'src/entity/area_unit.entity';
 import { City } from 'src/entity/city.entity';
+import { Contact } from 'src/entity/contact.entity';
 import { Country } from 'src/entity/country.entity';
 import { PropertyType } from 'src/entity/property_type.entity';
 import { HomeService } from './home.service';
@@ -101,8 +103,12 @@ export class HomeController {
     // createbath(@Body("b_quaintity") b_quaintity:number){
     //      this.homeservice.createbathroom(b_quaintity);
     // }
-    // @Post("PropertyType")
-    // Createpropertytypeandcatogory(){
-    // this.homeservice.createPropertycatogory();
-    // }
+    @Post("contact")
+    Createpropertytypeandcatogory(@Body() contactdto:Contactdto):Promise<any>{
+     return this.homeservice.contactus(contactdto);
+    }
+    @Get("contact")
+    getallcontact():Promise<Contact[]>{
+       return this.homeservice.getallcontact();
+    }
 }

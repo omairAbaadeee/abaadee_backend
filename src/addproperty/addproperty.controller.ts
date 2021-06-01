@@ -15,6 +15,7 @@ import { json } from 'express';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { get } from 'node:http';
 import { url } from 'src/Global/Variable';
+import { Agentsdto } from 'src/dto/agent.dto';
 var watermark = require('image-watermark');
 @Controller('addproperty')
 export class AddpropertyController {
@@ -261,6 +262,12 @@ export class AddpropertyController {
     async Varified_property(@Body("id") id:number):Promise<any>{
       return  await this.addproservice.varified_property(id);
     }
+    @Post('/addagent')
+    signIn(@Body() agentsdto:Agentsdto) {
+     console.log(agentsdto);
+     return this.addproservice.addagent(agentsdto);
+    }
+
 
     
 }

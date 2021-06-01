@@ -11,6 +11,9 @@ import { PropertyCategoryRepositery } from 'src/reposatory/propertycatogory.repo
 import { PropertytypeRepositery } from 'src/reposatory/propertytype.reposatory';
 import { CountryRepository } from 'src/reposatory/country.reposatory';
 import { Country } from 'src/entity/country.entity';
+import { Contact } from 'src/entity/contact.entity';
+import { ContactRepository } from 'src/reposatory/contact.reposatory';
+import { Contactdto } from 'src/dto/contact.dto';
 @Injectable()
 export class HomeService {
     constructor(
@@ -32,6 +35,9 @@ export class HomeService {
 
         @InjectRepository(CountryRepository)
         private countryrepo: CountryRepository,
+
+        @InjectRepository(ContactRepository)
+        private contactrepo: ContactRepository,
     ) { }
     //Get All  City And Location
     async getallcity(): Promise<City[]> {
@@ -64,40 +70,7 @@ export class HomeService {
     return city;
 
     }
-    //  async createcountry() {
-    //     const country= new Country();   
-    //     country.country_name="Pakistan";
-    //     country.country_code="+92";
-    //     country.sort_name="PK";
-    //     await this.countryrepo.save(country);
-    //     const states =new State();
-    //     states.state_name="Sindh";
-    //     states.country=country;
-    //     await this.staterepo.save(states);
-    //     const cities= new City();
-    //     cities.cityname="Karachi";
-    //     cities.state=states;
-    //     await this.cityrepo.save(cities);
-    //     const locations= new Location();
-    //     locations.locationname="Malir";
-    //     locations.city=cities; 
-    //     await this.locationrepo.save(locations);
-    //     }
-
-    //Price Get And Post
-
-    //Beds Get And Post
-  
-       //Working on area_size
-    //    async getallareasize(): Promise<AreaSize[]> {
-    //     return this.areasizerepo.find();
-    // }
-
-    // async createareasize(area_size: number) {
-    //     const areasize = new AreaSize();
-    //     areasize.area_size = area_size;
-    //     await this.areasizerepo.save(areasize);
-    // }
+ 
       //Working on area_unit
     async getallareaunit(): Promise<Areaofunit[]> {
         return this.areaunitrepo.find();
@@ -153,6 +126,27 @@ export class HomeService {
       propertytype.property=[propertycatogory,propertycatogory1,propertycatogory2,propertycatogory3,propertycatogory4,propertycatogory5];
       await this.propertytyperepo.save(propertytype);
 
+    }
+    async contactus(contactdto:Contactdto):Promise<any>{
+        try{
+        const {f_name,l_name,p_number,email,message}=contactdto;
+        const contact=new Contact();
+        contact.f_name=f_name;
+        contact.l_name=l_name;
+        contact.email=email;
+        contact.p_number=p_number;
+        contact.message=message;
+        contact.date=new Date;
+       await  this.contactrepo.save(contact);
+       return {massage:"Response Submited"}
+        }
+        catch{
+            return {massage:"Error in contact"}
+        }
+
+    }
+    async getallcontact():Promise<Contact[]>{
+         return await this.contactrepo.createQueryBuilder().getMany();
     }
 
 }

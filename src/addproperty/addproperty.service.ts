@@ -25,6 +25,8 @@ import {
     IPaginationOptions,
   } from 'nestjs-typeorm-paginate';
 import { throwError } from 'rxjs';
+import { Agent } from 'src/entity/agent.entity';
+import { Agentsdto } from 'src/dto/agent.dto';
 
 @Injectable()
 export class AddpropertyService {
@@ -59,6 +61,9 @@ export class AddpropertyService {
 
         @InjectRepository(General_Info_Repository)
         private general_info_repo: General_Info_Repository,
+
+        @InjectRepository(General_Info_Repository)
+        private agent_repo: General_Info_Repository,
 
         
     ) { }
@@ -310,6 +315,7 @@ export class AddpropertyService {
             .leftJoinAndSelect("addproperty.property_category", "property_category")
             .leftJoinAndSelect("addproperty.feature", "feature")
             .leftJoinAndSelect("addproperty.general_info", "general_info")
+            .leftJoinAndSelect("addproperty.userid", "userid")
             .andWhere("addproperty.id=:id",{id:id})
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .getMany();
@@ -676,7 +682,7 @@ export class AddpropertyService {
         .leftJoinAndSelect("addproperty.property_type", "property_type")
         .leftJoinAndSelect("addproperty.general_info", "general_info")
         .leftJoinAndSelect("addproperty.property_category", "property_category")
-        .select(['addproperty.id','addproperty.purpose', 'addproperty.property_title', 'addproperty.price',
+        .select(['addproperty.id','addproperty.createdat','addproperty.purpose', 'addproperty.property_title', 'addproperty.price',
         'addproperty.title_image','addproperty.land_area','area_unit.area_name','general_info.bedrooms'
         ,'general_info.bathrooms','city.city_name','Location.location_name','property_type.property_type_name'
         ,'property_category.property_category_name'])
@@ -733,4 +739,30 @@ export class AddpropertyService {
  
             return paginate<Addproperty>(findDataByCity, options);
     }
+    addagent(agentsdto:Agentsdto){
+
+        var{
+            name,address,number,email,office_no,description,agent_rating,fb_link,twitter_link,linkdin_link,
+            other_link,image,video_link}=agentsdto;
+    
+            const agnt=new Agent();
+    
+            agnt.name=name;
+            agnt.address=address;
+            agnt.number=number;
+            agnt.email=email;
+            agnt.office_no=office_no;
+            agnt.description=description;
+            agnt.agent_rating=agent_rating;
+            agnt.fb_link=fb_link;
+            agnt.twitter_link=twitter_link;
+            agnt.linkdin_link=linkdin_link;
+            agnt.other_link=other_link;
+            agnt.image=image;
+            agnt.video_link=video_link;
+    
+            this.agent_repo.save(agnt);
+            
+      }
+    
 }

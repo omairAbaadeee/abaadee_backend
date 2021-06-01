@@ -8,6 +8,7 @@ import { PropertyType } from "./property_type.entity";
 import { Propertyimage } from "./propertyimage.entity";
 import { Features } from "./features.entity";
 import { General_Information } from "./featureGeneralInfo.entity";
+import { Agent } from "node:http";
 
 export enum Purpose {
     ForSale = "Sale",
@@ -25,6 +26,8 @@ export class Addproperty {
     @ManyToOne(()=>User,userid=>userid.addproperty)
     @JoinColumn({name:"user_id"})
     userid:User;
+
+    
     
     @Column()
     purpose: Purpose;
