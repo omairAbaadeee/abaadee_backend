@@ -9,6 +9,7 @@ import { Propertyimage } from "./propertyimage.entity";
 import { Features } from "./features.entity";
 import { General_Information } from "./featureGeneralInfo.entity";
 import { Agent } from "node:http";
+import { PropertyContact } from "./propertycontact.entity";
 
 export enum Purpose {
     ForSale = "Sale",
@@ -62,7 +63,7 @@ export class Addproperty {
     property_description: string;
     
     @Column()
-    price: number;
+    price: string;
     
     @Column()
     land_area: number;
@@ -90,6 +91,10 @@ export class Addproperty {
     @OneToMany(()=>General_Information,general_info=>general_info.addproperty)
     @JoinColumn({name:"general_info_id"})
     general_info: General_Information;
+
+    @OneToMany(()=>Features,feature=>feature.addproperty)
+    @JoinColumn({name:"Property_contact_id"})
+    propertycontact: PropertyContact[];
 
     @Column()
     expiredate: Date;

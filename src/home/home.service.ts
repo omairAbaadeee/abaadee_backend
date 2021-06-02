@@ -14,6 +14,11 @@ import { Country } from 'src/entity/country.entity';
 import { Contact } from 'src/entity/contact.entity';
 import { ContactRepository } from 'src/reposatory/contact.reposatory';
 import { Contactdto } from 'src/dto/contact.dto';
+import { AdvertisementReposatory } from 'src/reposatory/advertisement.reposatory';
+import { Advertisementdto } from 'src/dto/Advertisement.dto';
+import { Addimagedto } from 'src/dto/addproerty.dto';
+import { Advertisement } from 'src/entity/advertisement.entity';
+import { url } from 'src/Global/Variable';
 @Injectable()
 export class HomeService {
     constructor(
@@ -38,6 +43,9 @@ export class HomeService {
 
         @InjectRepository(ContactRepository)
         private contactrepo: ContactRepository,
+
+        @InjectRepository(AdvertisementReposatory)
+        private advertiserepo: AdvertisementReposatory,
     ) { }
     //Get All  City And Location
     async getallcity(): Promise<City[]> {
@@ -147,6 +155,18 @@ export class HomeService {
     }
     async getallcontact():Promise<Contact[]>{
          return await this.contactrepo.createQueryBuilder().getMany();
+    }
+
+    addAdvertisement(advertisementdto:Advertisementdto, images: Addimagedto){
+    const{company_name,company_link,page_name}=advertisementdto;
+      const advertisement=new Advertisement();
+      advertisement.advertisement_img=url+"/addproperty/Advertisement/"+images.filename;
+      advertisement.company_name=company_name;
+      advertisement.company_link=company_link;
+      advertisement.page_name=page_name;
+      this.advertiserepo.save(advertisement);
+
+
     }
 
 }

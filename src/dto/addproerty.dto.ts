@@ -8,7 +8,7 @@ export class Addpropertydto{
     location_name: string;
     property_title: string;
     property_description: string;
-    price: number;
+    price: string;
     land_area: number;
     area_unit_name: string;
     //propertyimage:Addimagedto;

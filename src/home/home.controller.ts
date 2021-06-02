@@ -1,68 +1,21 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { join } from 'path';
+import { Observable, of } from 'rxjs';
+import { editFileName, imageFileFilter } from 'src/addproperty/file.upload';
+import { Advertisementdto } from 'src/dto/Advertisement.dto';
 import { Contactdto } from 'src/dto/contact.dto';
-
-import { Areaofunit } from 'src/entity/area_unit.entity';
 import { City } from 'src/entity/city.entity';
 import { Contact } from 'src/entity/contact.entity';
 import { Country } from 'src/entity/country.entity';
-import { PropertyType } from 'src/entity/property_type.entity';
 import { HomeService } from './home.service';
+const Jimp = require("jimp");
 
 @Controller('home')
 export class HomeController {
     constructor(private homeservice: HomeService) { }
 
-    //working on price 
-    // @Get("/price")
-    // GetAllPrice(): Promise<Price[]> {
-    //     return this.homeservice.getallprice();
-    // }
-
-
-    // @Post("/price")
-    // createprice(
-    //     @Body("price") prices: string) {
-    //     //   console.log(prices);
-    //     this.homeservice.createprice(prices);
-
-    // }
-    // //Working on bed
-    // @Post("/bed")
-    // createbed(
-    //     @Body("bed_quaintity") bed_quaintity: number) {
-    //     //console.log(c_name,s_name,city_name,l_name);
-    //     this.homeservice.createbed(bed_quaintity);
-
-    // }
-    // @Get("/bed")
-    // GetAllbed(): Promise<Beds[]> {
-    //     return this.homeservice.getallbed();
-    // }
-    // //Working on areasize
-    // @Post("/areasize")
-    // createareasize(
-    //     @Body("area_size") area_size: number) {
-    //     //console.log(c_name,s_name,city_name,l_name);
-    //     this.homeservice.createareasize(area_size);
-    // }
-    // @Get("/areasize")
-    // GetAllareasize(): Promise<AreaSize[]> {
-    //     return this.homeservice.getallareasize();
-    // }
-    // //Working on areaunit
-    // @Post("/areaunit")
-    // createareaunit(
-    //     @Body("area_name") area_name: string) {
-    //     //console.log(c_name,s_name,city_name,l_name);
-    //     this.homeservice.createareaunit(area_name);
-
-    // }
-    // @Get("/areaunit")
-    // GetAllareaunit(): Promise<Areaofunit[]> {
-    //     return this.homeservice.getallareaunit();
-    // }
-
-   
     @Get("/country")
     country():Promise<Country[]> {
 
@@ -110,5 +63,72 @@ export class HomeController {
     @Get("contact")
     getallcontact():Promise<Contact[]>{
        return this.homeservice.getallcontact();
+    }
+    
+    @Get("image/:imagename")
+    findimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
+        return of(res.sendFile(join(process.cwd(), 'uploads/Advertisement/'+imagename)));
+    }
+    
+    @Post("/upload")
+    @UseInterceptors(
+        FileInterceptor('image', {
+            storage: diskStorage({
+                destination: './uploads/Advertisement',
+                filename: editFileName,
+                
+            }),
+            fileFilter: imageFileFilter,
+        }),
+
+    )
+    async uploadedFile(@UploadedFile() file/*,advertisementdto:Advertisementdto*/) {
+      const response = {
+            originalname: file.originalname,
+            filename: file.filename,
+            imagePath: file.path
+        };
+        const ORIGINAL_IMAGE ="./uploads/Advertisement/"+response.filename;
+      
+      const LOGO = "https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/Australian_Defence_Force_Academy_coat_of_arms.svg/1200px-Australian_Defence_Force_Academy_coat_of_arms.svg.png";
+      
+      const LOGO_MARGIN_PERCENTAGE = 5;
+      
+      const FILENAME = "test.jpg";
+      
+      const main = async () => {
+        const [image, logo] = await Promise.all([
+          Jimp.read(ORIGINAL_IMAGE),
+          Jimp.read(LOGO)
+        ]);
+      
+        logo.resize(image.bitmap.width / 10, Jimp.AUTO);
+      
+        const xMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100;
+        const yMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100;
+      
+        const X = image.bitmap.width - logo.bitmap.width - xMargin;
+        const Y = image.bitmap.height - logo.bitmap.height - yMargin;
+      
+        return image.composite(logo, X, Y, [
+          {
+            mode: Jimp.BLEND_SCREEN,
+            opacitySource: 0.1,
+            opacityDest: 1
+          }
+        ]);
+      };
+      
+      main().then(image => image.write(FILENAME));
+      console.log(FILENAME)
+  
+    
+      //this.homeservice.addAdvertisement(advertisementdto,response);
+
+        return {
+            status: HttpStatus.OK,
+            message: 'Image uploaded successfully!',
+            data: response,
+        };
     }
 }

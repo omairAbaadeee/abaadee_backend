@@ -10,11 +10,12 @@ import { PropertyCategoryRepositery } from '../reposatory/propertycatogory.repos
 import { PropertytypeRepositery } from '../reposatory/propertytype.reposatory';
 import { CountryRepository } from '../reposatory/country.reposatory';
 import { ContactRepository } from 'src/reposatory/contact.reposatory';
+import { AdvertisementReposatory } from 'src/reposatory/advertisement.reposatory';
 
 
 @Module({
   imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,
-  CityRepository,LocationRepository,PropertyCategoryRepositery,PropertytypeRepositery,CountryRepository,ContactRepository])],
+  CityRepository,LocationRepository,PropertyCategoryRepositery,AdvertisementReposatory,PropertytypeRepositery,CountryRepository,ContactRepository])],
   controllers: [HomeController],
   providers: [HomeService]
 })

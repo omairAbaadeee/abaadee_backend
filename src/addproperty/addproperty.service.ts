@@ -27,6 +27,10 @@ import {
 import { throwError } from 'rxjs';
 import { Agent } from 'src/entity/agent.entity';
 import { Agentsdto } from 'src/dto/agent.dto';
+import { PropertyContactReposatory } from 'src/reposatory/propertycontactrepo.reposatory';
+import { PropertyContact } from 'src/entity/propertycontact.entity';
+import { PropertyContactdto } from 'src/dto/propertycontact.dto';
+import { url } from 'src/Global/Variable';
 
 @Injectable()
 export class AddpropertyService {
@@ -64,6 +68,9 @@ export class AddpropertyService {
 
         @InjectRepository(General_Info_Repository)
         private agent_repo: General_Info_Repository,
+        
+        @InjectRepository(PropertyContactReposatory)
+        private propertyContactrepo: PropertyContactReposatory,
 
         
     ) { }
@@ -77,7 +84,7 @@ export class AddpropertyService {
     }
 
     async addproperty(addpropertydto: Addpropertydto, user: User, images: Addimagedto[]
-    ) {
+    ):Promise<any> {
         //console.log(main_feature)
 
         const { purpose, property_title, property_description, land_area,
@@ -113,7 +120,7 @@ export class AddpropertyService {
         //console.log(updateddat);
         addproperty.expiredate = expiredate;
         //console.log(expiredate);
-        addproperty.title_image = "http://localhost:3200/addproperty/image/" + filename;
+        addproperty.title_image = url+"/addproperty/image/" + filename;
         addproperty.is_verified = false;
         addproperty.latitude=latitude;
         addproperty.longitude=longitude;
@@ -172,21 +179,30 @@ export class AddpropertyService {
         this.addimage(images, addproperty);
         var parse1 = JSON.parse(addpropertydto.features)
         const { general_information, main_features, utilities, business_and_communication, facing } = parse1;
-       
+       try{
         if (addpropertydto.property_type == "Homes" || addpropertydto.property_type == "Commercial") {
             await this.addmainfeature(main_features, addproperty);
             await this.addutilities(utilities, addproperty);
             await this.addfacing(facing, addproperty);
             await this.add_bussness_and_communication(business_and_communication, addproperty);
             await this.addgeneralinfo(general_information, addproperty);
+         
            
         }
         else {
             await this.addmainfeature(main_features, addproperty);
             await this.addutilities(utilities, addproperty);
-            await this.addfacing(facing, addproperty);
-           
+            await this.addfacing(facing, addproperty);         
         }
+        return {
+            status: HttpStatus.OK,
+            message: 'Property uploaded successfully!',
+        };
+    }catch{
+        return {
+            status: HttpStatus.EXPECTATION_FAILED,
+            message:"Error"}
+    }
     
 
 
@@ -287,6 +303,27 @@ export class AddpropertyService {
 
 
     }
+    async PropertyContact(user:User,addproperty:Addproperty,propertycontactdto:PropertyContactdto){
+        try{
+        const {name,email,p_number,message}=propertycontactdto;
+        const propertycontact=new PropertyContact();
+        propertycontact.name=name;
+        propertycontact.email=email;
+        propertycontact.p_number=p_number;
+        propertycontact.message=message;
+        propertycontact.user=user;
+        propertycontact.addproerty=addproperty;
+        await this.propertyContactrepo.save(propertycontact);
+        return{
+            message:"ok"
+        }
+        }catch{
+            return{
+                message:"Error"
+            }
+        }
+
+    }
        //Varified_Property
        async varified_property(id:number):Promise<any>{
            
@@ -315,7 +352,6 @@ export class AddpropertyService {
             .leftJoinAndSelect("addproperty.property_category", "property_category")
             .leftJoinAndSelect("addproperty.feature", "feature")
             .leftJoinAndSelect("addproperty.general_info", "general_info")
-            .leftJoinAndSelect("addproperty.userid", "userid")
             .andWhere("addproperty.id=:id",{id:id})
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .getMany();

@@ -11,6 +11,8 @@ import { Country } from "src/entity/country.entity";
 import { Features } from "src/entity/features.entity";
 import { General_Information } from "src/entity/featureGeneralInfo.entity";
 import { Contact } from "src/entity/contact.entity";
+import { PropertyContact } from "src/entity/propertycontact.entity";
+import { Advertisement } from "src/entity/advertisement.entity";
 
 
 export const typeOrmConfig:TypeOrmModuleOptions = {
@@ -21,6 +23,7 @@ username:'postgres',
 password:'admin654321',
 database:'Abaadee',
 entities:[User,Areaofunit,Country,Location,City
-    ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,Contact],
+    ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,
+    Advertisement,Contact,PropertyContact],
 synchronize:true
 };

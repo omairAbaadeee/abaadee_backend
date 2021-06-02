@@ -13,16 +13,18 @@ import { User } from 'src/entity/user.entity';
 import { AddpropertySearch } from "src/dto/addpropertysearch.dto";
 import { json } from 'express';
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { get } from 'node:http';
 import { url } from 'src/Global/Variable';
 import { Agentsdto } from 'src/dto/agent.dto';
+import { PropertyContactdto } from 'src/dto/propertycontact.dto';
 var watermark = require('image-watermark');
 @Controller('addproperty')
 export class AddpropertyController {
     constructor(
         private addproservice: AddpropertyService
     ) { }
-    @Get("non_varified")
+
+
+    @Get("non_verified")
     Addproperty():Promise<Addproperty[]>{
         return  this.addproservice.non_varified();
         
@@ -83,7 +85,7 @@ export class AddpropertyController {
         ),
     )
     async uploadMultipleFiles(@UploadedFiles() files, @Body() addpropertydto: Addpropertydto,
-        @GetUser() user: User) {
+        @GetUser() user: User):Promise<any> {
             console.log(addpropertydto);
         const response = [];
         files.forEach(file => {
@@ -92,15 +94,13 @@ export class AddpropertyController {
             };
             response.push(fileReponse);
         });
-        try{
+    
         this.addproservice.addproperty(addpropertydto,user,response);
         return {
             status: HttpStatus.OK,
             message: 'Property uploaded successfully!',
         };
-        }catch{
-            return throwError("Error");
-        }
+        
     }
 
     @Get("image/:imagename")
@@ -122,14 +122,7 @@ export class AddpropertyController {
           },purpose);
 
     }
-    @Post('upload1')
-    @UseInterceptors(FileFieldsInterceptor([
-        { name: 'image1', maxCount: 5 },
-        { name: 'image2', maxCount: 1 },
-    ]))
-    uploadFile(@UploadedFiles() files) {
-        console.log(files);
-    }
+   
     @Get("databyid/:id")
     Getalldatabyid(@Param("id") id:number): Promise<Addproperty[]>{
        
@@ -258,7 +251,7 @@ export class AddpropertyController {
           },purpose,locationname,catogory);
     }
 
-    @Post()
+    @Post("verified_property")
     async Varified_property(@Body("id") id:number):Promise<any>{
       return  await this.addproservice.varified_property(id);
     }
@@ -266,6 +259,11 @@ export class AddpropertyController {
     signIn(@Body() agentsdto:Agentsdto) {
      console.log(agentsdto);
      return this.addproservice.addagent(agentsdto);
+    }
+
+    @Post("property_contact")
+    propertyContact(@Body() propertycontactdto:PropertyContactdto){
+
     }
 
 

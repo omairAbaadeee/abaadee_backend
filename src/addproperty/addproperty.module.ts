@@ -9,6 +9,7 @@ import { CityRepository } from 'src/reposatory/city.repositery';
 import { General_Info_Repository } from 'src/reposatory/generalinfo.reposatory';
 import { LocationRepository } from 'src/reposatory/location.repository';
 import { PropertyCategoryRepositery } from 'src/reposatory/propertycatogory.reposatory';
+import { PropertyContactReposatory } from 'src/reposatory/propertycontactrepo.reposatory';
 import { PropertyimagesRepositery } from 'src/reposatory/propertyimage.reposatory';
 import { PropertytypeRepositery } from 'src/reposatory/propertytype.reposatory';
 import { UserRepository } from 'src/reposatory/user.repository';
@@ -18,7 +19,8 @@ import { AddpropertyService } from './addproperty.service';
 @Module({
   imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,
     CityRepository,LocationRepository,PropertyimagesRepositery
-    ,PropertyCategoryRepositery,PropertytypeRepositery,UserRepository,AddfeatureReposatory,General_Info_Repository]),
+    ,PropertyCategoryRepositery,PropertytypeRepositery,UserRepository,AddfeatureReposatory
+    ,General_Info_Repository,PropertyContactReposatory]),
     AuthModule
   ],
   controllers: [AddpropertyController],

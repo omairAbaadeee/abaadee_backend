@@ -4,6 +4,7 @@ import { Addproperty } from "./addproperty.entity";
 import { City } from "./city.entity";
 import {Location} from "./location.entity";
 import { Country } from "./country.entity";
+import { PropertyContact } from "./propertycontact.entity";
 @Entity()
 @Unique(["email"])
 export class User extends BaseEntity {
@@ -53,7 +54,10 @@ export class User extends BaseEntity {
     @ManyToOne(()=>Country,country=>country.city)
     country:Country;
 
-
+    
+    @OneToMany(()=>PropertyContact,propertycontact=>propertycontact.user)
+    propertycontact:PropertyContact[];
+    
    
     
 }
