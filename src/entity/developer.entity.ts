@@ -18,7 +18,7 @@ name: string;
 @Column()
 address: string;
 @Column()
-number: number;
+p_number: number;
 @Column()
 email: string;
 @Column()
