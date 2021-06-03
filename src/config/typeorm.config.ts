@@ -13,6 +13,9 @@ import { General_Information } from "src/entity/featureGeneralInfo.entity";
 import { Contact } from "src/entity/contact.entity";
 import { PropertyContact } from "src/entity/propertycontact.entity";
 import { Advertisement } from "src/entity/advertisement.entity";
+import { Projectimage } from "src/entity/projectimage.entity";
+import { Project } from "src/entity/project.entity";
+import { Developer } from "src/entity/developer.entity";
 
 
 export const typeOrmConfig:TypeOrmModuleOptions = {
@@ -21,9 +24,9 @@ host:'localhost',
 port:5432,
 username:'postgres',
 password:'admin654321',
-database:'Abaadee',
+database:'Abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,
-    Advertisement,Contact,PropertyContact],
+    Advertisement,Contact,PropertyContact,Projectimage,Project,Developer],
 synchronize:true
 };

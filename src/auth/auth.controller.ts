@@ -112,7 +112,8 @@ export class AuthController {
     
     @Post("property_contact")
     propertyContact(@Body() propertycontactdto:PropertyContactdto):Promise<any>{
-     return this.authsevices.PropertyContact(propertycontactdto);
+    console.log(propertycontactdto)
+       return ;//this.authsevices.PropertyContact(propertycontactdto);
       
     }
 

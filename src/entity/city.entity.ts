@@ -4,6 +4,7 @@ import { Location } from "./location.entity"
 import { Addproperty } from "./addproperty.entity";
 import { User } from "./user.entity";
 import { Country } from "./country.entity";
+import { Project } from "./project.entity";
 
 
 
@@ -27,5 +28,8 @@ country:Country;
 
     @OneToMany(()=>User,user=>user.city)
     user:User[];
+
+    @OneToMany(()=>Project,project=>project.city)
+    project:Project[];
 
 }

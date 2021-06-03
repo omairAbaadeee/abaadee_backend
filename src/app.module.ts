@@ -7,10 +7,11 @@ import { HomeModule } from './home/home.module';
 import { AddpropertyModule } from './addproperty/addproperty.module';
 import { AuthModule } from './auth/auth.module';
 import { UtilityService } from './utility/utility.service';
+import { DeveloperModule } from './developer/developer.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmConfig), HomeModule, AddpropertyModule, AuthModule],
+  imports: [TypeOrmModule.forRoot(typeOrmConfig), HomeModule, AddpropertyModule, AuthModule, DeveloperModule],
   controllers: [AppController],
   providers: [AppService, UtilityService],
 })

@@ -4,4 +4,5 @@ export class PropertyContactdto{
     p_number: string;
     email: string;
     message: string;
+    user_data:string;
 }
