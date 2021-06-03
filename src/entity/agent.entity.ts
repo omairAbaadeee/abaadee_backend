@@ -35,6 +35,12 @@ export class Agent{
     
     @Column()
     linkdin_link: string;
+    @Column()
+
+    insta_link: string;
+    @Column()
+    
+    youtube_link: string;
     
     @Column()
     other_link: string;

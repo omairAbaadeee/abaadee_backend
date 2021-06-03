@@ -8,6 +8,7 @@ import jwt_decode from "jwt-decode";
 import { DecodeDto } from 'src/dto/decode.dto';
 import {FacebookUser} from "src/dto/addproerty.dto";
 import { SigninDto } from 'src/dto/signin.dto';
+import { PropertyContactdto } from 'src/dto/propertycontact.dto';
 
 
 @Controller('auth')
@@ -106,6 +107,13 @@ export class AuthController {
     SocialSignup(@Body("username") username:string , @Body("email") email:string , @Body("imageurl")imageurl:string){
       //console.log(email);
        return this.authsevices.SocialSignup(username,email,imageurl);
+    }
+
+    
+    @Post("property_contact")
+    propertyContact(@Body() propertycontactdto:PropertyContactdto):Promise<any>{
+     return this.authsevices.PropertyContact(propertycontactdto);
+      
     }
 
 }

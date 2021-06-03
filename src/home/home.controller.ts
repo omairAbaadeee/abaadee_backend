@@ -82,48 +82,48 @@ export class HomeController {
         }),
 
     )
-    async uploadedFile(@UploadedFile() file/*,advertisementdto:Advertisementdto*/) {
+    async uploadedFile(@UploadedFile() file,advertisementdto:Advertisementdto) {
       const response = {
             originalname: file.originalname,
             filename: file.filename,
             imagePath: file.path
         };
-        const ORIGINAL_IMAGE ="./uploads/Advertisement/"+response.filename;
+      // const ORIGINAL_IMAGE ="./uploads/Advertisement/"+response.filename;
       
-      const LOGO = "https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/Australian_Defence_Force_Academy_coat_of_arms.svg/1200px-Australian_Defence_Force_Academy_coat_of_arms.svg.png";
+      // const LOGO = "https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/Australian_Defence_Force_Academy_coat_of_arms.svg/1200px-Australian_Defence_Force_Academy_coat_of_arms.svg.png";
       
-      const LOGO_MARGIN_PERCENTAGE = 5;
+      // const LOGO_MARGIN_PERCENTAGE = 5;
       
-      const FILENAME = "test.jpg";
+      // const FILENAME = "test.jpg";
       
-      const main = async () => {
-        const [image, logo] = await Promise.all([
-          Jimp.read(ORIGINAL_IMAGE),
-          Jimp.read(LOGO)
-        ]);
+      // const main = async () => {
+      //   const [image, logo] = await Promise.all([
+      //     Jimp.read(ORIGINAL_IMAGE),
+      //     Jimp.read(LOGO)
+      //   ]);
       
-        logo.resize(image.bitmap.width / 10, Jimp.AUTO);
+      //   logo.resize(image.bitmap.width / 10, Jimp.AUTO);
       
-        const xMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100;
-        const yMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100;
+      //   const xMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100;
+      //   const yMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100;
       
-        const X = image.bitmap.width - logo.bitmap.width - xMargin;
-        const Y = image.bitmap.height - logo.bitmap.height - yMargin;
+      //   const X = image.bitmap.width - logo.bitmap.width - xMargin;
+      //   const Y = image.bitmap.height - logo.bitmap.height - yMargin;
       
-        return image.composite(logo, X, Y, [
-          {
-            mode: Jimp.BLEND_SCREEN,
-            opacitySource: 0.1,
-            opacityDest: 1
-          }
-        ]);
-      };
+      //   return image.composite(logo, X, Y, [
+      //     {
+      //       mode: Jimp.BLEND_SCREEN,
+      //       opacitySource: 0.1,
+      //       opacityDest: 1
+      //     }
+      //   ]);
+      // };
       
-      main().then(image => image.write(FILENAME));
-      console.log(FILENAME)
+      // main().then(image => image.write(FILENAME));
+      // console.log(FILENAME)
   
     
-      //this.homeservice.addAdvertisement(advertisementdto,response);
+      this.homeservice.addAdvertisement(advertisementdto,response);
 
         return {
             status: HttpStatus.OK,

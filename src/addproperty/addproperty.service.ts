@@ -19,6 +19,8 @@ import { PropertyCategoryRepositery } from 'src/reposatory/propertycatogory.repo
 import { PropertyimagesRepositery } from 'src/reposatory/propertyimage.reposatory';
 import { PropertytypeRepositery } from 'src/reposatory/propertytype.reposatory';
 import { UserRepository } from 'src/reposatory/user.repository';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from "bcrypt";
 import {
     paginate,
     Pagination,
@@ -31,6 +33,8 @@ import { PropertyContactReposatory } from 'src/reposatory/propertycontactrepo.re
 import { PropertyContact } from 'src/entity/propertycontact.entity';
 import { PropertyContactdto } from 'src/dto/propertycontact.dto';
 import { url } from 'src/Global/Variable';
+import { JwtPayload } from 'src/auth/jwt-payload.interface';
+import { UtilityService } from 'src/utility/utility.service';
 
 @Injectable()
 export class AddpropertyService {
@@ -72,7 +76,6 @@ export class AddpropertyService {
         @InjectRepository(PropertyContactReposatory)
         private propertyContactrepo: PropertyContactReposatory,
 
-        
     ) { }
     public date = new Date();
 
@@ -121,7 +124,7 @@ export class AddpropertyService {
         addproperty.expiredate = expiredate;
         //console.log(expiredate);
         addproperty.title_image = url+"/addproperty/image/" + filename;
-        addproperty.is_verified = false;
+        addproperty.is_verified = true;
         addproperty.latitude=latitude;
         addproperty.longitude=longitude;
         //  addproperty.title_image="Ahmed";
@@ -303,27 +306,7 @@ export class AddpropertyService {
 
 
     }
-    async PropertyContact(user:User,addproperty:Addproperty,propertycontactdto:PropertyContactdto){
-        try{
-        const {name,email,p_number,message}=propertycontactdto;
-        const propertycontact=new PropertyContact();
-        propertycontact.name=name;
-        propertycontact.email=email;
-        propertycontact.p_number=p_number;
-        propertycontact.message=message;
-        propertycontact.user=user;
-        propertycontact.addproerty=addproperty;
-        await this.propertyContactrepo.save(propertycontact);
-        return{
-            message:"ok"
-        }
-        }catch{
-            return{
-                message:"Error"
-            }
-        }
-
-    }
+   
        //Varified_Property
        async varified_property(id:number):Promise<any>{
            
@@ -352,6 +335,7 @@ export class AddpropertyService {
             .leftJoinAndSelect("addproperty.property_category", "property_category")
             .leftJoinAndSelect("addproperty.feature", "feature")
             .leftJoinAndSelect("addproperty.general_info", "general_info")
+            .leftJoinAndSelect("addproperty.userid", "userid")
             .andWhere("addproperty.id=:id",{id:id})
             .andWhere("addproperty.expiredate >:expiredate", { expiredate: this.date })
             .getMany();

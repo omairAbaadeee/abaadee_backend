@@ -3,9 +3,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AddpropertyRepo } from 'src/reposatory/addproperty.reposatory';
 import { CityRepository } from 'src/reposatory/city.repositery';
 import { CountryRepository } from 'src/reposatory/country.reposatory';
 import { LocationRepository } from 'src/reposatory/location.repository';
+import { PropertyContactReposatory } from 'src/reposatory/propertycontactrepo.reposatory';
 import { UserRepository } from 'src/reposatory/user.repository';
 import { UtilityService } from 'src/utility/utility.service';
 import { AuthController } from './auth.controller';
@@ -15,7 +17,8 @@ import { GoogleStrategy } from './google.strategy';
 import { JwtStrategy } from './jwt.strategy';
 
 @Module({
-  imports:[ScheduleModule.forRoot(),TypeOrmModule.forFeature([UserRepository,CityRepository,LocationRepository,CountryRepository]),
+  imports:[ScheduleModule.forRoot(),TypeOrmModule.forFeature([UserRepository,CityRepository,LocationRepository,
+    CountryRepository,PropertyContactReposatory,AddpropertyRepo]),
   PassportModule.register({defaultStrategy:'jwt'}),
     JwtModule.register({
       secret:'topsecret',

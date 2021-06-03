@@ -29,46 +29,6 @@ export class AddpropertyController {
         return  this.addproservice.non_varified();
         
     }
-    @Post("/upload")
-    @UseInterceptors(
-        FileInterceptor('image', {
-            storage: diskStorage({
-                destination: './uploads/images',
-                filename: editFileName,
-                
-            }),
-            fileFilter: imageFileFilter,
-        }),
-
-    )
-    async uploadedFile(@UploadedFile() file) {
-        console.log(file)
-      const response = {
-            originalname: file.originalname,
-            filename: file.filename,
-            imagePath: file.path
-        };
-        // var options = {
-        //     'text': 'watermark-test',
-        //     'textSize': 6, //Should be between 1-8
-           
-        // };
-
-         await watermark.embedWatermark('\\uploads\\images\\'+file.filename, {'text':'salman watermark'} , function(err) {
-            if (!err){
-                console.log('Succefully embetermaded wark');}
-                else{
-                    console.log('Succefully not embetermaded wark');
-                }
-        });
-        return {
-            status: HttpStatus.OK,
-            message: 'Image uploaded successfully!',
-            data: response,
-        };
-    }
-
-
     @Post('uploaddata')
     @UseGuards(AuthGuard())
     @UseInterceptors(
@@ -263,7 +223,8 @@ export class AddpropertyController {
 
     @Post("property_contact")
     propertyContact(@Body() propertycontactdto:PropertyContactdto){
-
+      console.log(propertycontactdto)
+      
     }
 
 

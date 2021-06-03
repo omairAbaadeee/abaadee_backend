@@ -21,6 +21,7 @@ export class PropertyContact{
     message: string;
    @Column()
    date: Date;
+   
    @ManyToOne(()=>Addproperty,addproerty=>addproerty.propertycontact)
    addproerty:Addproperty;
    

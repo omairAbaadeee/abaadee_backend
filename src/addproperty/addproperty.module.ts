@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
@@ -13,6 +14,7 @@ import { PropertyContactReposatory } from 'src/reposatory/propertycontactrepo.re
 import { PropertyimagesRepositery } from 'src/reposatory/propertyimage.reposatory';
 import { PropertytypeRepositery } from 'src/reposatory/propertytype.reposatory';
 import { UserRepository } from 'src/reposatory/user.repository';
+import { UtilityService } from 'src/utility/utility.service';
 import { AddpropertyController } from './addproperty.controller';
 import { AddpropertyService } from './addproperty.service';
 

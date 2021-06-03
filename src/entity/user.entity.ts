@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { Addproperty } from "./addproperty.entity";
 import { City } from "./city.entity";
@@ -56,6 +56,7 @@ export class User extends BaseEntity {
 
     
     @OneToMany(()=>PropertyContact,propertycontact=>propertycontact.user)
+    @JoinColumn({name:"property_contact"})
     propertycontact:PropertyContact[];
     
    

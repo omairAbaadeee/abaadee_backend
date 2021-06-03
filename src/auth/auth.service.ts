@@ -13,6 +13,11 @@ import { throwError } from 'rxjs';
 import { CountryRepository } from 'src/reposatory/country.reposatory';
 import { SigninDto } from 'src/dto/signin.dto';
 import { createQueryBuilder } from 'typeorm';
+import { url } from 'src/Global/Variable';
+import { PropertyContactdto } from 'src/dto/propertycontact.dto';
+import { PropertyContact } from 'src/entity/propertycontact.entity';
+import { PropertyContactReposatory } from 'src/reposatory/propertycontactrepo.reposatory';
+import { AddpropertyRepo } from 'src/reposatory/addproperty.reposatory';
 
 @Injectable()
 export class AuthService {
@@ -29,8 +34,15 @@ export class AuthService {
     @InjectRepository(CountryRepository)
     private countryrepo: CountryRepository,
 
+    @InjectRepository(PropertyContactReposatory)
+    private propertyContactrepo: PropertyContactReposatory,
+
+    @InjectRepository(AddpropertyRepo)
+    private addpropertyrepo: AddpropertyRepo,
+
     private jwtService: JwtService,
-    private utilityservice: UtilityService
+    private utilityservice: UtilityService,
+
   ) { }
 
 
@@ -284,11 +296,86 @@ export class AuthService {
     const accessToken = await this.jwtService.sign(payload);
     const para = " Your new Login Credentials AT ABAADEE.COM Are : <br/>"
     +"USERNAME :" +username+" <br/> PASSWORD : "+pass;
-      this.utilityservice.sendEmail(email,"http://localhost:3000","Go To Abaadee", para, "ABAADEE LOGIN");
+      this.utilityservice.sendEmail(email,url,"Go To Abaadee", para, "ABAADEE LOGIN");
     return {
       user: accessToken,
       name:username
     }
   }
+
+
+
+
+
+
+
+  ///Property COntact Form
+  async PropertyContact(propertycontactdto:PropertyContactdto):Promise<any>{
+    const {name,email,p_number,message,p_id}=propertycontactdto;
+    const property=await this.addpropertyrepo.createQueryBuilder("addproperty").where("addproperty.id=:id",{id:p_id}).getOne();
+    try{
+      console.log(propertycontactdto)
+    const propertycontact=new PropertyContact();
+    propertycontact.name=name;
+    propertycontact.p_number=p_number;
+    propertycontact.message=message;
+    propertycontact.email=email;
+    propertycontact.date=new Date;
+    const user1 = await this.userRepository.createQueryBuilder("user")
+    .where("user.email=:email", { email: email})
+    .getOne();
+    if(user1){
+      console.log(2)
+    propertycontact.user=user1;
+    console.log(user1)
+    const property=await this.addpropertyrepo.createQueryBuilder("addproperty").where("addproperty.id=:id",{id:p_id}).getOne();
+    propertycontact.addproerty=property;
+    await this.propertyContactrepo.save(propertycontact);
+    }
+    
+    
+    
+    
+    else{
+      console.log(3)
+        const pass=name+"-abaadee";
+        const user1=new User();
+        user1.name=name;
+        user1.email=email;
+        user1.salt = await bcrypt.genSalt();
+        user1.password = await this.hashpassword(pass, user1.salt);
+        user1.created_at=new Date;
+        user1.is_active=true;
+        user1.is_verified=true;
+        user1.city=null;
+        user1.location=null;
+        user1.country=null;
+        user1.phone_number=p_number;
+        await this.userRepository.save(user1);
+        //console.log(user1)
+        propertycontact.user=user1;
+        const property=await this.addpropertyrepo.createQueryBuilder("addproperty").where("addproperty.id=:id",{id:p_id}).getOne();
+        //console.log(property)
+        propertycontact.addproerty=property;
+        await this.propertyContactrepo.save(propertycontact);
+        //const email1=email;
+        const payload: JwtPayload = { email };
+        const accessToken = await this.jwtService.sign(payload);
+        const para = " Your new Login Credentials AT ABAADEE.COM Are : <br/>"
+        +"USERNAME :" +name+" <br/> PASSWORD : "+pass;
+          this.utilityservice.sendEmail(email,url,"Go To Abaadee", para, "ABAADEE LOGIN");
+        return {
+          user: accessToken,
+          name:name
+        }
+    }
+    }catch(error){
+
+        return{
+            message:error
+        }
+    }
+
+}
 }
 

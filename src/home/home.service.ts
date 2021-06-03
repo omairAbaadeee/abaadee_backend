@@ -159,13 +159,25 @@ export class HomeService {
 
     addAdvertisement(advertisementdto:Advertisementdto, images: Addimagedto){
     const{company_name,company_link,page_name}=advertisementdto;
-      const advertisement=new Advertisement();
-      advertisement.advertisement_img=url+"/addproperty/Advertisement/"+images.filename;
-      advertisement.company_name=company_name;
-      advertisement.company_link=company_link;
-      advertisement.page_name=page_name;
-      this.advertiserepo.save(advertisement);
+      
+    try {
 
+        
+    const advertisement=new Advertisement();
+    advertisement.advertisement_img=url+"/addproperty/Advertisement/"+images.filename;
+    advertisement.company_name=company_name;
+    advertisement.company_link=company_link;
+    advertisement.page_name=page_name;
+    advertisement.date=new Date;
+    this.advertiserepo.save(advertisement);
+
+     return {massage:"Response Submited"}
+        
+    } catch (error) {
+
+        return {massage:`Error in advertisement${error}`}
+        
+    }
 
     }
 
