@@ -16,6 +16,7 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { url } from 'src/Global/Variable';
 import { Agentsdto } from 'src/dto/agent.dto';
 import { PropertyContactdto } from 'src/dto/propertycontact.dto';
+import { Watermark } from 'src/Watermark/watermark';
 var watermark = require('image-watermark');
 @Controller('addproperty')
 export class AddpropertyController {
@@ -52,9 +53,11 @@ export class AddpropertyController {
             const fileReponse = {
                 filename: file.filename,
             };
+            Watermark('./uploads/logo/logo.png', "./uploads/images/"+fileReponse.filename);
             response.push(fileReponse);
         });
-    
+        
+ 
         this.addproservice.addproperty(addpropertydto,user,response);
         return {
             status: HttpStatus.OK,

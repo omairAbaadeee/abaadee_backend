@@ -1,8 +1,8 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 import { City } from "./city.entity";
 import { Project } from "./project.entity";
-
+import { MemberList } from "./memberlist.entity";
 
 
 @Entity()
@@ -18,23 +18,23 @@ name: string;
 @Column()
 address: string;
 @Column()
-p_number: number;
+p_number: string;
 @Column()
 email: string;
 @Column()
-office_number: number;
+office_number: string;
 @Column()
 description: string;
 @Column()
 rating: string;
 @Column(
     {
-        nullable:true
+        //nullable:true
     }
 )
 facebook_link: string;
 @Column({
-    nullable:true
+  //  nullable:true
 })
 youtube_link: string;
 @Column({
@@ -57,6 +57,9 @@ other_link: string;
     nullable:true
 })
 vedio_link: string;
+
+@OneToMany(()=>MemberList,memberlist=>memberlist.developer)
+memberlist: MemberList[];
 
 @OneToMany(()=>Project,project=>project.developer)
 project:Project[];

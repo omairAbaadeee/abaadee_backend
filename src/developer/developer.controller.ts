@@ -1,10 +1,14 @@
-import { Body, Controller, HttpStatus, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { join } from 'path';
+import { Observable, of } from 'rxjs';
 import { editFileName, imageFileFilter } from 'src/addproperty/file.upload';
+import { DeveloperDto } from 'src/dto/developer.dto';
 import { PropertyContactdto } from 'src/dto/propertycontact.dto';
+import { Watermark } from 'src/Watermark/watermark';
 import { DeveloperService } from './developer.service';
-
+var Jimp = require("jimp");
 @Controller('developer')
 export class DeveloperController {
     constructor(
@@ -17,26 +21,55 @@ export class DeveloperController {
             storage: diskStorage({
                 destination: './uploads/developer',
                 filename: editFileName,
-                
+
             }),
             fileFilter: imageFileFilter,
         }),
 
     )
-    async uploadedFile(@UploadedFile() file,@Body() body) {
-      const response = {
+    async uploadedFile(@UploadedFile() file, @Body() body: DeveloperDto) {
+        console.log(body)
+        const response = {
             originalname: file.originalname,
             filename: file.filename,
             imagePath: file.path
         };
-     
-    
-        return {
-            status: HttpStatus.OK,
-            message: 'Image uploaded successfully!',
-            data: response,
-        };
-    } 
- 
+        Watermark('./uploads/logo/logo.png', response.imagePath)
+
+        this.developerservice.AddDeveloper(body, response);
+        // return {
+        //     status: HttpStatus.OK,
+        //     message: 'Image uploaded successfully!',
+        //     data: response,
+        // };
+    }
+    @Get("image/:imagename")
+    findimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
+        return of(res.sendFile(join(process.cwd(), 'uploads/developer/' + imagename)));
+    }
+    @Post('/upload')
+    @UseInterceptors(FileFieldsInterceptor( [
+        {
+          name: 'p1',
+          maxCount: 2,
+        },
+        {
+          name: 'p2',
+          maxCount: 1,
+        },
+      ],
+      {
+        storage: diskStorage({
+          destination: './uploads/developer',
+          filename: editFileName,
+        }),
+      fileFilter: imageFileFilter,
+      },
+    ),)
+    uploadFile(@UploadedFiles() files) {
+        console.log(files);
+    }
+
+
 }
 

@@ -6,7 +6,9 @@ export class DeveloperDto{
     officeNo:string;
     videoUrl:string;
     description:string;
-    developerRating:string;
+    developRating:string;
+    socialValues:string;
+    memberList:object;
 
 }
 export class SocialDto{

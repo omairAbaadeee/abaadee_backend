@@ -16,6 +16,7 @@ import { Advertisement } from "src/entity/advertisement.entity";
 import { Projectimage } from "src/entity/projectimage.entity";
 import { Project } from "src/entity/project.entity";
 import { Developer } from "src/entity/developer.entity";
+import { MemberList } from "src/entity/memberlist.entity";
 
 
 export const typeOrmConfig:TypeOrmModuleOptions = {
@@ -27,6 +28,6 @@ password:'admin654321',
 database:'Abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,
-    Advertisement,Contact,PropertyContact,Projectimage,Project,Developer],
+    Advertisement,Contact,PropertyContact,Projectimage,Project,Developer,MemberList],
 synchronize:true
 };
