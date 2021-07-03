@@ -47,18 +47,14 @@ export class DeveloperController {
     findimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
         return of(res.sendFile(join(process.cwd(), 'uploads/developer/' + imagename)));
     }
-    @Post('/upload')
-    @UseInterceptors(FileFieldsInterceptor( [
+    @Post('/project')
+    @UseInterceptors(FileFieldsInterceptor( 
+        [
+        { name: 'p1', maxCount: 2,},
+        
+        {name: 'p2', maxCount: 1,},
+        ],
         {
-          name: 'p1',
-          maxCount: 2,
-        },
-        {
-          name: 'p2',
-          maxCount: 1,
-        },
-      ],
-      {
         storage: diskStorage({
           destination: './uploads/developer',
           filename: editFileName,
@@ -66,8 +62,9 @@ export class DeveloperController {
       fileFilter: imageFileFilter,
       },
     ),)
-    uploadFile(@UploadedFiles() files) {
+    uploadFile(@UploadedFiles() files,@Body() body) {
         console.log(files);
+        console.log(body);
     }
 
 

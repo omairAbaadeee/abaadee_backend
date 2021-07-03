@@ -18,7 +18,7 @@ constructor(
     private memberlist: MemberlistRepository,
 ){}
 
-    async AddDeveloper(developerdto:DeveloperDto,response:Addimagedto){
+async AddDeveloper(developerdto:DeveloperDto,response:Addimagedto){
 const{name,address,email,mobileNo,officeNo,videoUrl,description,developRating,socialValues,memberList}=developerdto;
 var parse1 = JSON.parse(developerdto.socialValues)
 const{fbProfile,instaProfile,twtProfile,inProfile,otherProfile,ytbProfile}=parse1;
