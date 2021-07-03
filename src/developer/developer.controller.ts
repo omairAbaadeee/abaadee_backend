@@ -50,9 +50,10 @@ export class DeveloperController {
     @Post('/project')
     @UseInterceptors(FileFieldsInterceptor( 
         [
-        { name: 'p1', maxCount: 2,},
-        
-        {name: 'p2', maxCount: 1,},
+        {name: 'fp_images', maxCount: 50,},
+        {name: 'pp_images', maxCount: 50,},
+        {name: 'pi_images', maxCount: 50,},
+        {name: 'logo_image', maxCount: 1,},
         ],
         {
         storage: diskStorage({
