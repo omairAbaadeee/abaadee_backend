@@ -18,14 +18,13 @@ import { Project } from "src/entity/project.entity";
 import { Developer } from "src/entity/developer.entity";
 import { MemberList } from "src/entity/memberlist.entity";
 
-
 export const typeOrmConfig:TypeOrmModuleOptions = {
 type:'postgres',
 host:'localhost',
-port:5432,
+port:5000, 
 username:'postgres',
-password:'admin654321',
-database:'Abaadee.com',
+password:'admin',
+database:'abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,
     Advertisement,Contact,PropertyContact,Projectimage,Project,Developer,MemberList],

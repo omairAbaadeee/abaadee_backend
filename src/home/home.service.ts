@@ -158,7 +158,7 @@ export class HomeService {
     }
 
     addAdvertisement(advertisementdto:Advertisementdto, images: Addimagedto){
-    const{company_name,company_link,page_name}=advertisementdto;
+    const{company_name,company_url,page_name}=advertisementdto;
       
     try {
 
@@ -166,16 +166,16 @@ export class HomeService {
     const advertisement=new Advertisement();
     advertisement.advertisement_img=url+"/addproperty/Advertisement/"+images.filename;
     advertisement.company_name=company_name;
-    advertisement.company_link=company_link;
+    advertisement.company_link=company_url;
     advertisement.page_name=page_name;
     advertisement.date=new Date;
     this.advertiserepo.save(advertisement);
 
-     return {massage:"Response Submited"}
+     return {message:"Response Submited"}
         
     } catch (error) {
 
-        return {massage:`Error in advertisement${error}`}
+        return {message:`Error in advertisement${error}`}
         
     }
 
