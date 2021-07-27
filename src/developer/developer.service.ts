@@ -64,7 +64,7 @@ for (var x of Object.entries(parse1)) {
 }
 
     async getdevelopername():Promise<Developer[]>{
-    return await this.developerrepo.createQueryBuilder("developername").select("developername.name").getMany();
+    return await this.developerrepo.createQueryBuilder("developername").select(['developername.developer_id','developername.name']).getMany();
     
 }
 
