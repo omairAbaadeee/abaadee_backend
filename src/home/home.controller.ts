@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join } from 'path';
@@ -65,7 +65,7 @@ export class HomeController {
        return this.homeservice.getallcontact();
     }
     
-    @Get("image/:imagename")
+    @Get("Advertisement/:imagename")
     findimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
         return of(res.sendFile(join(process.cwd(), 'uploads/Advertisement/'+imagename)));
     }
@@ -100,4 +100,29 @@ export class HomeController {
         //     data: response,
         // };
     }
+    @Post('featureagency')
+    @UseInterceptors(
+        FileInterceptor('image', {
+            storage: diskStorage({
+                destination: './uploads/developer',
+                filename: editFileName,
+
+            }),
+            fileFilter: imageFileFilter,
+        }),
+
+    )
+    async uploadMultipleFiles(@UploadedFiles() file,@Body() body):Promise<any> {
+        const response = {
+            originalname: file.originalname,
+            filename: file.filename,
+            imagePath: file.path
+        };
+        this.homeservice.addagency(response.imagePath,body.f_link);
+    }
+    @Get("image/:imagename")
+    findagencyimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
+        return of(res.sendFile(join(process.cwd(), 'uploads/Agency/' + imagename)));
+    }
+
 }

@@ -19,6 +19,8 @@ import { Advertisementdto } from 'src/dto/Advertisement.dto';
 import { Addimagedto } from 'src/dto/addproerty.dto';
 import { Advertisement } from 'src/entity/advertisement.entity';
 import { url } from 'src/Global/Variable';
+import { FeatureAgencyRepository } from 'src/reposatory/featureagency.reposatory';
+import { FeatureAgency } from 'src/entity/featureagency.entity';
 @Injectable()
 export class HomeService {
     constructor(
@@ -46,6 +48,9 @@ export class HomeService {
 
         @InjectRepository(AdvertisementReposatory)
         private advertiserepo: AdvertisementReposatory,
+
+        @InjectRepository(FeatureAgencyRepository)
+        private featureagencyrepo: FeatureAgencyRepository,
     ) { }
     //Get All  City And Location
     async getallcity(): Promise<City[]> {
@@ -57,29 +62,29 @@ export class HomeService {
     async getallcountry(): Promise<Country[]> {
         const country = await this.countryrepo
             .createQueryBuilder("country")
-         
+
             .getMany();
         return country;
     }
-    async getaonecountry(country_name:string): Promise<Country> {
+    async getaonecountry(country_name: string): Promise<Country> {
         const country = await this.countryrepo
             .createQueryBuilder("country")
-            .leftJoinAndSelect("country.city","city")
-            .where("country.country_name=:country_name",{country_name:country_name})
+            .leftJoinAndSelect("country.city", "city")
+            .where("country.country_name=:country_name", { country_name: country_name })
             .getOne();
         return country;
     }
-    async getalllacation(cityname:string){
+    async getalllacation(cityname: string) {
         const city = await this.cityrepo
-        .createQueryBuilder("city")
-         .leftJoinAndSelect("city.location","location")
-         .where("city.city_name=:city_name",{city_name:cityname})
-        .getMany();
-    return city;
+            .createQueryBuilder("city")
+            .leftJoinAndSelect("city.location", "location")
+            .where("city.city_name=:city_name", { city_name: cityname })
+            .getMany();
+        return city;
 
     }
- 
-      //Working on area_unit
+
+    //Working on area_unit
     async getallareaunit(): Promise<Areaofunit[]> {
         return this.areaunitrepo.find();
     }
@@ -90,95 +95,108 @@ export class HomeService {
         await this.areaunitrepo.save(areaunit);
     }
     //PropertyType
-    
-     async getallPropertytype(): Promise<PropertyType[]> {
+
+    async getallPropertytype(): Promise<PropertyType[]> {
         const propertytype = await this.propertytyperepo
-        .createQueryBuilder("type")
-        .leftJoinAndSelect("type.property", "property")
-        .getMany();
+            .createQueryBuilder("type")
+            .leftJoinAndSelect("type.property", "property")
+            .getMany();
         return propertytype;
     }
- 
+
 
     async createPropertycatogory() {
-     const propertycatogory=new PropertyCategory();
-     propertycatogory.property_category_name="Residential Plot";
-     await this.propertycatogoryrepo.save(propertycatogory);
-     
-     const propertycatogory1=new PropertyCategory();
-     propertycatogory1.property_category_name="Commercial Plot";
-     await this.propertycatogoryrepo.save(propertycatogory1);
+        const propertycatogory = new PropertyCategory();
+        propertycatogory.property_category_name = "Residential Plot";
+        await this.propertycatogoryrepo.save(propertycatogory);
 
-     const propertycatogory2=new PropertyCategory();
-     propertycatogory2.property_category_name="Agricultural Land";
-     await this.propertycatogoryrepo.save(propertycatogory2);
+        const propertycatogory1 = new PropertyCategory();
+        propertycatogory1.property_category_name = "Commercial Plot";
+        await this.propertycatogoryrepo.save(propertycatogory1);
 
-     const propertycatogory3=new PropertyCategory();
-     propertycatogory3.property_category_name="Industrial Land";
-     await this.propertycatogoryrepo.save(propertycatogory3);
+        const propertycatogory2 = new PropertyCategory();
+        propertycatogory2.property_category_name = "Agricultural Land";
+        await this.propertycatogoryrepo.save(propertycatogory2);
 
-     const propertycatogory4=new PropertyCategory();
-     propertycatogory4.property_category_name="Plot File";
-     await this.propertycatogoryrepo.save(propertycatogory4);
+        const propertycatogory3 = new PropertyCategory();
+        propertycatogory3.property_category_name = "Industrial Land";
+        await this.propertycatogoryrepo.save(propertycatogory3);
 
-     const propertycatogory5=new PropertyCategory();
-     propertycatogory5.property_category_name="Plot Form";
-     await this.propertycatogoryrepo.save(propertycatogory5);
+        const propertycatogory4 = new PropertyCategory();
+        propertycatogory4.property_category_name = "Plot File";
+        await this.propertycatogoryrepo.save(propertycatogory4);
 
-    //  const propertycatogory6=new PropertyCategory();
-    //  propertycatogory6.property_category_name="Penthouse";
-    //  await this.propertycatogoryrepo.save(propertycatogory6);
+        const propertycatogory5 = new PropertyCategory();
+        propertycatogory5.property_category_name = "Plot Form";
+        await this.propertycatogoryrepo.save(propertycatogory5);
 
-      const propertytype=new PropertyType();
-      propertytype.property_type_name="Plots";
-      propertytype.property=[propertycatogory,propertycatogory1,propertycatogory2,propertycatogory3,propertycatogory4,propertycatogory5];
-      await this.propertytyperepo.save(propertytype);
+        //  const propertycatogory6=new PropertyCategory();
+        //  propertycatogory6.property_category_name="Penthouse";
+        //  await this.propertycatogoryrepo.save(propertycatogory6);
+
+        const propertytype = new PropertyType();
+        propertytype.property_type_name = "Plots";
+        propertytype.property = [propertycatogory, propertycatogory1, propertycatogory2, propertycatogory3, propertycatogory4, propertycatogory5];
+        await this.propertytyperepo.save(propertytype);
 
     }
-    async contactus(contactdto:Contactdto):Promise<any>{
-        try{
-        const {f_name,l_name,p_number,email,message}=contactdto;
-        const contact=new Contact();
-        contact.f_name=f_name;
-        contact.l_name=l_name;
-        contact.email=email;
-        contact.p_number=p_number;
-        contact.message=message;
-        contact.date=new Date;
-       await  this.contactrepo.save(contact);
-       return {massage:"Response Submited"}
+    async contactus(contactdto: Contactdto): Promise<any> {
+        try {
+            const { f_name, l_name, p_number, email, message } = contactdto;
+            const contact = new Contact();
+            contact.f_name = f_name;
+            contact.l_name = l_name;
+            contact.email = email;
+            contact.p_number = p_number;
+            contact.message = message;
+            contact.date = new Date;
+            await this.contactrepo.save(contact);
+            return { massage: "Response Submited" }
         }
-        catch{
-            return {massage:"Error in contact"}
+        catch {
+            return { massage: "Error in contact" }
         }
 
     }
-    async getallcontact():Promise<Contact[]>{
-         return await this.contactrepo.createQueryBuilder().getMany();
+    async getallcontact(): Promise<Contact[]> {
+        return await this.contactrepo.createQueryBuilder().getMany();
     }
 
-    addAdvertisement(advertisementdto:Advertisementdto, images: Addimagedto){
-    const{company_name,company_url,page_name}=advertisementdto;
-      
-    try {
+    addAdvertisement(advertisementdto: Advertisementdto, images: Addimagedto) {
+        const { company_name, company_url, page_name } = advertisementdto;
 
-        
-    const advertisement=new Advertisement();
-    advertisement.advertisement_img=url+"/addproperty/Advertisement/"+images.filename;
-    advertisement.company_name=company_name;
-    advertisement.company_link=company_url;
-    advertisement.page_name=page_name;
-    advertisement.date=new Date;
-    this.advertiserepo.save(advertisement);
+        try {
 
-     return {message:"Response Submited"}
-        
-    } catch (error) {
 
-        return {message:`Error in advertisement${error}`}
-        
+            const advertisement = new Advertisement();
+            advertisement.advertisement_img = url + "/home/Advertisement/" + images.filename;
+            advertisement.company_name = company_name;
+            advertisement.company_link = company_url;
+            advertisement.page_name = page_name;
+            advertisement.date = new Date;
+            this.advertiserepo.save(advertisement);
+
+            return { message: "Response Submited" }
+
+        } catch (error) {
+
+            return { message: `Error in advertisement${error}` }
+
+        }
+
     }
-
+    //Feature Agency
+    addagency(images: Addimagedto,F_link:string) {
+     const agency=new FeatureAgency();
+     try{
+     agency.f_image=url+"/home/image/"+images;
+     agency.f_link=F_link;
+     this.featureagencyrepo.save(agency);
+     return {message:"save"}
+     }
+     catch(error){
+         return {message:`${error}`}
+     }
     }
-
+ 
 }
