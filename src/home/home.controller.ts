@@ -6,9 +6,11 @@ import { Observable, of } from 'rxjs';
 import { editFileName, imageFileFilter } from 'src/addproperty/file.upload';
 import { Advertisementdto } from 'src/dto/Advertisement.dto';
 import { Contactdto } from 'src/dto/contact.dto';
+import { Advertisement } from 'src/entity/advertisement.entity';
 import { City } from 'src/entity/city.entity';
 import { Contact } from 'src/entity/contact.entity';
 import { Country } from 'src/entity/country.entity';
+import { FeatureAgency } from 'src/entity/featureagency.entity';
 import { HomeService } from './home.service';
 const Jimp = require("jimp");
 
@@ -100,6 +102,12 @@ export class HomeController {
         //     data: response,
         // };
     }
+
+    @Get("advertise/:pagename")
+    getadvertize(@Param("pagename") pagename):Promise<Advertisement[]> {
+        return this.homeservice.getadvertize(pagename);
+    }
+
     @Post('featureagency')
     @UseInterceptors(
         FileInterceptor('image', {
@@ -123,6 +131,11 @@ export class HomeController {
     @Get("image/:imagename")
     findagencyimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
         return of(res.sendFile(join(process.cwd(), 'uploads/Agency/' + imagename)));
+    }
+
+    @Get("featureagency")
+    getagency():Promise<FeatureAgency[]> {
+        return this.homeservice.getagency();
     }
 
 }

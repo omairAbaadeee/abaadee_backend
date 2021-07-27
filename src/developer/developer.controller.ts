@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { editFileName, imageFileFilter } from 'src/addproperty/file.upload';
 import { DeveloperDto } from 'src/dto/developer.dto';
 import { PropertyContactdto } from 'src/dto/propertycontact.dto';
+import { Developer } from 'src/entity/developer.entity';
 import { Watermark } from 'src/Watermark/watermark';
 import { DeveloperService } from './developer.service';
 var Jimp = require("jimp");
@@ -67,7 +68,11 @@ export class DeveloperController {
         console.log(files);
         console.log(body);
     }
-
+    
+@Get("getdevelopername")
+getdevelopername():Promise<Developer[]>{
+    return this.developerservice.getdevelopername();
+}
 
 }
 

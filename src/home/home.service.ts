@@ -198,5 +198,14 @@ export class HomeService {
          return {message:`${error}`}
      }
     }
+    //getagency
+    async getagency():Promise<FeatureAgency[]> {
+       return await this.featureagencyrepo.createQueryBuilder().getMany();
+    }
+ //getadvertize
+    async getadvertize(pagename:string):Promise<Advertisement[]> {
+        return await this.advertiserepo.createQueryBuilder("advertize")
+        .where("advertize.page_name=:page_name", { page_name: pagename}).getMany();
+     }
  
 }

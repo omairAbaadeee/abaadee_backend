@@ -62,4 +62,10 @@ for (var x of Object.entries(parse1)) {
     }
 }
 }
+
+    async getdevelopername():Promise<Developer[]>{
+    return await this.developerrepo.createQueryBuilder("developername").select("developername.name").getMany();
+    
+}
+
 }
