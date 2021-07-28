@@ -2,64 +2,64 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, Primar
 import { User } from "./user.entity";
 import { City } from "./city.entity";
 import { Developer } from "./developer.entity";
-import {Location} from "./location.entity";
+import { Location } from "./location.entity";
 import { Projectimage } from "./projectimage.entity";
+import { Project_Aminities } from "./project_aminities.entity";
 
 
 
 @Entity()
 export class Project {
-    @PrimaryColumn()
-    project_id:number;
+    @PrimaryGeneratedColumn()
+    project_id: number;
 
     @Column()
-    total_area:number;
-    
-    @Column()
-    project_type:string;
-    
-    @Column()
-    price:string;
+    project_name: string;
 
     @Column()
-    payment_option:string;
-    
-    @Column()
-    completion_year:string;
-    
-    @Column()
-    project_logo_image:string;
-
-    
-    @Column()
-    description:string;
-    
-    @Column()
-    latitude:number;
-    
-    @Column()
-    longitude:number;
+    total_area: string;
 
     @Column()
-    flor_plan_images:string;
-    
-   
+    project_type: string;
 
-   
+    @Column()
+    price: string;
 
-    @ManyToOne(() => City,city=>city.project)
-    @JoinColumn({name:"city_id"})
+    @Column()
+    payment_option: string;
+
+    @Column()
+    completion_year: string;
+
+    @Column()
+    project_logo_image: string;
+
+
+    @Column()
+    description: string;
+
+    @Column()
+    latitude: string;
+
+    @Column()
+    longitude: string;
+
+    @ManyToOne(() => City, city => city.project)
+    @JoinColumn({ name: "city_id" })
     city: City;
 
-    @ManyToOne(() => Location,location=>location.project)
-    @JoinColumn({name:"location_id"})
+    @ManyToOne(() => Location, location => location.project)
+    @JoinColumn({ name: "location_id" })
     location: Location;
 
-    @ManyToOne(() => Developer,developer=>developer.project)
-    @JoinColumn({name:"developer_id"})
+    @ManyToOne(() => Developer, developer => developer.project)
+    @JoinColumn({ name: "developer_id" })
     developer: Developer;
-  
 
-    @OneToMany(()=>Projectimage,project_image=>project_image.project)
-    project_image:Projectimage[];
+
+    @OneToMany(() => Projectimage, project_image => project_image.project)
+    project_image: Projectimage[];
+
+    @OneToMany(() => Project_Aminities, project_Aminities => project_Aminities.project)
+    project_aminities: Project_Aminities[];
 }

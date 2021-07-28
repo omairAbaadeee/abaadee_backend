@@ -21,17 +21,18 @@ import { Partner } from "src/entity/paetner.entity";
 import { FeatureAgency } from "src/entity/featureagency.entity";
 import { Blog } from "src/entity/blog.entity";
 import { BlogImage } from "src/entity/blogimage.entity";
+import { Project_Aminities } from "src/entity/project_aminities.entity";
 
 export const typeOrmConfig:TypeOrmModuleOptions = {
 type:'postgres',
 host:'localhost',
-port:5432, 
+port:5000, 
 username:'postgres',
-password:'abc123',
-database:'abaadee.com',
+password:'admin',
+database:'Abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,
     Advertisement,Contact,PropertyContact,Projectimage,Project,Developer,MemberList,Blog,BlogImage
-    ,Partner,FeatureAgency],
+    ,Partner,FeatureAgency,Project_Aminities],
 synchronize:true
 };

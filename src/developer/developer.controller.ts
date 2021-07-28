@@ -58,15 +58,55 @@ export class DeveloperController {
         ],
         {
         storage: diskStorage({
-          destination: './uploads/developer',
+          destination: './uploads/project',
           filename: editFileName,
         }),
       fileFilter: imageFileFilter,
       },
     ),)
     uploadFile(@UploadedFiles() files,@Body() body) {
-        console.log(files);
-        console.log(body);
+        //console.log(files);
+        //console.log(body);
+        try{
+        const fp_images = [];
+        files.fp_images.forEach(file => {
+            const fileReponse = {
+                filename: file.filename,
+            };
+            fp_images.push(fileReponse);
+        });
+        console.log(fp_images);
+
+        const pp_images = [];
+        files.pp_images.forEach(file => {
+            const fileReponse = {
+                filename: file.filename,
+            };
+            pp_images.push(fileReponse);
+        });
+        console.log(pp_images);
+
+        const pi_images = [];
+        files.pi_images.forEach(file => {
+            const fileReponse = {
+                filename: file.filename,
+            };
+            pi_images.push(fileReponse);
+        });
+        console.log(pi_images);
+
+        const logo_image = [];
+        files.logo_image.forEach(file => {
+            const fileReponse = {
+                filename: file.filename,
+            };
+            logo_image.push(fileReponse);
+        });
+        console.log(logo_image)
+
+        this.developerservice.addproject(body,fp_images,pp_images,pi_images,logo_image);
+    }catch(e){console.log(e)}
+ 
     }
     
 @Get("getdevelopername")
