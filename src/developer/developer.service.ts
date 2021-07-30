@@ -98,6 +98,12 @@ export class DeveloperService {
         return await this.developerrepo.createQueryBuilder("developername").select(['developername.developer_id', 'developername.name']).getMany();
     }
 
+    async getdeveloper():Promise<Developer[]>{
+
+        return await this.developerrepo.createQueryBuilder("developer")
+         .leftJoinAndSelect("developer.memberlist","memberlist").getMany();
+     }
+
 
     async addproject(body,fp_images,pp_images,pi_images,logo_image){
         const project=new Project();
@@ -170,9 +176,9 @@ export class DeveloperService {
 
 }
 
-getproject():Promise<Project[]>{
+    async getproject():Promise<Project[]>{
 
-   return this.projectrepo.createQueryBuilder("project")
+   return await this.projectrepo.createQueryBuilder("project")
     .leftJoinAndSelect("project.city","city")
     .leftJoinAndSelect("project.location","location")
     .leftJoinAndSelect("project.developer","developer").getMany();

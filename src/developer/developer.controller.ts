@@ -50,6 +50,10 @@ export class DeveloperController {
     findimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
         return of(res.sendFile(join(process.cwd(), 'uploads/developer/' + imagename)));
     }
+    @Get("developer")
+    getdeveloper():Promise<Developer[]>{
+        return this.developerservice.getdeveloper();
+    }
 
     // Start Project
     @Post('/project')
@@ -123,7 +127,11 @@ getproject():Promise<Project[]>{
 
     return this.developerservice.getproject();
 }
-
+@Get("project_image/:imagename")
+projectimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
+    return of(res.sendFile(join(process.cwd(), 'uploads/project/' + imagename)));
+}
+//end project
 
 
 //start agent
