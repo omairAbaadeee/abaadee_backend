@@ -26,9 +26,9 @@ import { Project_Aminities } from "src/entity/project_aminities.entity";
 export const typeOrmConfig:TypeOrmModuleOptions = {
 type:'postgres',
 host:'localhost',
-port:5000, 
+port:5432, 
 username:'postgres',
-password:'admin',
+password:'abc123',
 database:'Abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,

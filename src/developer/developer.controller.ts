@@ -113,6 +113,27 @@ export class DeveloperController {
 getdevelopername():Promise<Developer[]>{
     return this.developerservice.getdevelopername();
 }
+@Post("agent")
+@UseInterceptors(
+    FileInterceptor('agent_image', {
+        storage: diskStorage({
+            destination: './uploads/agent',
+            filename: editFileName,
+
+        }),
+        fileFilter: imageFileFilter,
+    }),
+
+)
+async addagent(@UploadedFile() file, @Body() body: DeveloperDto) {
+    console.log(body)
+    const response = {
+        originalname: file.originalname,
+        filename: file.filename,
+        imagePath: file.path
+    };
+  
+}
 
 }
 
