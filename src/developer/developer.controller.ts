@@ -6,7 +6,9 @@ import { Observable, of } from 'rxjs';
 import { editFileName, imageFileFilter } from 'src/addproperty/file.upload';
 import { DeveloperDto } from 'src/dto/developer.dto';
 import { PropertyContactdto } from 'src/dto/propertycontact.dto';
+import { Agent } from 'src/entity/agent.entity';
 import { Developer } from 'src/entity/developer.entity';
+import { Project } from 'src/entity/project.entity';
 import { Watermark } from 'src/Watermark/watermark';
 import { DeveloperService } from './developer.service';
 var Jimp = require("jimp");
@@ -48,6 +50,8 @@ export class DeveloperController {
     findimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
         return of(res.sendFile(join(process.cwd(), 'uploads/developer/' + imagename)));
     }
+
+    // Start Project
     @Post('/project')
     @UseInterceptors(FileFieldsInterceptor( 
         [
@@ -113,6 +117,16 @@ export class DeveloperController {
 getdevelopername():Promise<Developer[]>{
     return this.developerservice.getdevelopername();
 }
+
+@Get("project")
+getproject():Promise<Project[]>{
+
+    return this.developerservice.getproject();
+}
+
+
+
+//start agent
 @Post("agent")
 @UseInterceptors(
     FileInterceptor('agent_image', {
@@ -125,15 +139,26 @@ getdevelopername():Promise<Developer[]>{
     }),
 
 )
-async addagent(@UploadedFile() file, @Body() body: DeveloperDto) {
+async addagent(@UploadedFile() file, @Body() body) {
     console.log(body)
     const response = {
         originalname: file.originalname,
         filename: file.filename,
         imagePath: file.path
     };
+    this.developerservice.addagent(response,body)
+
+
   
 }
+@Get("agent")
+getagent():Promise<Agent[]>{
+    return this.developerservice.getagent();
+}
+@Get("agent_image/:imagename")
+agentimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
+    return of(res.sendFile(join(process.cwd(), 'uploads/agent/' + imagename)));
+}// end agent
 
 }
 

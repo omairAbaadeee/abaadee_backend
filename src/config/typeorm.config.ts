@@ -22,6 +22,8 @@ import { FeatureAgency } from "src/entity/featureagency.entity";
 import { Blog } from "src/entity/blog.entity";
 import { BlogImage } from "src/entity/blogimage.entity";
 import { Project_Aminities } from "src/entity/project_aminities.entity";
+import { Agent } from "src/entity/agent.entity";
+
 
 export const typeOrmConfig:TypeOrmModuleOptions = {
 type:'postgres',
@@ -33,6 +35,6 @@ database:'Abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,
     Advertisement,Contact,PropertyContact,Projectimage,Project,Developer,MemberList,Blog,BlogImage
-    ,Partner,FeatureAgency,Project_Aminities],
+    ,Partner,FeatureAgency,Project_Aminities,Agent],
 synchronize:true
 };

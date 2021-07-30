@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DeveloperRepository } from 'src/reposatory/developerrepo.reposatory';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeveloperDto } from 'src/dto/developer.dto';
@@ -15,6 +15,10 @@ import { Projectimage } from 'src/entity/projectimage.entity';
 import { ProjectimageRepository } from 'src/reposatory/projectimage.reposatory';
 import { Project_AminitiesRepository } from 'src/reposatory/projectaminities.reposatory';
 import { Project_Aminities } from 'src/entity/project_aminities.entity';
+import { AgentReposatory } from 'src/reposatory/agent.reposatory';
+import { Agent } from 'src/entity/agent.entity';
+import { Http2ServerRequest } from 'node:http2';
+
 
 @Injectable()
 export class DeveloperService {
@@ -40,7 +44,8 @@ export class DeveloperService {
         @InjectRepository(Project_AminitiesRepository)
         private project_AminitiesRepository: Project_AminitiesRepository,
 
-        
+        @InjectRepository(AgentReposatory)
+        private agentReposatory: AgentReposatory,
 
     ) { }
 
@@ -163,5 +168,58 @@ export class DeveloperService {
             }
     }
 
+}
+
+getproject():Promise<Project[]>{
+
+   return this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city","city")
+    .leftJoinAndSelect("project.location","location")
+    .leftJoinAndSelect("project.developer","developer").getMany();
+}
+
+
+addagent(response,body){
+
+    try{
+const agent=new Agent()
+agent.name=body.name;
+agent.address=body.address;
+agent.number=body.mobileNo;
+agent.office_no=body.officeNo;
+agent.email=body.email;
+agent.description=body.description;
+agent.agent_rating=body.developRating;
+agent.video_link=body.videoUrl;
+var parse = JSON.parse(body.socialValues) 
+agent.fb_link=parse.fbProfile;
+agent.insta_link=parse.instaProfile;
+agent.twitter_link=parse.twtProfile;
+agent.linkdin_link=parse.inProfile;
+agent.other_link=parse.otherProfile;
+agent.youtube_link=parse.ytbProfile;
+agent.image= url+"/developer/agent_image/"+response.filename;
+
+this.agentReposatory.save(agent);
+
+return  new HttpException(
+      'agent added successfully',
+      HttpStatus.CREATED,
+    )
+  
+
+}
+catch(e){
+    return e;
+}
+
+
+
+
+
+}
+async getagent():Promise<Agent[]>{
+ const data=await this.agentReposatory.createQueryBuilder().getMany();   
+return data;
 }
 }

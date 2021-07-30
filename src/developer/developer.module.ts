@@ -9,11 +9,12 @@ import { MemberlistRepository } from 'src/reposatory/memberlist.reposatory';
 import { CityRepository } from 'src/reposatory/city.repositery';
 import { LocationRepository } from 'src/reposatory/location.repository';
 import { Project_AminitiesRepository } from 'src/reposatory/projectaminities.reposatory';
+import { AgentReposatory } from 'src/reposatory/agent.reposatory';
 
 @Module({
   imports:[TypeOrmModule.forFeature([ProjectRepository,DeveloperRepository,
     ProjectimageRepository,MemberlistRepository,CityRepository,LocationRepository
-    ,Project_AminitiesRepository])],
+    ,Project_AminitiesRepository,AgentReposatory])],
   providers: [DeveloperService],
   controllers: [DeveloperController]
 })
