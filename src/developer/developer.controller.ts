@@ -50,10 +50,15 @@ export class DeveloperController {
     findimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
         return of(res.sendFile(join(process.cwd(), 'uploads/developer/' + imagename)));
     }
-    @Get("developer")
-    getdeveloper():Promise<Developer[]>{
-        return this.developerservice.getdeveloper();
+    @Get("developer/:id")
+    getdeveloper(@Param("id") id):Promise<Developer>{
+        return this.developerservice.getdeveloper(id);
     }
+   @Get("shortdeveloper")
+   getshortdeveloper():Promise<Developer[]>{
+   return this.developerservice.getshortdeveloper();
+
+   }
 
     // Start Project
     @Post('/project')
@@ -159,9 +164,15 @@ async addagent(@UploadedFile() file, @Body() body) {
 
   
 }
-@Get("agent")
-getagent():Promise<Agent[]>{
-    return this.developerservice.getagent();
+@Get("agent/:id")
+getagent(@Param("id") id):Promise<Agent>{
+    return this.developerservice.getagent(id);
+}
+
+@Get("shortagent")
+getshortagent():Promise<Agent[]>{
+return this.developerservice.getshortagent();
+
 }
 @Get("agent_image/:imagename")
 agentimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {

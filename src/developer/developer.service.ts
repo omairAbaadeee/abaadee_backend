@@ -98,10 +98,18 @@ export class DeveloperService {
         return await this.developerrepo.createQueryBuilder("developername").select(['developername.developer_id', 'developername.name']).getMany();
     }
 
-    async getdeveloper():Promise<Developer[]>{
+    async getdeveloper(id):Promise<Developer>{
 
         return await this.developerrepo.createQueryBuilder("developer")
-         .leftJoinAndSelect("developer.memberlist","memberlist").getMany();
+         .leftJoinAndSelect("developer.memberlist","memberlist")
+         .where("developer.developer_id=:developer_id",{developer_id:id})
+         .getOne();
+     }
+     async getshortdeveloper():Promise<Developer[]>{
+
+        return await this.developerrepo.createQueryBuilder("developer")
+         .select(["developer.name","developer.address","developer.image","developer.p_number"])
+         .getMany();
      }
 
 
@@ -224,8 +232,15 @@ catch(e){
 
 
 }
-async getagent():Promise<Agent[]>{
- const data=await this.agentReposatory.createQueryBuilder().getMany();   
+async getagent(id):Promise<Agent>{
+ const data=await this.agentReposatory.createQueryBuilder("agent").where("agent.id=:id",{id:id})
+ .getOne();   
 return data;
 }
+
+
+async getshortagent():Promise<Agent[]>{
+    const data=await this.agentReposatory.createQueryBuilder("agent").select(["agent.name","agent.address","agent.image","agent.number"]).getMany();   
+   return data;
+   }
 }
