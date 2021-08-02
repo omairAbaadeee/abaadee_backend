@@ -30,7 +30,7 @@ type:'postgres',
 host:'localhost',
 port:5432, 
 username:'postgres',
-password:'abc123',
+password:'omairomair5',
 database:'Abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,

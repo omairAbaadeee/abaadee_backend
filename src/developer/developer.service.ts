@@ -108,7 +108,7 @@ export class DeveloperService {
      async getshortdeveloper():Promise<Developer[]>{
 
         return await this.developerrepo.createQueryBuilder("developer")
-         .select(["developer.name","developer.address","developer.image","developer.p_number"])
+         .select(["developer.name","developer.address","developer.image","developer.p_number","developer.developer_id"])
          .getMany();
      }
 
@@ -240,7 +240,7 @@ return data;
 
 
 async getshortagent():Promise<Agent[]>{
-    const data=await this.agentReposatory.createQueryBuilder("agent").select(["agent.name","agent.address","agent.image","agent.number"]).getMany();   
+    const data=await this.agentReposatory.createQueryBuilder("agent").select(["agent.name","agent.address","agent.image","agent.number","agent.id"]).getMany();   
    return data;
    }
 }
