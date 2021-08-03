@@ -183,13 +183,27 @@ export class DeveloperService {
     }
 
 }
+async getshortproject():Promise<Project[]>{
 
-    async getproject():Promise<Project[]>{
+    return await this.projectrepo.createQueryBuilder("project")
+     .leftJoinAndSelect("project.city","city")
+     .leftJoinAndSelect("project.location","location")
+     .leftJoinAndSelect("project.developer","developer")
+     .select(["project.project_name","project.project_type","project.price","project.project_logo_image"
+          ,"project.completion_year","project.location","project.city"])
+     .getMany();
+ }
+
+    async getproject(id):Promise<Project>{
 
    return await this.projectrepo.createQueryBuilder("project")
     .leftJoinAndSelect("project.city","city")
     .leftJoinAndSelect("project.location","location")
-    .leftJoinAndSelect("project.developer","developer").getMany();
+    .leftJoinAndSelect("project.developer","developer")
+    .leftJoinAndSelect("project.project_image","project_image")
+    .leftJoinAndSelect("project.project_aminities","project_aminities")
+    .where("project.project_id=:project_id",{project_id:id})
+    .getOne();
 }
 
 

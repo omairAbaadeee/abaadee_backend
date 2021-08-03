@@ -127,11 +127,16 @@ getdevelopername():Promise<Developer[]>{
     return this.developerservice.getdevelopername();
 }
 
-@Get("project")
-getproject():Promise<Project[]>{
+@Get("project/:id")
+getproject(@Param("id") id):Promise<Project>{
 
-    return this.developerservice.getproject();
+    return this.developerservice.getproject(id);
 }
+@Get("shortproject")
+getshortproject():Promise<Project[]>{
+    return this.developerservice.getshortproject();
+}
+
 @Get("project_image/:imagename")
 projectimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
     return of(res.sendFile(join(process.cwd(), 'uploads/project/' + imagename)));
