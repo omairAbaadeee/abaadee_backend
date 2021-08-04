@@ -34,6 +34,8 @@ export class Project {
     @Column()
     project_logo_image: string;
 
+    @Column()
+    project_cover_image: string;
 
     @Column()
     description: string;

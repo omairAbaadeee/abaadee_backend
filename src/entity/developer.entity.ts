@@ -14,6 +14,9 @@ developer_id: number;
 image: string;
 
 @Column()
+logo_image: string;
+
+@Column()
 name: string;
 @Column()
 address: string;

@@ -49,7 +49,7 @@ export class DeveloperService {
 
     ) { }
 
-    async AddDeveloper(developerdto: DeveloperDto, response: Addimagedto) {
+    async AddDeveloper(developerdto: DeveloperDto, image,logo_image) {
         const { name, address, email, mobileNo, officeNo, videoUrl, description, developRating, socialValues, memberList } = developerdto;
         var parse1 = JSON.parse(developerdto.socialValues)
         const { fbProfile, instaProfile, twtProfile, inProfile, otherProfile, ytbProfile } = parse1;
@@ -57,7 +57,13 @@ export class DeveloperService {
         const developer = new Developer();
         try {
             developer.name = name;
-            developer.image = url + "/developer/image/" + response.filename;
+           
+            logo_image.forEach(async element => {
+                developer.image=url+"/developer/image/"+element.filename
+            });
+            logo_image.forEach(async element => {
+                developer.logo_image=url+"/developer/image/"+element.filename
+            });
             developer.address = address;
             developer.email = email;
             developer.p_number = mobileNo;
@@ -108,12 +114,12 @@ export class DeveloperService {
      async getshortdeveloper():Promise<Developer[]>{
 
         return await this.developerrepo.createQueryBuilder("developer")
-         .select(["developer.name","developer.address","developer.image","developer.p_number","developer.developer_id"])
+         .select(["developer.name","developer.address","developer.image","developer.logo_image","developer.p_number","developer.developer_id"])
          .getMany();
      }
 
 
-    async addproject(body,fp_images,pp_images,pi_images,logo_image){
+    async addproject(body,fp_images,pp_images,pi_images,logo_image,cover_image){
         const project=new Project();
         project.project_name=body.name;
         project.total_area=body.area;
@@ -127,6 +133,9 @@ export class DeveloperService {
         logo_image.forEach(async element => {
          project.project_logo_image=url+"/developer/project_image/"+element.filename
         })
+        cover_image.forEach(async element => {
+            project.project_cover_image=url+"/developer/project_image/"+element.filename
+           })
         const findcity = await this.cityrepo
             .createQueryBuilder("city")
             .where("city.city_name = :city_name", { city_name: body.city })
@@ -189,8 +198,8 @@ async getshortproject():Promise<Project[]>{
      .leftJoinAndSelect("project.city","city")
      .leftJoinAndSelect("project.location","location")
      .leftJoinAndSelect("project.developer","developer")
-     .select(["project.project_name","project.project_type","project.price","project.project_logo_image"
-          ,"project.completion_year","project.location","project.city"])
+     .select(["project.project_id","project.project_name","project.project_type","project.price","project.project_logo_image","project.project_cover_image"
+          ,"project.completion_year","location.location_name","city.city_name"])
      .getMany();
  }
 
@@ -207,7 +216,7 @@ async getshortproject():Promise<Project[]>{
 }
 
 
-addagent(response,body){
+addagent(agent_image,logo_image,body){
 
     try{
 const agent=new Agent()
@@ -226,7 +235,12 @@ agent.twitter_link=parse.twtProfile;
 agent.linkdin_link=parse.inProfile;
 agent.other_link=parse.otherProfile;
 agent.youtube_link=parse.ytbProfile;
-agent.image= url+"/developer/agent_image/"+response.filename;
+agent_image.forEach(async element => {
+    agent.image=url+"/developer/agent_image/"+element.filename
+});
+logo_image.forEach(async element => {
+    agent.logo_image=url+"/developer/agent_image/"+element.filename
+});
 
 this.agentReposatory.save(agent);
 
@@ -254,7 +268,7 @@ return data;
 
 
 async getshortagent():Promise<Agent[]>{
-    const data=await this.agentReposatory.createQueryBuilder("agent").select(["agent.name","agent.address","agent.image","agent.number","agent.id"]).getMany();   
+    const data=await this.agentReposatory.createQueryBuilder("agent").select(["agent.name","agent.address","agent.image","agent.logo_image","agent.number","agent.id"]).getMany();   
    return data;
    }
 }

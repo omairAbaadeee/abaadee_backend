@@ -48,6 +48,9 @@ export class Agent{
     @Column()
     image: string;
 
+    @Column()
+    logo_image: string;
+
     
     @Column()
     video_link: string;

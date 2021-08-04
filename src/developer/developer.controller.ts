@@ -12,6 +12,7 @@ import { Project } from 'src/entity/project.entity';
 import { Watermark } from 'src/Watermark/watermark';
 import { DeveloperService } from './developer.service';
 var Jimp = require("jimp");
+const fs = require('fs')
 @Controller('developer')
 export class DeveloperController {
     constructor(
@@ -19,27 +20,40 @@ export class DeveloperController {
     ) { }
 
     @Post("/develop")
-    @UseInterceptors(
-        FileInterceptor('image', {
-            storage: diskStorage({
-                destination: './uploads/developer',
-                filename: editFileName,
-
-            }),
-            fileFilter: imageFileFilter,
+    @UseInterceptors(FileFieldsInterceptor( 
+        [
+        {name: 'image', maxCount: 1,},
+        {name: 'logo_image ', maxCount: 1,},
+        ],
+        {
+        storage: diskStorage({
+          destination: './uploads/developer',
+          filename: editFileName,
         }),
-
-    )
+      fileFilter: imageFileFilter,
+      },
+    ),)
     async uploadedFile(@UploadedFile() file, @Body() body: DeveloperDto) {
         console.log(body)
-        const response = {
-            originalname: file.originalname,
-            filename: file.filename,
-            imagePath: file.path
-        };
-        Watermark('./uploads/logo/logo.png', response.imagePath)
+        const image = [];
+        file.image.forEach(file => {
+            const fileReponse = {
+                filename: file.filename,
+            };
+            image.push(fileReponse);
+        });
+        console.log(image)
+        const logo_image = [];
+        file.logo_image.forEach(file => {
+            const fileReponse = {
+                filename: file.filename,
+            };
+            logo_image.push(fileReponse);
+        });
+        console.log(logo_image)
+        //Watermark('./uploads/logo/logo.png', response.imagePath)
 
-        this.developerservice.AddDeveloper(body, response);
+        this.developerservice.AddDeveloper(body, image,logo_image);
         // return {
         //     status: HttpStatus.OK,
         //     message: 'Image uploaded successfully!',
@@ -68,6 +82,7 @@ export class DeveloperController {
         {name: 'pp_images', maxCount: 50,},
         {name: 'pi_images', maxCount: 50,},
         {name: 'logo_image', maxCount: 1,},
+        {name: 'cover_image', maxCount: 1,},
         ],
         {
         storage: diskStorage({
@@ -116,8 +131,16 @@ export class DeveloperController {
             logo_image.push(fileReponse);
         });
         console.log(logo_image)
+        const cover_image = [];
+        files.cover_image.forEach(file => {
+            const fileReponse = {
+                filename: file.filename,
+            };
+            cover_image.push(fileReponse);
+        });
+        console.log(cover_image)
 
-        this.developerservice.addproject(body,fp_images,pp_images,pi_images,logo_image);
+        this.developerservice.addproject(body,fp_images,pp_images,pi_images,logo_image,cover_image);
     }catch(e){console.log(e)}
  
     }
@@ -146,25 +169,38 @@ projectimage(@Param("imagename") imagename: string, @Res() res): Observable<obje
 
 //start agent
 @Post("agent")
-@UseInterceptors(
-    FileInterceptor('agent_image', {
-        storage: diskStorage({
-            destination: './uploads/agent',
-            filename: editFileName,
-
-        }),
-        fileFilter: imageFileFilter,
+@UseInterceptors(FileFieldsInterceptor( 
+    [
+    {name: 'agent_image', maxCount: 1,},
+    {name: 'logo_image ', maxCount: 1,},
+    ],
+    {
+    storage: diskStorage({
+      destination: './uploads/developer',
+      filename: editFileName,
     }),
-
-)
+  fileFilter: imageFileFilter,
+  },
+),)
 async addagent(@UploadedFile() file, @Body() body) {
     console.log(body)
-    const response = {
-        originalname: file.originalname,
-        filename: file.filename,
-        imagePath: file.path
-    };
-    this.developerservice.addagent(response,body)
+    const agent_image = [];
+    file.agent_image.forEach(file => {
+        const fileReponse = {
+            filename: file.filename,
+        };
+        agent_image.push(fileReponse);
+    });
+    console.log(agent_image)
+    const logo_image = [];
+    file.logo_image.forEach(file => {
+        const fileReponse = {
+            filename: file.filename,
+        };
+        logo_image.push(fileReponse);
+    });
+    console.log(logo_image)
+    this.developerservice.addagent(agent_image,logo_image,body)
 
 
   
@@ -182,7 +218,21 @@ return this.developerservice.getshortagent();
 @Get("agent_image/:imagename")
 agentimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
     return of(res.sendFile(join(process.cwd(), 'uploads/agent/' + imagename)));
-}// end agent
+}
+@Get("delete")
+deleteimage(){
+    
+
+const path = './uploads/delete/ahmed.png'
+
+try {
+  fs.unlinkSync(path)
+  //file removed
+} catch(err) {
+  console.error(err)
+}
+}
+// end agent
 
 }
 
