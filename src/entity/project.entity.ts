@@ -41,6 +41,9 @@ export class Project {
     description: string;
 
     @Column()
+    approved_by: string;
+
+    @Column()
     latitude: string;
 
     @Column()

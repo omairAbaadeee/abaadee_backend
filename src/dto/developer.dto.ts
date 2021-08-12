@@ -8,6 +8,7 @@ export class DeveloperDto{
     description:string;
     developRating:string;
     socialValues:string;
+    approved_by:string;
     memberList:object;
 
 }

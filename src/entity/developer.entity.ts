@@ -30,6 +30,7 @@ office_number: string;
 description: string;
 @Column()
 rating: string;
+
 @Column(
     {
         //nullable:true

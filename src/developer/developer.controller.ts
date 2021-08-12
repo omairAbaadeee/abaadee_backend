@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join } from 'path';
 import { Observable, of } from 'rxjs';
@@ -12,7 +12,7 @@ import { Project } from 'src/entity/project.entity';
 import { Watermark } from 'src/Watermark/watermark';
 import { DeveloperService } from './developer.service';
 var Jimp = require("jimp");
-const fs = require('fs')
+
 @Controller('developer')
 export class DeveloperController {
     constructor(
@@ -23,7 +23,7 @@ export class DeveloperController {
     @UseInterceptors(FileFieldsInterceptor( 
         [
         {name: 'image', maxCount: 1,},
-        {name: 'logo_image ', maxCount: 1,},
+        {name: 'logo_image', maxCount: 1,},
         ],
         {
         storage: diskStorage({
@@ -33,7 +33,7 @@ export class DeveloperController {
       fileFilter: imageFileFilter,
       },
     ),)
-    async uploadedFile(@UploadedFile() file, @Body() body: DeveloperDto) {
+    async uploadedFile(@UploadedFiles() file, @Body() body: DeveloperDto) {
         console.log(body)
         const image = [];
         file.image.forEach(file => {
@@ -73,6 +73,10 @@ export class DeveloperController {
    return this.developerservice.getshortdeveloper();
 
    }
+   @Get("delete_developer")
+   deletedeveloper(){
+       this.developerservice.deletedeveloper(1);
+   }
 
     // Start Project
     @Post('/project')
@@ -93,8 +97,8 @@ export class DeveloperController {
       },
     ),)
     uploadFile(@UploadedFiles() files,@Body() body) {
-        //console.log(files);
-        //console.log(body);
+        console.log(files);
+        console.log(body);
         try{
         const fp_images = [];
         files.fp_images.forEach(file => {
@@ -172,17 +176,17 @@ projectimage(@Param("imagename") imagename: string, @Res() res): Observable<obje
 @UseInterceptors(FileFieldsInterceptor( 
     [
     {name: 'agent_image', maxCount: 1,},
-    {name: 'logo_image ', maxCount: 1,},
+    {name: 'logo_image', maxCount: 1,},
     ],
     {
     storage: diskStorage({
-      destination: './uploads/developer',
+      destination: './uploads/agent',
       filename: editFileName,
     }),
   fileFilter: imageFileFilter,
   },
 ),)
-async addagent(@UploadedFile() file, @Body() body) {
+async addagent(@UploadedFiles() file, @Body() body) {
     console.log(body)
     const agent_image = [];
     file.agent_image.forEach(file => {
@@ -219,20 +223,42 @@ return this.developerservice.getshortagent();
 agentimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
     return of(res.sendFile(join(process.cwd(), 'uploads/agent/' + imagename)));
 }
-@Get("delete")
-deleteimage(){
+@Post("delete_agent")
+delete_agent(@Body() body):Promise<any>{
     
+return this.developerservice.delete_agent(body.id);
 
-const path = './uploads/delete/ahmed.png'
-
-try {
-  fs.unlinkSync(path)
-  //file removed
-} catch(err) {
-  console.error(err)
-}
 }
 // end agent
+//start blogs
+@Post("blog")
+@UseInterceptors(
+    FilesInterceptor(
+        'blog_image', 11, {
+        storage: diskStorage({
+            destination: './uploads/blog',
+            filename: editFileName,
+            
+        }
+        ),
+        fileFilter: imageFileFilter,
+    }
+    ),
+)
+async addblog(@UploadedFiles() file, @Body() body) {
+    console.log(file);
+    console.log(body);
+    const blog_image = [];
+    file.forEach(file => {
+        const fileReponse = {
+            filename: file.filename,
+        };
+        blog_image.push(fileReponse);
+    });
+    console.log(blog_image)
+    this.developerservice.addblog(body,blog_image)
+}
+
 
 }
 
