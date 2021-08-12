@@ -99,7 +99,7 @@ export class DeveloperController {
     uploadFile(@UploadedFiles() files,@Body() body) {
         console.log(files);
         console.log(body);
-        try{
+    
         const fp_images = [];
         files.fp_images.forEach(file => {
             const fileReponse = {
@@ -145,7 +145,7 @@ export class DeveloperController {
         console.log(cover_image)
 
         this.developerservice.addproject(body,fp_images,pp_images,pi_images,logo_image,cover_image);
-    }catch(e){console.log(e)}
+    
  
     }
     

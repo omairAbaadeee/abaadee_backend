@@ -182,7 +182,7 @@ export class DeveloperService {
         const finddeveloper = await this.developerrepo.createQueryBuilder("developer")
             .where("developer.developer_id=:developer_id", { developer_id: parseInt(body.developer) })
             .getOne();
-        console.log(finddeveloper)
+        //console.log(finddeveloper)
         project.developer = finddeveloper;
         await this.projectrepo.save(project);
         await this.addimage(fp_images, project, "fp_images");
@@ -239,12 +239,14 @@ export class DeveloperService {
     async getproject(id): Promise<Project> {
 
         return await this.projectrepo.createQueryBuilder("project")
+      
             .leftJoinAndSelect("project.city", "city")
             .leftJoinAndSelect("project.location", "location")
             .leftJoinAndSelect("project.developer", "developer")
             .leftJoinAndSelect("project.project_image", "project_image")
             .leftJoinAndSelect("project.project_aminities", "project_aminities")
             .where("project.project_id=:project_id", { project_id: id })
+            .select(["project","location","developer.name","developer.developer_id","project_image","project_aminities"])
             .getOne();
     }
 

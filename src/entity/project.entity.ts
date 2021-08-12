@@ -65,6 +65,6 @@ export class Project {
     @OneToMany(() => Projectimage, project_image => project_image.project)
     project_image: Projectimage[];
 
-    @OneToMany(() => Project_Aminities, project_Aminities => project_Aminities.project)
+    @OneToMany(() => Project_Aminities, project_aminities => project_aminities.project)
     project_aminities: Project_Aminities[];
 }
