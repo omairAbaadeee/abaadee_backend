@@ -246,8 +246,20 @@ export class DeveloperService {
             .leftJoinAndSelect("project.project_image", "project_image")
             .leftJoinAndSelect("project.project_aminities", "project_aminities")
             .where("project.project_id=:project_id", { project_id: id })
-            .select(["project","location","developer.name","developer.developer_id","project_image","project_aminities"])
+            .select(["project","location","city","developer.name","developer.developer_id","project_image","project_aminities"])
             .getOne();
+    }
+
+    async searchprojectbycity(body):Promise<Project[]>{
+        const data= await this.projectrepo.createQueryBuilder("project")
+        .leftJoinAndSelect("project.city", "city")
+        .leftJoinAndSelect("project.location", "location")
+        .leftJoinAndSelect("project.developer", "developer")
+        .where("city.city_name=:city_name",{city_name:body.city})
+        .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+            , "project.completion_year", "location.location_name", "city.city_name"])
+        .getMany();
+        return data;
     }
 
 

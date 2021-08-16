@@ -168,6 +168,11 @@ getshortproject():Promise<Project[]>{
 projectimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
     return of(res.sendFile(join(process.cwd(), 'uploads/project/' + imagename)));
 }
+@Get("serchproject")
+ projectserch(@Body() body)/*:Promise<Project[]>*/{
+    //return this.developerservice.searchprojectbycity(body.city); 
+
+}
 //end project
 
 
