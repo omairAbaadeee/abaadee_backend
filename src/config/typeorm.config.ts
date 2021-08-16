@@ -28,10 +28,10 @@ import { Agent } from "src/entity/agent.entity";
 export const typeOrmConfig:TypeOrmModuleOptions = {
 type:'postgres',
 host:'localhost',
-port:5432, 
+port:5000, 
 username:'postgres',
-password:'abc123',
-database:'abaadee.com',
+password:'admin',
+database:'Abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,
     Advertisement,Contact,PropertyContact,Projectimage,Project,Developer,MemberList,Blog,BlogImage
