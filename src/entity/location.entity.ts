@@ -1,6 +1,8 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Addproperty } from "./addproperty.entity";
+import { Agent } from "./agent.entity";
 import { City } from "./city.entity";
+import { Developer } from "./developer.entity";
 import { Project } from "./project.entity";
 import { User } from "./user.entity";
 
@@ -23,5 +25,11 @@ export class Location {
 
     @OneToMany(()=>Project,project=>project.location)
     project:Project[];
+
+    @OneToMany(()=>Agent,agent=>agent.Location)
+    agent:Agent[];
+
+    @OneToMany(()=>Developer,developer=>developer.Location)
+    developer:Developer[];
 
 }

@@ -3,7 +3,7 @@ import { User } from "./user.entity";
 import { City } from "./city.entity";
 import { Project } from "./project.entity";
 import { MemberList } from "./memberlist.entity";
-
+import {Location} from "./location.entity"
 
 @Entity()
 export class Developer {
@@ -68,4 +68,11 @@ memberlist: MemberList[];
 @OneToMany(()=>Project,project=>project.developer)
 project:Project[];
 
+@ManyToOne(() => City,city=>city.addproperty)
+@JoinColumn({name:"city_id"})
+city: City;
+
+@ManyToOne(() => Location,location=>location.developer)
+@JoinColumn({name:"location_id"})
+Location: Location;
 }

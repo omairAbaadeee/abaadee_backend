@@ -1,26 +1,206 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Addimagedto } from 'src/dto/addproerty.dto';
+import { Project } from 'src/entity/project.entity';
+import { Projectimage } from 'src/entity/projectimage.entity';
+import { Project_Aminities } from 'src/entity/project_aminities.entity';
+import { url } from 'src/Global/Variable';
+import { CityRepository } from 'src/reposatory/city.repositery';
+import { DeveloperRepository } from 'src/reposatory/developerrepo.reposatory';
+import { LocationRepository } from 'src/reposatory/location.repository';
+import { Project_AminitiesRepository } from 'src/reposatory/projectaminities.reposatory';
+import { ProjectimageRepository } from 'src/reposatory/projectimage.reposatory';
+import { ProjectRepository } from 'src/reposatory/projectrepo.reposatry';
+
 
 @Injectable()
 export class ProjectService {
-  create(createProjectDto: CreateProjectDto) {
-    return 'This action adds a new project';
-  }
+  constructor(
+    @InjectRepository(CityRepository)
+    private cityrepo: CityRepository,
 
-  findAll() {
-    return `This action returns all project`;
-  }
+    @InjectRepository(LocationRepository)
+    private locationrepo: LocationRepository,
 
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
-  }
+    @InjectRepository(ProjectRepository)
+    private projectrepo: ProjectRepository,
 
-  update(id: number, updateProjectDto: UpdateProjectDto) {
-    return `This action updates a #${id} project`;
-  }
+    @InjectRepository(ProjectimageRepository)
+    private projectimageRepository: ProjectimageRepository,
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
-  }
+    @InjectRepository(Project_AminitiesRepository)
+    private project_AminitiesRepository: Project_AminitiesRepository,
+
+    @InjectRepository(DeveloperRepository)
+    private developerrepo: DeveloperRepository,
+    ){}
+  async addproject(body, fp_images, pp_images, pi_images, logo_image, cover_image) {
+    const project = new Project();
+    project.project_name = body.name;
+    project.total_area = body.area;
+    project.price = body.price;
+    project.completion_year = body.completion_year;
+    project.project_type = body.project_type;
+    project.description = body.description;
+    project.approved_by = body.approved_by;
+    project.latitude = body.lat;
+    project.longitude = body.lng;
+    project.payment_option = body.payment;
+    logo_image.forEach(async element => {
+        project.project_logo_image = url + "/developer/project_image/" + element.filename
+    })
+    cover_image.forEach(async element => {
+        project.project_cover_image = url + "/developer/project_image/" + element.filename
+    })
+    const findcity = await this.cityrepo
+        .createQueryBuilder("city")
+        .where("city.city_name = :city_name", { city_name: body.city })
+        .getOne();
+    project.city = findcity;
+    const findlocation = await this.locationrepo
+        .createQueryBuilder("location")
+        .where("location.location_name = :location_name", { location_name: body.location })
+        .getOne();
+    project.location = findlocation;
+    const finddeveloper = await this.developerrepo.createQueryBuilder("developer")
+        .where("developer.developer_id=:developer_id", { developer_id: parseInt(body.developer) })
+        .getOne();
+    //console.log(finddeveloper)
+    project.developer = finddeveloper;
+    await this.projectrepo.save(project);
+    await this.addimage(fp_images, project, "fp_images");
+    await this.addimage(pp_images, project, "pp_images");
+    await this.addimage(pi_images, project, "pi_images");
+    var parse = JSON.parse(body.amenities)
+    await this.addaminities(parse.Home_business_And_Communication, "Home_business_And_Communication", project);
+    await this.addaminities(parse.Home_Facing, "Home_Facing", project);
+    await this.addaminities(parse.Home_utilities, "Home_utilities", project);
+    await this.addaminities(parse.NearbyLocations, "NearbyLocations", project);
+    await this.addaminities(parse.CommunityFeatures, "CommunityFeatures", project);
+    await this.addaminities(parse.Features, "Features", project);
+
+
+}
+
+async addimage(images: Addimagedto[], projectid: Project, image_type: string) {
+
+
+    images.forEach(async element => {
+        const projectimage = new Projectimage();
+        projectimage.imageurl = url + "/developer/project_image/" + element.filename;
+        projectimage.project = projectid;
+        projectimage.image_type = image_type;
+        await this.projectimageRepository.save(projectimage);
+    })
+
+}
+async addaminities(body, aminity_name: string, projectid: Project) {
+    for (var x of Object.entries(body)) {
+        if (x[1] == true) {
+            console.log(x[0]);
+            const project_Aminities = new Project_Aminities();
+            project_Aminities.Category_name = aminity_name;
+            project_Aminities.feature_name = x[0];
+            project_Aminities.project = projectid;
+            await this.project_AminitiesRepository.save(project_Aminities);
+
+        }
+    }
+
+}
+async getshortproject(): Promise<Project[]> {
+
+    return await this.projectrepo.createQueryBuilder("project")
+        .leftJoinAndSelect("project.city", "city")
+        .leftJoinAndSelect("project.location", "location")
+        .leftJoinAndSelect("project.developer", "developer")
+        .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+            , "project.completion_year", "location.location_name", "city.city_name"])
+        .getMany();
+}
+
+async getproject(id): Promise<Project> {
+
+    return await this.projectrepo.createQueryBuilder("project")
+  
+        .leftJoinAndSelect("project.city", "city")
+        .leftJoinAndSelect("project.location", "location")
+        .leftJoinAndSelect("project.developer", "developer")
+        .leftJoinAndSelect("project.project_image", "project_image")
+        .leftJoinAndSelect("project.project_aminities", "project_aminities")
+        .where("project.project_id=:project_id", { project_id: id })
+        .select(["project","location","city","developer.name","developer.developer_id","project_image","project_aminities"])
+        .getOne();
+}
+
+async searchprojectbycity(city):Promise<Project[]>{
+    const data= await this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city", "city")
+    .leftJoinAndSelect("project.location", "location")
+    .leftJoinAndSelect("project.developer", "developer")
+    .where("city.city_name=:city_name",{city_name:city})
+    .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+        , "project.completion_year", "location.location_name", "city.city_name"])
+    .getMany();
+    return data;
+}
+async searchprojectbycity_project_type(city,project_type):Promise<Project[]>{
+    const data= await this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city", "city")
+    .leftJoinAndSelect("project.location", "location")
+    .leftJoinAndSelect("project.developer", "developer")
+    .where("city.city_name=:city_name",{city_name:city})
+    .where("project.project_type=:project_type",{project_type:project_type})
+    
+    
+    .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+        , "project.completion_year", "location.location_name", "city.city_name"])
+    .getMany();
+    return data;
+}
+async searchprojectbycity_project_type_developertitle(city,project_type,developer_title):Promise<Project[]>{
+    const data= await this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city", "city")
+    .leftJoinAndSelect("project.location", "location")
+    .leftJoinAndSelect("project.developer", "developer")
+    .where("city.city_name=:city_name",{city_name:city})
+    .where("project.project_type=:project_type",{project_type:project_type})
+    .where("developer.name=:name",{name:developer_title})
+    
+    
+    .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+        , "project.completion_year", "location.location_name", "city.city_name"])
+    .getMany();
+    return data;
+}
+async searchprojectbycity_project_type_developertitle_projecttitle(city,project_type,developer_title,project_name):Promise<Project[]>{
+    const data= await this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city", "city")
+    .leftJoinAndSelect("project.location", "location")
+    .leftJoinAndSelect("project.developer", "developer")
+    .where("city.city_name=:city_name",{city_name:city})
+    .where("project.project_type=:project_type",{project_type:project_type})
+    .where("developer.name=:name",{name:developer_title})
+    .where("project.project_name=:project_name",{project_name:project_name})
+    
+    .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+        , "project.completion_year", "location.location_name", "city.city_name"])
+    .getMany();
+    return data;
+}
+async searchprojectbyAll(city,project_type,developer_title,project_name):Promise<Project[]>{
+    const data= await this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city", "city")
+    .leftJoinAndSelect("project.location", "location")
+    .leftJoinAndSelect("project.developer", "developer")
+    .where("city.city_name=:city_name",{city_name:city})
+    .orWhere("project.project_type=:project_type",{project_type:project_type})
+    .orWhere("developer.name=:name",{name:developer_title})
+    .orWhere("project.project_name=:project_name",{project_name:project_name})
+    
+    .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+        , "project.completion_year", "location.location_name", "city.city_name"])
+    .getMany();
+    return data;
+}
 }

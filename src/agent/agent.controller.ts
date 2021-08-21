@@ -1,34 +1,77 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Res, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { join } from 'path';
+import { Observable, of } from 'rxjs';
+import { editFileName, imageFileFilter } from 'src/addproperty/file.upload';
+import { Agent } from 'src/entity/agent.entity';
 import { AgentService } from './agent.service';
-import { CreateAgentDto } from './dto/create-agent.dto';
-import { UpdateAgentDto } from './dto/update-agent.dto';
 
 @Controller('agent')
 export class AgentController {
   constructor(private readonly agentService: AgentService) {}
+//start agent
+@Post("agent")
+@UseInterceptors(FileFieldsInterceptor( 
+    [
+    {name: 'agent_image', maxCount: 1,},
+    {name: 'logo_image', maxCount: 1,},
+    ],
+    {
+    storage: diskStorage({
+      destination: './uploads/agent',
+      filename: editFileName,
+    }),
+  fileFilter: imageFileFilter,
+  },
+),)
+async addagent(@UploadedFiles() file, @Body() body) {
+     console.log(body)
+    // const agent_image = [];
+    // file.agent_image.forEach(file => {
+    //     const fileReponse = {
+    //         filename: file.filename,
+    //     };
+    //     agent_image.push(fileReponse);
+    // });
+    // console.log(agent_image)
+    // const logo_image = [];
+    // file.logo_image.forEach(file => {
+    //     const fileReponse = {
+    //         filename: file.filename,
+    //     };
+    //     logo_image.push(fileReponse);
+    // });
+    // console.log(logo_image)
+    // this.agentService.addagent(agent_image,logo_image,body)
 
-  @Post()
-  create(@Body() createAgentDto: CreateAgentDto) {
-    return this.agentService.create(createAgentDto);
-  }
 
-  @Get()
-  findAll() {
-    return this.agentService.findAll();
-  }
+  
+}
+@Get("agent/:id")
+getagent(@Param("id") id):Promise<Agent>{
+    return this.agentService.getagent(id);
+}
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.agentService.findOne(+id);
-  }
+@Get("shortagent")
+getshortagent():Promise<Agent[]>{
+return this.agentService.getshortagent();
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateAgentDto: UpdateAgentDto) {
-    return this.agentService.update(+id, updateAgentDto);
-  }
+}
+@Get("agent_image/:imagename")
+agentimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
+    return of(res.sendFile(join(process.cwd(), 'uploads/agent/' + imagename)));
+}
+@Post("delete_agent")
+delete_agent(@Body() body):Promise<any>{
+    
+return this.agentService.delete_agent(body.id);
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.agentService.remove(+id);
-  }
+}
+@Post("serch_agent")
+serchagent(@Body() body):Promise<Agent[]>{
+ return this.agentService.serchby_city(body.name)
+;}
+// end agent
+ 
 }

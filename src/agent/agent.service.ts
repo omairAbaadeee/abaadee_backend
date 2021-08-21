@@ -1,26 +1,112 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAgentDto } from './dto/create-agent.dto';
-import { UpdateAgentDto } from './dto/update-agent.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Agent } from 'src/entity/agent.entity';
+import { url } from 'src/Global/Variable';
+import { AgentReposatory } from 'src/reposatory/agent.reposatory';
+const fs = require('fs');
 
 @Injectable()
 export class AgentService {
-  create(createAgentDto: CreateAgentDto) {
-    return 'This action adds a new agent';
-  }
+ 
+    constructor(
+        @InjectRepository(AgentReposatory)
+        private agentReposatory: AgentReposatory,
+    ){}
+    addagent(agent_image, logo_image, body) {
 
-  findAll() {
-    return `This action returns all agent`;
-  }
+        try {
+            const agent = new Agent()
+            agent.name = body.name;
+            agent.address = body.address;
+            agent.number = body.mobileNo;
+            agent.office_no = body.officeNo;
+            agent.email = body.email;
+            agent.description = body.description;
+            agent.agent_rating = body.developRating;
+            agent.video_link = body.videoUrl;
+            var parse = JSON.parse(body.socialValues)
+            agent.fb_link = parse.fbProfile;
+            agent.insta_link = parse.instaProfile;
+            agent.twitter_link = parse.twtProfile;
+            agent.linkdin_link = parse.inProfile;
+            agent.other_link = parse.otherProfile;
+            agent.youtube_link = parse.ytbProfile;
+            agent_image.forEach(async element => {
+                agent.image = url + "/developer/agent_image/" + element.filename
+            });
+            logo_image.forEach(async element => {
+                agent.logo_image = url + "/developer/agent_image/" + element.filename
+            });
 
-  findOne(id: number) {
-    return `This action returns a #${id} agent`;
-  }
+            this.agentReposatory.save(agent);
 
-  update(id: number, updateAgentDto: UpdateAgentDto) {
-    return `This action updates a #${id} agent`;
-  }
+            return new HttpException(
+                'agent added successfully',
+                HttpStatus.CREATED,
+            )
 
-  remove(id: number) {
-    return `This action removes a #${id} agent`;
-  }
+
+        }
+        catch (e) {
+            return e;
+        }
+
+
+
+
+
+    }
+    async getagent(id): Promise<Agent> {
+        const data = await this.agentReposatory.createQueryBuilder("agent")
+        .where("agent.id=:id", { id: id })
+            .getOne();
+        return data;
+    }
+
+
+    async getshortagent(): Promise<Agent[]> {
+        const data = await this.agentReposatory.createQueryBuilder("agent")
+        .select(["agent.name", "agent.address", "agent.image", "agent.logo_image", 
+        "agent.number","agent.agent_rating", "agent.id"]).getMany();
+        return data;
+    }
+
+    async delete_agent(id):Promise<any> {
+        try {
+
+            const data = await this.agentReposatory.createQueryBuilder("agent").where("agent.id=:id", { id: id })
+                .getOne();
+            const logo_image = data.logo_image.replace(`${url}/developer/agent_image/`, "");
+            const image = data.image.replace(`${url}/developer/agent_image/`, "");
+            this.deleteimage("./uploads/agent/" + logo_image);
+            this.deleteimage("./uploads/agent/" + image);
+            await this.agentReposatory
+                .createQueryBuilder()
+                .delete()
+                .from(Agent)
+                .where("id = :id", { id: id })
+                .execute();
+                return HttpStatus.MOVED_PERMANENTLY;
+        } catch {
+            return HttpStatus.NOT_FOUND;
+        }
+    }
+
+
+
+    deleteimage(path: string) {
+        //const path = './uploads/delete/ahmed.png'
+
+        try {
+            fs.unlinkSync(path)
+            //file removed
+        } catch (err) {
+            console.error(err)
+        }
+    }
+    serchby_city(name):Promise<Agent[]>{
+        const data= this.agentReposatory.createQueryBuilder("agent")
+        .where("agent.name=:name",{name:name}).getMany();
+        return data;
+    }
 }

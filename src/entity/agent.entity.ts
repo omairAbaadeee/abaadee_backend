@@ -1,5 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Addproperty } from "./addproperty.entity";
+import { City } from "./city.entity";
+import {Location} from "./location.entity"
 
 @Entity()
 export class Agent{
@@ -54,6 +56,12 @@ export class Agent{
     
     @Column()
     video_link: string;
-
+    @ManyToOne(() => City,city=>city.agent)
+    @JoinColumn({name:"city_id"})
+    city: City;
+    
+    @ManyToOne(() => Location,location=>location.agent)
+    @JoinColumn({name:"location_id"})
+    Location: Location;
 
 }
