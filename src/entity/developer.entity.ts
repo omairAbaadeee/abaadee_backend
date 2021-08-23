@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, Primar
 import { User } from "./user.entity";
 import { City } from "./city.entity";
 import { Project } from "./project.entity";
-import { MemberList } from "./memberlist.entity";
+import { MemberListLogo } from "./developermemberlogo.entity";
 import {Location} from "./location.entity"
 
 @Entity()
@@ -62,17 +62,17 @@ other_link: string;
 })
 vedio_link: string;
 
-@OneToMany(()=>MemberList,memberlist=>memberlist.developer)
-memberlist: MemberList[];
+@OneToMany(()=>MemberListLogo,memberlist=>memberlist.developer)
+memberlist: MemberListLogo[];
 
 @OneToMany(()=>Project,project=>project.developer)
 project:Project[];
 
-@ManyToOne(() => City,city=>city.addproperty)
+@ManyToOne(() => City,city=>city.developer,{onDelete:"CASCADE"})
 @JoinColumn({name:"city_id"})
 city: City;
 
-@ManyToOne(() => Location,location=>location.developer)
+@ManyToOne(() => Location,location=>location.developer,{onDelete:"CASCADE"})
 @JoinColumn({name:"location_id"})
 Location: Location;
 }

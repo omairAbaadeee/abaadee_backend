@@ -10,6 +10,8 @@ export class DeveloperDto{
     socialValues:string;
     approved_by:string;
     memberList:object;
+    city:string;
+    location:string;
 
 }
 export class SocialDto{

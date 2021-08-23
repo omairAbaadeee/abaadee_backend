@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Addimagedto } from 'src/dto/addproerty.dto';
 import { Project } from 'src/entity/project.entity';
@@ -11,7 +11,7 @@ import { LocationRepository } from 'src/reposatory/location.repository';
 import { Project_AminitiesRepository } from 'src/reposatory/projectaminities.reposatory';
 import { ProjectimageRepository } from 'src/reposatory/projectimage.reposatory';
 import { ProjectRepository } from 'src/reposatory/projectrepo.reposatry';
-
+const fs = require('fs');
 
 @Injectable()
 export class ProjectService {
@@ -45,6 +45,7 @@ export class ProjectService {
     project.approved_by = body.approved_by;
     project.latitude = body.lat;
     project.longitude = body.lng;
+    project.phone_no=body.phone_no;
     project.payment_option = body.payment;
     logo_image.forEach(async element => {
         project.project_logo_image = url + "/developer/project_image/" + element.filename
@@ -203,4 +204,56 @@ async searchprojectbyAll(city,project_type,developer_title,project_name):Promise
     .getMany();
     return data;
 }
+    async deleteProject(id):Promise<any> {
+        try{
+        const pro_image=await this.projectimageRepository.createQueryBuilder("image")
+        .where("image.project_id=:project_id",{project_id:id})
+        .getMany();
+        pro_image.forEach(async element=>{
+            const image=element.imageurl.replace(`${url}/developer/project_image/`, "")
+            await this.deleteimage("./uploads/project/" + image)
+        })
+        const project=await this.projectrepo.createQueryBuilder("project")
+        .where("project.project_id=:project_id",{project_id:id})
+        .getOne();
+        const logo_image=project.project_logo_image.replace(`${url}/developer/project_image/`, "")
+        const cover_image=project.project_cover_image.replace(`${url}/developer/project_image/`, "")
+        await this.deleteimage("./uploads/project/" + logo_image)
+        await this.deleteimage("./uploads/project/" + cover_image)
+     await  await this.project_AminitiesRepository
+    .createQueryBuilder()
+    .delete()
+    .from(Project_Aminities)
+    .where("Project_id = :Project_id", { Project_id: id })
+    .execute();
+    await  await this.projectimageRepository
+    .createQueryBuilder()
+    .delete()
+    .from(Projectimage)
+    .where("Project_id = :Project_id", { Project_id: id })
+    .execute();
+    await  await this.projectrepo
+    .createQueryBuilder()
+    .delete()
+    .from(Project)
+    .where("Project_id = :Project_id", { Project_id: id })
+    .execute();
+    return HttpStatus.MOVED_PERMANENTLY;
+        }catch{
+            return HttpStatus.NOT_FOUND;
+        }
+
+}
+
+deleteimage(path: string) {
+    //const path = './uploads/delete/ahmed.png'
+
+    try {
+        fs.unlinkSync(path)
+        //file removed
+    } catch (err) {
+        console.error(err)
+    }
+}
+
 }

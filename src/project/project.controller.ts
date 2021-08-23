@@ -122,6 +122,10 @@ export class ProjectController {
     console.log("run")
     return this.projectService.searchprojectbyAll(body.city,body.project_type,body.developer_title,body.project_name);
   }
+  @Post("delete_project")
+  deleteProject(@Body() body):Promise<any> {
+    return this.projectService.deleteProject(body.id);
+  }
   //end project
 
 }

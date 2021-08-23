@@ -25,6 +25,10 @@ export class Project {
     @Column()
     price: string;
 
+    
+    @Column()
+    phone_no: string;
+
     @Column()
     payment_option: string;
 
@@ -49,15 +53,15 @@ export class Project {
     @Column()
     longitude: string;
 
-    @ManyToOne(() => City, city => city.project)
+    @ManyToOne(() => City, city => city.project,{onDelete:"CASCADE"})
     @JoinColumn({ name: "city_id" })
     city: City;
 
-    @ManyToOne(() => Location, location => location.project)
+    @ManyToOne(() => Location, location => location.project,{onDelete:"CASCADE"})
     @JoinColumn({ name: "location_id" })
     location: Location;
 
-    @ManyToOne(() => Developer, developer => developer.project)
+    @ManyToOne(() => Developer, developer => developer.project,{onDelete:"CASCADE"})
     @JoinColumn({ name: "developer_id" })
     developer: Developer;
 

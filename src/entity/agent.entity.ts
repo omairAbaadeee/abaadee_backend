@@ -56,12 +56,12 @@ export class Agent{
     
     @Column()
     video_link: string;
-    @ManyToOne(() => City,city=>city.agent)
+    @ManyToOne(() => City,city=>city.agent,{onDelete:"CASCADE"})
     @JoinColumn({name:"city_id"})
     city: City;
     
-    @ManyToOne(() => Location,location=>location.agent)
+    @ManyToOne(() => Location,location=>location.agent,{onDelete:"CASCADE"})
     @JoinColumn({name:"location_id"})
-    Location: Location;
+    location: Location;
 
 }

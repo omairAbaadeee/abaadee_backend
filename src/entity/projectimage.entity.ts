@@ -13,7 +13,7 @@ export class Projectimage{
     @Column()
     image_type:string;
 
-    @ManyToOne(()=>Project,project=>project.project_image)
+    @ManyToOne(()=>Project,project=>project.project_image,{onDelete:"CASCADE"})
     @JoinColumn({name:"project_id"})
     project:Project;
 }

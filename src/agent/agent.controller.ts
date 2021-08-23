@@ -27,23 +27,23 @@ export class AgentController {
 ),)
 async addagent(@UploadedFiles() file, @Body() body) {
      console.log(body)
-    // const agent_image = [];
-    // file.agent_image.forEach(file => {
-    //     const fileReponse = {
-    //         filename: file.filename,
-    //     };
-    //     agent_image.push(fileReponse);
-    // });
-    // console.log(agent_image)
-    // const logo_image = [];
-    // file.logo_image.forEach(file => {
-    //     const fileReponse = {
-    //         filename: file.filename,
-    //     };
-    //     logo_image.push(fileReponse);
-    // });
-    // console.log(logo_image)
-    // this.agentService.addagent(agent_image,logo_image,body)
+    const agent_image = [];
+    file.agent_image.forEach(file => {
+        const fileReponse = {
+            filename: file.filename,
+        };
+        agent_image.push(fileReponse);
+    });
+    console.log(agent_image)
+    const logo_image = [];
+    file.logo_image.forEach(file => {
+        const fileReponse = {
+            filename: file.filename,
+        };
+        logo_image.push(fileReponse);
+    });
+    console.log(logo_image)
+    this.agentService.addagent(agent_image,logo_image,body)
 
 
   
@@ -64,8 +64,8 @@ agentimage(@Param("imagename") imagename: string, @Res() res): Observable<object
 }
 @Post("delete_agent")
 delete_agent(@Body() body):Promise<any>{
-    
-return this.agentService.delete_agent(body.id);
+    console.log(body.id)
+   return this.agentService.delete_agent(body.id);
 
 }
 @Post("serch_agent")

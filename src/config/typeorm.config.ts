@@ -16,7 +16,7 @@ import { Advertisement } from "src/entity/advertisement.entity";
 import { Projectimage } from "src/entity/projectimage.entity";
 import { Project } from "src/entity/project.entity";
 import { Developer } from "src/entity/developer.entity";
-import { MemberList } from "src/entity/memberlist.entity";
+import { MemberListLogo } from "src/entity/developermemberlogo.entity";
 import { Partner } from "src/entity/paetner.entity";
 import { FeatureAgency } from "src/entity/featureagency.entity";
 import { Blog } from "src/entity/blog.entity";
@@ -34,7 +34,7 @@ password:'abc123',
 database:'abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,
-    Advertisement,Contact,PropertyContact,Projectimage,Project,Developer,MemberList,Blog,BlogImage
+    Advertisement,Contact,PropertyContact,Projectimage,Project,Developer,MemberListLogo,Blog,BlogImage
     ,Partner,FeatureAgency,Project_Aminities,Agent],
 synchronize:true
 };

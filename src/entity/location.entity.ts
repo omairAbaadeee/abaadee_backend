@@ -26,7 +26,7 @@ export class Location {
     @OneToMany(()=>Project,project=>project.location)
     project:Project[];
 
-    @OneToMany(()=>Agent,agent=>agent.Location)
+    @OneToMany(()=>Agent,agent=>agent.location)
     agent:Agent[];
 
     @OneToMany(()=>Developer,developer=>developer.Location)

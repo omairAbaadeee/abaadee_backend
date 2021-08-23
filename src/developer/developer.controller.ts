@@ -19,11 +19,12 @@ export class DeveloperController {
         private developerservice: DeveloperService
     ) { }
 
-    @Post("/develop")
+    @Post("develop")
     @UseInterceptors(FileFieldsInterceptor( 
         [
         {name: 'image', maxCount: 1,},
         {name: 'logo_image', maxCount: 1,},
+        {name: 'memberList', maxCount: 50,},
         ],
         {
         storage: diskStorage({
@@ -34,6 +35,7 @@ export class DeveloperController {
       },
     ),)
     async uploadedFile(@UploadedFiles() file, @Body() body: DeveloperDto) {
+        console.log(file)
         console.log(body)
         const image = [];
         file.image.forEach(file => {
@@ -51,9 +53,17 @@ export class DeveloperController {
             logo_image.push(fileReponse);
         });
         console.log(logo_image)
+        const memberList = [];
+        file.memberList.forEach(file => {
+            const fileReponse = {
+                filename: file.filename,
+            };
+            memberList.push(fileReponse);
+        });
+        console.log(memberList)
         //Watermark('./uploads/logo/logo.png', response.imagePath)
 
-        this.developerservice.AddDeveloper(body, image,logo_image);
+        this.developerservice.AddDeveloper(body, image,logo_image,memberList);
         // return {
         //     status: HttpStatus.OK,
         //     message: 'Image uploaded successfully!',
@@ -73,9 +83,9 @@ export class DeveloperController {
    return this.developerservice.getshortdeveloper();
 
    }
-   @Get("delete_developer")
-   deletedeveloper(){
-       this.developerservice.deletedeveloper(1);
+   @Post("delete_developer")
+   deletedeveloper(@Body() body):Promise<any>{
+       return this.developerservice.deletedeveloper(body.id);
    }
    @Get("getdevelopername")
    getdevelopername():Promise<Developer[]>{
