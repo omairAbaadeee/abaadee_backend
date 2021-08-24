@@ -13,6 +13,7 @@ import { BlogRepositery } from 'src/reposatory/blog.reposatory';
 import { BlogImage } from 'src/entity/blogimage.entity';
 import { CityRepository } from 'src/reposatory/city.repositery';
 import { LocationRepository } from 'src/reposatory/location.repository';
+import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 const fs = require('fs');
 
 @Injectable()
@@ -107,6 +108,7 @@ export class DeveloperService {
             .select(["developer.name","developer.rating", "developer.address", "developer.image", "developer.logo_image", "developer.p_number", "developer.developer_id"])
             .getMany();
     }
+
     async deletedeveloper(id):Promise<any> {
         try{
         const developer_data = await this.developerrepo.createQueryBuilder("developer")
@@ -174,5 +176,11 @@ export class DeveloperService {
           blogimage.blog=blog;
           this.blogimageReposatory.save(blogimage);
       });
+    }
+    async shortBlog(options: IPaginationOptions): Promise<Pagination<Blog>>{
+        const data = await this.blogReposatory.createQueryBuilder("blog")
+        .leftJoinAndSelect("blog.blogimage","blogimage")
+        .select(["blog.blog_id","blog.short_description","blog.Date","blogimage"])
+        return paginate<Blog>(data, options);
     }
 }

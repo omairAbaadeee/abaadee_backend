@@ -11,7 +11,7 @@ export class UtilityService {
          this.transporter = await createTransport({
             service: 'gmail',
             auth: {
-                user: 'ahmedshafi7812@gmail.com',
+                user: 'ahmedshafi784@gmail.com',
                 pass: 'Altaf1234'
             }
         });

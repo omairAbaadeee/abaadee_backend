@@ -84,7 +84,7 @@ export class HomeController {
         }),
 
     )
-    async uploadedFile(@UploadedFile() file,@Body() advertisementdto:Advertisementdto) {
+    async uploadedFile(@UploadedFile() file,@Body() body /*advertisementdto:Advertisementdto*/) {
       const response = {
             originalname: file.originalname,
             filename: file.filename,
@@ -92,9 +92,9 @@ export class HomeController {
         };
       
   
-    console.log(file)
-    console.log(advertisementdto)
-      this.homeservice.addAdvertisement(advertisementdto,response);
+    console.log(body)
+    
+     //this.homeservice.addAdvertisement(advertisementdto,response);
 
         // return {
         //     status: HttpStatus.OK,

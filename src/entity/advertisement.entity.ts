@@ -12,6 +12,11 @@ export class Advertisement {
     @Column()
     company_name:string;
 
+    @Column({
+        nullable:true
+    })
+    additional_page_name:string;
+
     @Column()
     company_link:string;
 

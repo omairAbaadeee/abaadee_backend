@@ -48,10 +48,10 @@ export class ProjectService {
     project.phone_no=body.phone_no;
     project.payment_option = body.payment;
     logo_image.forEach(async element => {
-        project.project_logo_image = url + "/developer/project_image/" + element.filename
+        project.project_logo_image = url + "/project/project_image/" + element.filename
     })
     cover_image.forEach(async element => {
-        project.project_cover_image = url + "/developer/project_image/" + element.filename
+        project.project_cover_image = url + "/project/project_image/" + element.filename
     })
     const findcity = await this.cityrepo
         .createQueryBuilder("city")
@@ -88,7 +88,7 @@ async addimage(images: Addimagedto[], projectid: Project, image_type: string) {
 
     images.forEach(async element => {
         const projectimage = new Projectimage();
-        projectimage.imageurl = url + "/developer/project_image/" + element.filename;
+        projectimage.imageurl = url + "/project/project_image/" + element.filename;
         projectimage.project = projectid;
         projectimage.image_type = image_type;
         await this.projectimageRepository.save(projectimage);
@@ -201,6 +201,15 @@ async searchprojectbyAll(city,project_type,developer_title,project_name):Promise
     
     .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
         , "project.completion_year", "location.location_name", "city.city_name"])
+    .getMany();
+    return data;
+}
+async getprojectname():Promise<Project[]>{
+    const data= await this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city", "city")
+    .leftJoinAndSelect("project.location", "location")
+    .leftJoinAndSelect("project.developer", "developer")
+    .select("project.project_name")
     .getMany();
     return data;
 }

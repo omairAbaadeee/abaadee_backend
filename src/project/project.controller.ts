@@ -98,6 +98,10 @@ export class ProjectController {
   projectimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
       return of(res.sendFile(join(process.cwd(), 'uploads/project/' + imagename)));
   }
+  @Get("projectname")
+  getprojectname():Promise<Project[]>{
+      return this.projectService.getprojectname();
+  }
   @Post("serchproject")
    projectserch(@Body() body):Promise<Project[]>{
        console.log(body)

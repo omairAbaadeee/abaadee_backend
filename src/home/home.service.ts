@@ -163,7 +163,7 @@ export class HomeService {
     }
 
     addAdvertisement(advertisementdto: Advertisementdto, images: Addimagedto) {
-        const { company_name, company_url, page_name } = advertisementdto;
+        const { company_name, company_url, page_name,additional_page_name } = advertisementdto;
 
         try {
 
@@ -173,6 +173,8 @@ export class HomeService {
             advertisement.company_name = company_name;
             advertisement.company_link = company_url;
             advertisement.page_name = page_name;
+            if(page_name==""&&page_name==""){}
+            advertisement.additional_page_name=additional_page_name;
             advertisement.date = new Date;
             this.advertiserepo.save(advertisement);
 

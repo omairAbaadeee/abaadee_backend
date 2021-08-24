@@ -1,14 +1,17 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { Pagination } from 'nestjs-typeorm-paginate';
 import { join } from 'path';
 import { Observable, of } from 'rxjs';
 import { editFileName, imageFileFilter } from 'src/addproperty/file.upload';
 import { DeveloperDto } from 'src/dto/developer.dto';
 import { PropertyContactdto } from 'src/dto/propertycontact.dto';
 import { Agent } from 'src/entity/agent.entity';
+import { Blog } from 'src/entity/blog.entity';
 import { Developer } from 'src/entity/developer.entity';
 import { Project } from 'src/entity/project.entity';
+import { url } from 'src/Global/Variable';
 import { Watermark } from 'src/Watermark/watermark';
 import { DeveloperService } from './developer.service';
 var Jimp = require("jimp");
@@ -124,7 +127,16 @@ async addblog(@UploadedFiles() file, @Body() body) {
     console.log(blog_image)
     this.developerservice.addblog(body,blog_image)
 }
-
-
+@Get("blog_image/:imagename")
+    blogimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
+        return of(res.sendFile(join(process.cwd(), 'uploads/blog/' + imagename)));
+    }
+@Get("shortBlog")
+shortBlog(@Query('page') page: number = 1,@Query('limit') limit: number = 11): Promise<Pagination<Blog>>{
+ return this.developerservice.shortBlog({
+    page,
+    limit,
+    route: url+'/developer/shortBlog'})
+}
 }
 
