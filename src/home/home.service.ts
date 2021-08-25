@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpCode, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Areaofunit } from 'src/entity/area_unit.entity';
 import { City } from 'src/entity/city.entity';
@@ -21,6 +21,10 @@ import { Advertisement } from 'src/entity/advertisement.entity';
 import { url } from 'src/Global/Variable';
 import { FeatureAgencyRepository } from 'src/reposatory/featureagency.reposatory';
 import { FeatureAgency } from 'src/entity/featureagency.entity';
+import { PartnerRepository } from 'src/reposatory/partner.reposatory';
+import { Partner } from 'src/entity/paetner.entity';
+import { HomepopupReposatory } from 'src/reposatory/homepopupRepo.reposatory';
+import { Homepopup } from 'src/entity/popup.entity';
 @Injectable()
 export class HomeService {
     constructor(
@@ -51,6 +55,12 @@ export class HomeService {
 
         @InjectRepository(FeatureAgencyRepository)
         private featureagencyrepo: FeatureAgencyRepository,
+
+        @InjectRepository(PartnerRepository)
+        private partnerRepo: PartnerRepository,
+
+        @InjectRepository(HomepopupReposatory)
+        private homepopupRepo: HomepopupReposatory,
     ) { }
     //Get All  City And Location
     async getallcity(): Promise<City[]> {
@@ -173,8 +183,9 @@ export class HomeService {
             advertisement.company_name = company_name;
             advertisement.company_link = company_url;
             advertisement.page_name = page_name;
-            if(page_name==""&&page_name==""){}
+            if(page_name=="Popular Cities To Buy Properties" || page_name=="Popular Locations For Homes"){
             advertisement.additional_page_name=additional_page_name;
+            }
             advertisement.date = new Date;
             this.advertiserepo.save(advertisement);
 
@@ -187,27 +198,59 @@ export class HomeService {
         }
 
     }
+    async getadvertise_for_popular(page_name:string,position:string):Promise<Advertisement[]>{
+        return await this.advertiserepo.createQueryBuilder("advertize")
+        .where("advertize.page_name=:page_name", { page_name: page_name})
+        .andWhere("advertize.additional_page_name=:additional_page_name",{additional_page_name:position})
+        .getMany(); 
+    }
+     //getadvertize
+     async getadvertize(pagename:string):Promise<Advertisement[]> {
+        return await this.advertiserepo.createQueryBuilder("advertize")
+        .where("advertize.page_name=:page_name", { page_name: pagename}).getMany();
+     }
     //Feature Agency
-    addagency(images: Addimagedto,F_link:string) {
-     const agency=new FeatureAgency();
+    async addagency(images: Addimagedto,F_link:string):Promise<any>{
      try{
-     agency.f_image=url+"/home/image/"+images;
+    const agency=new FeatureAgency();
+     agency.f_image=url+"/home/agencyimage/"+images;
      agency.f_link=F_link;
-     this.featureagencyrepo.save(agency);
-     return {message:"save"}
-     }
-     catch(error){
-         return {message:`${error}`}
-     }
+     await this.featureagencyrepo.save(agency);
+     return HttpStatus.CREATED;
+    }catch{
+        return  HttpStatus.BAD_REQUEST;
+    }
+
     }
     //getagency
     async getagency():Promise<FeatureAgency[]> {
        return await this.featureagencyrepo.createQueryBuilder().getMany();
     }
- //getadvertize
-    async getadvertize(pagename:string):Promise<Advertisement[]> {
-        return await this.advertiserepo.createQueryBuilder("advertize")
-        .where("advertize.page_name=:page_name", { page_name: pagename}).getMany();
-     }
+    //Partner
+    async Addpartner(imagePath,partner_link):Promise<any>{
+        try{
+      const partner = new Partner();
+      partner.p_image=url + "/home/partnerimage/" +imagePath;
+      partner.p_link=partner_link;
+      await this.partnerRepo.save(partner);
+      return HttpStatus.CREATED;
+        }catch{
+            return  HttpStatus.BAD_REQUEST;
+    }
+}
+//homepopup
+    async AddPOPUP(imagePath,homepopup_link):Promise<any>{
+    try{
+        const homepopup=new Homepopup();
+        homepopup.homepopup_link=homepopup_link
+        homepopup.homepopup_image= url + "/home/homepopupimage/" +imagePath;
+        await this.homepopupRepo.save(homepopup);
+        return HttpStatus.CREATED;
+    }
+    catch{
+        return  HttpStatus.BAD_REQUEST;
+    }
+}
+
  
 }

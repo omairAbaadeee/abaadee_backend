@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join } from 'path';
@@ -84,7 +84,7 @@ export class HomeController {
         }),
 
     )
-    async uploadedFile(@UploadedFile() file,@Body() body /*advertisementdto:Advertisementdto*/) {
+    async uploadedFile(@UploadedFile() file,@Body()  advertisementdto:Advertisementdto) {
       const response = {
             originalname: file.originalname,
             filename: file.filename,
@@ -92,9 +92,9 @@ export class HomeController {
         };
       
   
-    console.log(body)
+    console.log(advertisementdto)
     
-     //this.homeservice.addAdvertisement(advertisementdto,response);
+     return this.homeservice.addAdvertisement(advertisementdto,response);
 
         // return {
         //     status: HttpStatus.OK,
@@ -107,12 +107,17 @@ export class HomeController {
     getadvertize(@Param("pagename") pagename):Promise<Advertisement[]> {
         return this.homeservice.getadvertize(pagename);
     }
-
+    @Get("advertise_for_popular")
+    getadvertise_for_popular(@Query("page_name") page_name, @Query("position") position:string):Promise<Advertisement[]>{
+       console.log(page_name,position)
+        return this.homeservice.getadvertise_for_popular(page_name,position);
+    }
+    //feature Agency
     @Post('featureagency')
     @UseInterceptors(
         FileInterceptor('image', {
             storage: diskStorage({
-                destination: './uploads/developer',
+                destination: './uploads/featureagency',
                 filename: editFileName,
 
             }),
@@ -120,22 +125,76 @@ export class HomeController {
         }),
 
     )
-    async uploadMultipleFiles(@UploadedFiles() file,@Body() body):Promise<any> {
+    async uploadMultipleFiles(@UploadedFile() file,@Body() body):Promise<any> {
         const response = {
             originalname: file.originalname,
             filename: file.filename,
             imagePath: file.path
         };
-        this.homeservice.addagency(response.imagePath,body.f_link);
+        return this.homeservice.addagency(response.filename,body.f_link);
     }
-    @Get("image/:imagename")
+    @Get("agencyimage/:imagename")
     findagencyimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
-        return of(res.sendFile(join(process.cwd(), 'uploads/Agency/' + imagename)));
+        return of(res.sendFile(join(process.cwd(), 'uploads/featureagency/' + imagename)));
     }
 
     @Get("featureagency")
     getagency():Promise<FeatureAgency[]> {
         return this.homeservice.getagency();
+    }
+    //Partner
+    @Post('addpartner')
+    @UseInterceptors(
+        FileInterceptor('partner_image', {
+            storage: diskStorage({
+                destination: './uploads/partner',
+                filename: editFileName,
+
+            }),
+            fileFilter: imageFileFilter,
+        }),
+
+    )
+    async Addpartner(@UploadedFile() file,@Body() body):Promise<any> {
+        console.log(file)
+        console.log(body.partner_link)
+        const response = {
+            originalname: file.originalname,
+            filename: file.filename,
+            imagePath: file.path
+        };
+       return this.homeservice.Addpartner(response.filename,body.partner_link);
+    }
+    @Get("partnerimage/:imagename")
+    findpartner(@Param("imagename") imagename: string, @Res() res): Observable<object> {
+        return of(res.sendFile(join(process.cwd(), 'uploads/partner/'+imagename)));
+    }
+    //Home POPUP
+    @Post('addpopup')
+    @UseInterceptors(
+        FileInterceptor('homepopup_image', {
+            storage: diskStorage({
+                destination: './uploads/homepopup',
+                filename: editFileName,
+
+            }),
+            fileFilter: imageFileFilter,
+        }),
+
+    )
+    async AddPOPUP(@UploadedFile() file,@Body() body):Promise<any> {
+        console.log(file)
+        console.log(body.homepopup_link)
+        const response = {
+            originalname: file.originalname,
+            filename: file.filename,
+            imagePath: file.path
+        };
+       return this.homeservice.AddPOPUP(response.filename,body.homepopup_link);
+    }
+    @Get("homepopupimage/:imagename")
+    findpopupimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
+        return of(res.sendFile(join(process.cwd(), 'uploads/homepopup/'+imagename)));
     }
 
 }

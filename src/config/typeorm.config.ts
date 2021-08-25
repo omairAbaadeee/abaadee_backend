@@ -23,6 +23,7 @@ import { Blog } from "src/entity/blog.entity";
 import { BlogImage } from "src/entity/blogimage.entity";
 import { Project_Aminities } from "src/entity/project_aminities.entity";
 import { Agent } from "src/entity/agent.entity";
+import { Homepopup } from "src/entity/popup.entity";
 
 
 export const typeOrmConfig:TypeOrmModuleOptions = {
@@ -35,6 +36,6 @@ database:'abaadee.com',
 entities:[User,Areaofunit,Country,Location,City
     ,PropertyCategory,PropertyType,Addproperty,Propertyimage,Features,General_Information,
     Advertisement,Contact,PropertyContact,Projectimage,Project,Developer,MemberListLogo,Blog,BlogImage
-    ,Partner,FeatureAgency,Project_Aminities,Agent],
+    ,Partner,FeatureAgency,Project_Aminities,Agent,Homepopup],
 synchronize:true
 };

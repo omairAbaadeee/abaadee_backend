@@ -10,5 +10,8 @@ export class Partner {
     @Column()
     p_image: string;
 
+    @Column()
+    p_link: string;
+    
 
 }

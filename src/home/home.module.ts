@@ -13,12 +13,13 @@ import { ContactRepository } from 'src/reposatory/contact.reposatory';
 import { AdvertisementReposatory } from 'src/reposatory/advertisement.reposatory';
 import { FeatureAgencyRepository } from 'src/reposatory/featureagency.reposatory';
 import { PartnerRepository } from 'src/reposatory/partner.reposatory';
+import { HomepopupReposatory } from 'src/reposatory/homepopupRepo.reposatory';
 
 
 @Module({
   imports:[TypeOrmModule.forFeature([AddpropertyRepo,AreaofunitRepositery,
   CityRepository,LocationRepository,PropertyCategoryRepositery,AdvertisementReposatory
-  ,PropertytypeRepositery,CountryRepository,ContactRepository,FeatureAgencyRepository,PartnerRepository])],
+  ,PropertytypeRepositery,CountryRepository,ContactRepository,FeatureAgencyRepository,PartnerRepository,HomepopupReposatory])],
   controllers: [HomeController],
   providers: [HomeService]
 })
