@@ -11,6 +11,8 @@ import { City } from 'src/entity/city.entity';
 import { Contact } from 'src/entity/contact.entity';
 import { Country } from 'src/entity/country.entity';
 import { FeatureAgency } from 'src/entity/featureagency.entity';
+import { Partner } from 'src/entity/paetner.entity';
+import { Homepopup } from 'src/entity/popup.entity';
 import { HomeService } from './home.service';
 const Jimp = require("jimp");
 
@@ -169,6 +171,10 @@ export class HomeController {
     findpartner(@Param("imagename") imagename: string, @Res() res): Observable<object> {
         return of(res.sendFile(join(process.cwd(), 'uploads/partner/'+imagename)));
     }
+    @Get("getpartner")
+    getpartner():Promise<Partner[]> {
+       return this.homeservice.getpartner();
+    }
     //Home POPUP
     @Post('addpopup')
     @UseInterceptors(
@@ -195,6 +201,10 @@ export class HomeController {
     @Get("homepopupimage/:imagename")
     findpopupimage(@Param("imagename") imagename: string, @Res() res): Observable<object> {
         return of(res.sendFile(join(process.cwd(), 'uploads/homepopup/'+imagename)));
+    }
+    @Get("getpopup")
+    getpopup():Promise<Homepopup>{
+      return this.homeservice.getpopup();
     }
 
 }

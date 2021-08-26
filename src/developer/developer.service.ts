@@ -183,4 +183,13 @@ export class DeveloperService {
         .select(["blog.blog_id","blog.short_description","blog.Date","blogimage"])
         return paginate<Blog>(data, options);
     }
+    async getalldata(id): Promise<Blog>{
+        const data = await this.blogReposatory.createQueryBuilder("blog")
+        .leftJoinAndSelect("blog.blogimage","blogimage")
+        .where("blog.blog_id=:blog_id",{blog_id:id})
+        .getOne()
+        //.select(["blog.blog_id","blog.short_description","blog.Date","blogimage"])
+        return data;
+    }
+
 }

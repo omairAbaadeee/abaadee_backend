@@ -238,6 +238,9 @@ export class HomeService {
             return  HttpStatus.BAD_REQUEST;
     }
 }
+async getpartner():Promise<Partner[]> {
+    return await this.partnerRepo.createQueryBuilder().getMany();
+ }
 //homepopup
     async AddPOPUP(imagePath,homepopup_link):Promise<any>{
     try{
@@ -250,7 +253,11 @@ export class HomeService {
     catch{
         return  HttpStatus.BAD_REQUEST;
     }
+    
 }
+async getpopup():Promise<Homepopup> {
+    return await this.homepopupRepo.createQueryBuilder().getOne();
+ }
 
  
 }

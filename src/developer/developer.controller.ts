@@ -138,5 +138,9 @@ shortBlog(@Query('page') page: number = 1,@Query('limit') limit: number = 11): P
     limit,
     route: url+'/developer/shortBlog'})
 }
+@Get("Blog/:id")
+getalldata(@Param("id") id):Promise<Blog>{
+     return this.developerservice.getalldata(id);
+}
 }
 
