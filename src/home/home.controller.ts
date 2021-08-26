@@ -114,6 +114,10 @@ export class HomeController {
        console.log(page_name,position)
         return this.homeservice.getadvertise_for_popular(page_name,position);
     }
+    @Get("getalladvertise")
+    getalladvertise():Promise<Advertisement[]>{
+        return this.homeservice.getalladvertize();
+    }
     //feature Agency
     @Post('featureagency')
     @UseInterceptors(

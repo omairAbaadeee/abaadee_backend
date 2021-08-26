@@ -209,6 +209,10 @@ export class HomeService {
         return await this.advertiserepo.createQueryBuilder("advertize")
         .where("advertize.page_name=:page_name", { page_name: pagename}).getMany();
      }
+     async getalladvertize():Promise<Advertisement[]> {
+        return await this.advertiserepo.createQueryBuilder("advertize")
+        .getMany();
+     }
     //Feature Agency
     async addagency(images: Addimagedto,F_link:string):Promise<any>{
      try{
