@@ -145,27 +145,34 @@ async searchprojectbycity(city):Promise<Project[]>{
     .getMany();
     return data;
 }
-async searchprojectbycity_project_type(city,project_type):Promise<Project[]>{
+async searchprojectbydevelopertitile(developer_title):Promise<Project[]>{
     const data= await this.projectrepo.createQueryBuilder("project")
     .leftJoinAndSelect("project.city", "city")
     .leftJoinAndSelect("project.location", "location")
     .leftJoinAndSelect("project.developer", "developer")
-    .where("city.city_name=:city_name",{city_name:city})
-    .where("project.project_type=:project_type",{project_type:project_type})
-    
-    
+    .where("developer.name=:name",{name:developer_title})
     .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
         , "project.completion_year", "location.location_name", "city.city_name"])
     .getMany();
     return data;
 }
-async searchprojectbycity_project_type_developertitle(city,project_type,developer_title):Promise<Project[]>{
+async searchprojectbyprojecttitile(project_name):Promise<Project[]>{
+    const data= await this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city", "city")
+    .leftJoinAndSelect("project.location", "location")
+    .leftJoinAndSelect("project.developer", "developer")
+    .where("project.project_name=:project_name",{project_name:project_name})
+    .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+        , "project.completion_year", "location.location_name", "city.city_name"])
+    .getMany();
+    return data;
+}
+async searchprojectbycity_project_type(city,developer_title):Promise<Project[]>{
     const data= await this.projectrepo.createQueryBuilder("project")
     .leftJoinAndSelect("project.city", "city")
     .leftJoinAndSelect("project.location", "location")
     .leftJoinAndSelect("project.developer", "developer")
     .where("city.city_name=:city_name",{city_name:city})
-    .where("project.project_type=:project_type",{project_type:project_type})
     .where("developer.name=:name",{name:developer_title})
     
     
@@ -174,13 +181,23 @@ async searchprojectbycity_project_type_developertitle(city,project_type,develope
     .getMany();
     return data;
 }
-async searchprojectbycity_project_type_developertitle_projecttitle(city,project_type,developer_title,project_name):Promise<Project[]>{
+async searchprojectbycity_project_type_developertitle(city,project_name):Promise<Project[]>{
     const data= await this.projectrepo.createQueryBuilder("project")
     .leftJoinAndSelect("project.city", "city")
     .leftJoinAndSelect("project.location", "location")
     .leftJoinAndSelect("project.developer", "developer")
     .where("city.city_name=:city_name",{city_name:city})
-    .where("project.project_type=:project_type",{project_type:project_type})
+    .where("project.project_name=:project_name",{project_name:project_name})
+    .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+        , "project.completion_year", "location.location_name", "city.city_name"])
+    .getMany();
+    return data;
+}
+async searchprojectbycity_project_type_developertitle_projecttitle(developer_title,project_name):Promise<Project[]>{
+    const data= await this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city", "city")
+    .leftJoinAndSelect("project.location", "location")
+    .leftJoinAndSelect("project.developer", "developer")
     .where("developer.name=:name",{name:developer_title})
     .where("project.project_name=:project_name",{project_name:project_name})
     
@@ -189,13 +206,28 @@ async searchprojectbycity_project_type_developertitle_projecttitle(city,project_
     .getMany();
     return data;
 }
-async searchprojectbyAll(city,project_type,developer_title,project_name):Promise<Project[]>{
+async searchprojectbycitydeveloperproject(city,developer_title,project_name):Promise<Project[]>{
     const data= await this.projectrepo.createQueryBuilder("project")
     .leftJoinAndSelect("project.city", "city")
     .leftJoinAndSelect("project.location", "location")
     .leftJoinAndSelect("project.developer", "developer")
     .where("city.city_name=:city_name",{city_name:city})
-    .orWhere("project.project_type=:project_type",{project_type:project_type})
+    
+    .where("developer.name=:name",{name:developer_title})
+    .where("project.project_name=:project_name",{project_name:project_name})
+    
+    .select(["project.project_id", "project.project_name", "project.project_type", "project.price", "project.project_logo_image", "project.project_cover_image"
+        , "project.completion_year", "location.location_name", "city.city_name"])
+    .getMany();
+    return data;
+}
+async searchprojectbyAll(city,developer_title,project_name):Promise<Project[]>{
+    const data= await this.projectrepo.createQueryBuilder("project")
+    .leftJoinAndSelect("project.city", "city")
+    .leftJoinAndSelect("project.location", "location")
+    .leftJoinAndSelect("project.developer", "developer")
+    .where("city.city_name=:city_name",{city_name:city})
+    
     .orWhere("developer.name=:name",{name:developer_title})
     .orWhere("project.project_name=:project_name",{project_name:project_name})
     

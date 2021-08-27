@@ -105,26 +105,37 @@ export class ProjectController {
   @Post("serchproject")
    projectserch(@Body() body):Promise<Project[]>{
        console.log(body)
-       if(body.city && !body.project_type && !body.developer_title && !body.project_name){
+       if(body.city  && !body.developer_title && !body.project_name){
         console.log(1)
         return this.projectService.searchprojectbycity(body.city);
        
        }
-       if(body.city && body.project_type && !body.developer_title && !body.project_name){
-        console.log(2)
-      return this.projectService.searchprojectbycity_project_type(body.city,body.project_type);
+       if(!body.city  && body.developer_title && !body.project_name){
+        console.log(2) 
+        return this.projectService.searchprojectbydevelopertitile(body.developer_title);
        }
-       if(body.city && body.project_type && body.developer_title && !body.project_name){
-        console.log(3)
-        return this.projectService.
-        searchprojectbycity_project_type_developertitle(body.city,body.project_type,body.developer_title);
-       } 
-       if(body.city && body.project_type && body.developer_title && body.project_name){
+       if(!body.city  && !body.developer_title && body.project_name){
+        console.log(3)   
+        return this.projectService.searchprojectbyprojecttitile(body.project_name);
+        }
+       if(body.city && body.developer_title && !body.project_name){
         console.log(4)
-        return this.projectService.searchprojectbycity_project_type_developertitle_projecttitle(body.city,body.project_type,body.developer_title,body.project_name)   
-    }
+      return this.projectService.searchprojectbycity_project_type(body.city,body.developer_title);
+       }
+       if(body.city && !body.developer_title && body.project_name){
+        console.log(5)
+        return this.projectService.searchprojectbycity_project_type_developertitle(body.city,body.project_name);
+       } 
+       if(!body.city && body.developer_title && body.project_name){
+        console.log(6)
+        return this.projectService.searchprojectbycity_project_type_developertitle_projecttitle(body.developer_title,body.project_name)   
+       }
+       if(body.city && body.developer_title && body.project_name){
+        console.log(7)
+        return this.projectService.searchprojectbycitydeveloperproject(body.city,body.developer_title,body.project_name)   
+       }
     console.log("run")
-    return this.projectService.searchprojectbyAll(body.city,body.project_type,body.developer_title,body.project_name);
+    return this.projectService.searchprojectbyAll(body.city,body.developer_title,body.project_name);
   }
   @Post("delete_project")
   deleteProject(@Body() body):Promise<any> {

@@ -180,7 +180,7 @@ export class DeveloperService {
     async shortBlog(options: IPaginationOptions): Promise<Pagination<Blog>>{
         const data = await this.blogReposatory.createQueryBuilder("blog")
         .leftJoinAndSelect("blog.blogimage","blogimage")
-        .select(["blog.blog_id","blog.short_description","blog.Date","blogimage"])
+        .select(["blog.blog_id","blog.short_description","blog.Date","blog.title","blogimage"])
         return paginate<Blog>(data, options);
     }
     async getalldata(id): Promise<Blog>{
