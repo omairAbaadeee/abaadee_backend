@@ -121,6 +121,13 @@ export class AgentService {
             console.error(err)
         }
     }
+    
+    getagentname():Promise<Agent[]>{
+        const data= this.agentReposatory.createQueryBuilder("agent")
+        .select("agent.name")
+        .getMany();
+        return data;
+    }
     serchby_city(name):Promise<Agent[]>{
         const data= this.agentReposatory.createQueryBuilder("agent")
         .where("agent.name=:name",{name:name}).getMany();

@@ -72,6 +72,10 @@ delete_agent(@Body() body):Promise<any>{
 serchagent(@Body() body):Promise<Agent[]>{
  return this.agentService.serchby_city(body.name)
 ;}
+@Get("agentname")
+getagentname():Promise<Agent[]>{
+return this.agentService.getagentname();
+}
 // end agent
  
 }
