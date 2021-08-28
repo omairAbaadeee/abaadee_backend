@@ -25,6 +25,7 @@ import { PartnerRepository } from 'src/reposatory/partner.reposatory';
 import { Partner } from 'src/entity/paetner.entity';
 import { HomepopupReposatory } from 'src/reposatory/homepopupRepo.reposatory';
 import { Homepopup } from 'src/entity/popup.entity';
+const fs = require('fs');
 @Injectable()
 export class HomeService {
     constructor(
@@ -213,6 +214,30 @@ export class HomeService {
         return await this.advertiserepo.createQueryBuilder("advertize")
         .getMany();
      }
+     async deleteadvertise(id):Promise<any>{
+         try{
+        const data = await this.advertiserepo.createQueryBuilder("advertise")
+    
+        .where("advertise.id=:id", { id: id })
+       .getOne();
+        console.log(data);
+       console.log(data.advertisement_img);
+       const logo_image = data.advertisement_img.replace(`${url}/home/Advertisement/`, "");
+       //const image = data.image.replace(`${url}/agent/agent_image/`, "");
+       this.deleteimage("./uploads/Advertisement/" + logo_image);
+      // this.deleteimage("./uploads/agent/" + image);
+       await this.advertiserepo
+           .createQueryBuilder()
+           .delete()
+           .from(Advertisement)
+           .where("id = :id", { id: id })
+           .execute();
+           return HttpStatus.MOVED_PERMANENTLY;
+   } catch {
+       return HttpStatus.NOT_FOUND;
+   }    
+       
+     }
     //Feature Agency
     async addagency(images: Addimagedto,F_link:string):Promise<any>{
      try{
@@ -229,6 +254,29 @@ export class HomeService {
     //getagency
     async getagency():Promise<FeatureAgency[]> {
        return await this.featureagencyrepo.createQueryBuilder().getMany();
+    }
+    async deleteageency(id):Promise<any>{
+        try{
+       const data = await this.featureagencyrepo.createQueryBuilder("agency")
+       .where("agency.f_id=:f_id", { f_id: id })
+       .getOne();
+    
+      console.log(data.f_image);
+      const logo_image = data.f_image.replace(`${url}/home/agencyimage/`, "");
+      //const image = data.image.replace(`${url}/agent/agent_image/`, "");
+      this.deleteimage("./uploads/featureagency/" + logo_image);
+     // this.deleteimage("./uploads/agent/" + image);
+      await this.featureagencyrepo
+          .createQueryBuilder()
+          .delete()
+          .from(FeatureAgency)
+          .where("f_id = :f_id", { f_id: id })
+          .execute();
+          return HttpStatus.MOVED_PERMANENTLY;
+  } catch {
+      return HttpStatus.NOT_FOUND;
+  }    
+      
     }
     //Partner
     async Addpartner(imagePath,partner_link):Promise<any>{
@@ -262,6 +310,13 @@ async getpartner():Promise<Partner[]> {
 async getpopup():Promise<Homepopup> {
     return await this.homepopupRepo.createQueryBuilder().getOne();
  }
-
+ deleteimage(path: string) {
+    try {
+        fs.unlinkSync(path)
+        //file removed
+    } catch (err) {
+        console.error(err)
+    }
+}
  
 }

@@ -118,6 +118,10 @@ export class HomeController {
     getalladvertise():Promise<Advertisement[]>{
         return this.homeservice.getalladvertize();
     }
+    @Post("delete_advertise")
+    deleteadertise(@Body() body):Promise<any>{
+      return this.homeservice.deleteadvertise(body.id);
+    }
     //feature Agency
     @Post('featureagency')
     @UseInterceptors(
@@ -147,6 +151,10 @@ export class HomeController {
     @Get("featureagency")
     getagency():Promise<FeatureAgency[]> {
         return this.homeservice.getagency();
+    }
+    @Post("delete_agency")
+    deleteagency(@Body() body):Promise<any>{
+      return this.homeservice.deleteageency(body.id);
     }
     //Partner
     @Post('addpartner')
