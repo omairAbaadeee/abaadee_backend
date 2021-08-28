@@ -142,5 +142,9 @@ shortBlog(@Query('page') page: number = 1,@Query('limit') limit: number = 11): P
 getalldata(@Param("id") id):Promise<Blog>{
      return this.developerservice.getalldata(id);
 }
+@Post("delete_blog")
+    deletepopup(@Body() body):Promise<any>{
+      return this.developerservice.deleteblog(body.id);
+    }
 }
 

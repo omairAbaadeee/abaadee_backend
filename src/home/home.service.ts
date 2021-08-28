@@ -293,6 +293,29 @@ export class HomeService {
 async getpartner():Promise<Partner[]> {
     return await this.partnerRepo.createQueryBuilder().getMany();
  }
+ async deletepartner(id):Promise<any>{
+    try{
+   const data = await this.partnerRepo.createQueryBuilder("partner")
+   .where("partner.p_id=:p_id", { p_id: id })
+   .getOne();
+
+  console.log(data.p_image);
+  const logo_image = data.p_image.replace(`${url}/home/partnerimage/`, "");
+  //const image = data.image.replace(`${url}/agent/agent_image/`, "");
+  this.deleteimage("./uploads/partner/" + logo_image);
+ // this.deleteimage("./uploads/agent/" + image);
+  await this.partnerRepo
+      .createQueryBuilder()
+      .delete()
+      .from(Partner)
+      .where("p_id = :p_id", { p_id: id })
+      .execute();
+      return HttpStatus.MOVED_PERMANENTLY;
+} catch {
+  return HttpStatus.NOT_FOUND;
+}    
+  
+}
 //homepopup
     async AddPOPUP(imagePath,homepopup_link):Promise<any>{
     try{
@@ -310,6 +333,29 @@ async getpartner():Promise<Partner[]> {
 async getpopup():Promise<Homepopup> {
     return await this.homepopupRepo.createQueryBuilder().getOne();
  }
+ async deletepopup(id):Promise<any>{
+    try{
+   const data = await this.homepopupRepo.createQueryBuilder("popup")
+   .where("popup.homepopup_id=:homepopup_id", { homepopup_id: id })
+   .getOne();
+
+  console.log(data.homepopup_image);
+  const logo_image = data.homepopup_image.replace(`${url}/home/homepopupimage/`, "");
+  //const image = data.image.replace(`${url}/agent/agent_image/`, "");
+  this.deleteimage("./uploads/homepopup/" + logo_image);
+ // this.deleteimage("./uploads/agent/" + image);
+  await this.homepopupRepo
+      .createQueryBuilder()
+      .delete()
+      .from(Homepopup)
+      .where("homepopup_id = :homepopup_id", { homepopup_id: id })
+      .execute();
+      return HttpStatus.MOVED_PERMANENTLY;
+} catch {
+  return HttpStatus.NOT_FOUND;
+}    
+  
+}
  deleteimage(path: string) {
     try {
         fs.unlinkSync(path)

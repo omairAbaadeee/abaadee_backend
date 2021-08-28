@@ -10,6 +10,6 @@ export class BlogImage {
     @Column()
     blog_image: string;
 
-    @ManyToOne(()=>Blog,blog=>blog.blogimage)
+    @ManyToOne(()=>Blog,blog=>blog.blogimage,{onDelete:"CASCADE"})
     blog:Blog;
 }

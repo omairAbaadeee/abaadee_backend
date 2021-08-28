@@ -47,7 +47,8 @@ export class AddpropertyController {
     )
     async uploadMultipleFiles(@UploadedFiles() files, @Body() addpropertydto: Addpropertydto,
         @GetUser() user: User):Promise<any> {
-            console.log(addpropertydto);
+            // console.log(addpropertydto);
+            console.log(files)
         const response = [];
         files.forEach(file => {
             const fileReponse = {

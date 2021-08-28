@@ -187,6 +187,10 @@ export class HomeController {
     getpartner():Promise<Partner[]> {
        return this.homeservice.getpartner();
     }
+    @Post("delete_partner")
+    deletepartner(@Body() body):Promise<any>{
+      return this.homeservice.deletepartner(body.id);
+    }
     //Home POPUP
     @Post('addpopup')
     @UseInterceptors(
@@ -217,6 +221,10 @@ export class HomeController {
     @Get("getpopup")
     getpopup():Promise<Homepopup>{
       return this.homeservice.getpopup();
+    }
+    @Post("delete_popup")
+    deletepopup(@Body() body):Promise<any>{
+      return this.homeservice.deletepopup(body.id);
     }
 
 }

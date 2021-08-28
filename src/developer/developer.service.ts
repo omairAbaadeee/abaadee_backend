@@ -191,5 +191,35 @@ export class DeveloperService {
         //.select(["blog.blog_id","blog.short_description","blog.Date","blogimage"])
         return data;
     }
+    async deleteblog(Id):Promise<any> {
+        try {
+
+            const data = await this.blogimageReposatory.createQueryBuilder("bimage")
+             .where("bimage.blog=:blog", { blog: Id })
+            .getMany();
+                console.log(data);
+                data.forEach(element=>{
+                    console.log(element.blog_image);
+                    const logo_image = element.blog_image.replace(`${url}/developer/blog_image/`, "");
+                    this.deleteimage("./uploads/blog/" + logo_image);
+                })
+               
+            await this.blogimageReposatory
+                .createQueryBuilder()
+                .delete()
+                .from(BlogImage)
+                .where("blog = :blog", { blog: Id })
+                .execute();
+                await this.blogReposatory.createQueryBuilder()
+                .delete()
+                .from(Blog)
+                .where("blog_id=:blog_id",{blog_id:Id})
+                .execute();
+                return HttpStatus.MOVED_PERMANENTLY;
+        } catch {
+            return HttpStatus.NOT_FOUND;
+        }
+    }
+  
 
 }
